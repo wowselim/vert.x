@@ -31,6 +31,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Closeable;
+import io.vertx.core.Promise;
 import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.logging.Logger;
@@ -106,33 +107,38 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public NetServer listen(int port, String host) {
-    return listen(port, host, null);
+  public Promise<NetServer> listen(int port, String host) {
+    Future<NetServer> fut = Future.future();
+    listen(port, host, fut.completer());
+    return fut;
   }
 
   @Override
-  public NetServer listen(int port) {
-    return listen(port, "0.0.0.0", null);
+  public Promise<NetServer> listen(int port) {
+    Future<NetServer> fut = Future.future();
+    listen(port, "0.0.0.0", fut.completer());
+    return fut;
   }
 
   @Override
-  public NetServer listen(int port, Handler<AsyncResult<NetServer>> listenHandler) {
-    return listen(port, "0.0.0.0", listenHandler);
+  public void listen(int port, Handler<AsyncResult<NetServer>> listenHandler) {
+    listen(port, "0.0.0.0", listenHandler);
   }
 
   @Override
-  public NetServer listen() {
-    listen(null);
-    return this;
+  public Promise<NetServer> listen() {
+    Future<NetServer> fut = Future.future();
+    listen(fut.completer());
+    return fut;
   }
 
   @Override
-  public synchronized NetServer listen(Handler<AsyncResult<NetServer>> listenHandler) {
-    return listen(options.getPort(), options.getHost(), listenHandler);
+  public synchronized void listen(Handler<AsyncResult<NetServer>> listenHandler) {
+    listen(options.getPort(), options.getHost(), listenHandler);
   }
 
   @Override
-  public synchronized NetServer listen(int port, String host, Handler<AsyncResult<NetServer>> listenHandler) {
+  public synchronized void listen(int port, String host, Handler<AsyncResult<NetServer>> listenHandler) {
     if (connectStream.handler() == null) {
       throw new IllegalStateException("Set connect handler first");
     }
@@ -213,7 +219,7 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
             log.error(t);
           }
           listening = false;
-          return this;
+          return;
         }
         if (port != 0) {
           vertx.sharedNetServers().put(id, this);
@@ -250,11 +256,12 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
         }
       });
     }
-    return this;
   }
 
-  public synchronized void close() {
-    close(null);
+  public Promise<Void> close() {
+    Future<Void> fut = Future.future();
+    close(fut.completer());
+    return fut;
   }
 
   @Override

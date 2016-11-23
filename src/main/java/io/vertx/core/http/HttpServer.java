@@ -18,11 +18,11 @@ package io.vertx.core.http;
 
 import io.vertx.codegen.annotations.CacheReturn;
 import io.vertx.codegen.annotations.GenIgnore;
-import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.VertxGen;
+import io.vertx.core.Promise;
 import io.vertx.core.metrics.Measured;
 
 /**
@@ -103,8 +103,7 @@ public interface HttpServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  HttpServer listen();
+  Promise<HttpServer> listen();
 
   /**
    * Tell the server to start listening. The server will listen on the port and host specified here,
@@ -117,8 +116,7 @@ public interface HttpServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  HttpServer listen(int port, String host);
+  Promise<HttpServer> listen(int port, String host);
 
   /**
    * Like {@link #listen(int, String)} but supplying a handler that will be called when the server is actually
@@ -128,8 +126,7 @@ public interface HttpServer extends Measured {
    * @param host  the host to listen on
    * @param listenHandler  the listen handler
    */
-  @Fluent
-  HttpServer listen(int port, String host, Handler<AsyncResult<HttpServer>> listenHandler);
+  void listen(int port, String host, Handler<AsyncResult<HttpServer>> listenHandler);
 
   /**
    * Like {@link #listen(int, String)} but the server will listen on host "0.0.0.0" and port specified here ignoring
@@ -139,8 +136,7 @@ public interface HttpServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  HttpServer listen(int port);
+  Promise<HttpServer> listen(int port);
 
   /**
    * Like {@link #listen(int)} but supplying a handler that will be called when the server is actually listening (or has failed).
@@ -148,23 +144,21 @@ public interface HttpServer extends Measured {
    * @param port  the port to listen on
    * @param listenHandler  the listen handler
    */
-  @Fluent
-  HttpServer listen(int port, Handler<AsyncResult<HttpServer>> listenHandler);
+  void listen(int port, Handler<AsyncResult<HttpServer>> listenHandler);
 
   /**
    * Like {@link #listen} but supplying a handler that will be called when the server is actually listening (or has failed).
    *
    * @param listenHandler  the listen handler
    */
-  @Fluent
-  HttpServer listen(Handler<AsyncResult<HttpServer>> listenHandler);
+  void listen(Handler<AsyncResult<HttpServer>> listenHandler);
 
   /**
    * Close the server. Any open HTTP connections will be closed.
    * <p>
    * The close happens asynchronously and the server may not be closed until some time after the call has returned.
    */
-  void close();
+  Promise<Void> close();
 
   /**
    * Like {@link #close} but supplying a handler that will be called when the server is actually closed (or has failed).

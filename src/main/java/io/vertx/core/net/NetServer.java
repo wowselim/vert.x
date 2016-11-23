@@ -20,8 +20,8 @@ import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.VertxGen;
+import io.vertx.core.Promise;
 import io.vertx.core.metrics.Measured;
 import io.vertx.core.streams.ReadStream;
 
@@ -62,17 +62,14 @@ public interface NetServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  NetServer listen();
+  Promise<NetServer> listen();
 
   /**
    * Like {@link #listen} but providing a handler that will be notified when the server is listening, or fails.
    *
    * @param listenHandler  handler that will be notified when listening or failed
-   * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  NetServer listen(Handler<AsyncResult<NetServer>> listenHandler);
+  void listen(Handler<AsyncResult<NetServer>> listenHandler);
 
   /**
    * Start listening on the specified port and host, ignoring post and host configured in the {@link io.vertx.core.net.NetServerOptions} used when
@@ -86,8 +83,7 @@ public interface NetServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  NetServer listen(int port, String host);
+  Promise<NetServer> listen(int port, String host);
 
   /**
    * Like {@link #listen(int, String)} but providing a handler that will be notified when the server is listening, or fails.
@@ -95,10 +91,8 @@ public interface NetServer extends Measured {
    * @param port  the port to listen on
    * @param host  the host to listen on
    * @param listenHandler handler that will be notified when listening or failed
-   * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  NetServer listen(int port, String host, Handler<AsyncResult<NetServer>> listenHandler);
+  void listen(int port, String host, Handler<AsyncResult<NetServer>> listenHandler);
 
   /**
    * Start listening on the specified port and host "0.0.0.0", ignoring post and host configured in the
@@ -110,24 +104,21 @@ public interface NetServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  NetServer listen(int port);
+  Promise<NetServer> listen(int port);
 
   /**
    * Like {@link #listen(int)} but providing a handler that will be notified when the server is listening, or fails.
    *
    * @param port  the port to listen on
    * @param listenHandler handler that will be notified when listening or failed
-   * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  NetServer listen(int port, Handler<AsyncResult<NetServer>> listenHandler);
+  void listen(int port, Handler<AsyncResult<NetServer>> listenHandler);
 
   /**
    * Close the server. This will close any currently open connections. The close may not complete until after this
    * method has returned.
    */
-  void close();
+  Promise<Void> close();
 
   /**
    * Like {@link #close} but supplying a handler that will be notified when close is complete.

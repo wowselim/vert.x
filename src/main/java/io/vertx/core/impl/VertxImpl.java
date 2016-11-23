@@ -443,8 +443,10 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public void close() {
-    close(null);
+  public Future<Void> close() {
+    Future<Void> fut = Future.future();
+    close(fut.completer());
+    return fut;
   }
 
   private void closeClusterManager(Handler<AsyncResult<Void>> completionHandler) {
@@ -522,8 +524,10 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public void deployVerticle(Verticle verticle) {
-    deployVerticle(verticle, new DeploymentOptions(), null);
+  public Future<String> deployVerticle(Verticle verticle) {
+    Future<String> fut = Future.future();
+    deployVerticle(verticle, new DeploymentOptions(), fut.completer());
+    return fut;
   }
 
   @Override
@@ -537,8 +541,10 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public void deployVerticle(Verticle verticle, DeploymentOptions options) {
-    deployVerticle(verticle, options, null);
+  public Future<String> deployVerticle(Verticle verticle, DeploymentOptions options) {
+    Future<String> fut = Future.future();
+    deployVerticle(verticle, options, fut.completer());
+    return fut;
   }
 
   @Override
@@ -557,13 +563,17 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public void deployVerticle(String name) {
-    deployVerticle(name, new DeploymentOptions(), null);
+  public Future<String> deployVerticle(String name) {
+    Future<String> fut = Future.future();
+    deployVerticle(name, new DeploymentOptions(), fut.completer());
+    return fut;
   }
 
   @Override
-  public void deployVerticle(String name, DeploymentOptions options) {
-    deployVerticle(name, options, null);
+  public Future<String> deployVerticle(String name, DeploymentOptions options) {
+    Future<String> fut = Future.future();
+    deployVerticle(name, options, fut.completer());
+    return fut;
   }
 
   @Override
@@ -581,9 +591,10 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public void undeploy(String deploymentID) {
-    undeploy(deploymentID, res -> {
-    });
+  public Future<Void> undeploy(String deploymentID) {
+    Future<Void> fut = Future.future();
+    undeploy(deploymentID, fut.completer());
+    return fut;
   }
 
   @Override

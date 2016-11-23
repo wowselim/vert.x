@@ -16,8 +16,11 @@
 
 package io.vertx.core.file.impl;
 
+import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.AsyncFile;
 import io.vertx.core.file.FileProps;
@@ -808,5 +811,145 @@ public class FileSystemImpl implements FileSystem {
     public void run() {
       context.executeBlocking(this, handler);
     }
+  }
+
+  @Override
+  public Promise<Void> copy(String from, String to) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> copyRecursive(String from, String to, boolean recursive) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> move(String from, String to) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> truncate(String path, long len) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> chmod(String path, String perms) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> chmodRecursive(String path, String perms, String dirPerms) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> chown(String path, @Nullable String user, @Nullable String group) {
+    return null;
+  }
+
+  @Override
+  public Promise<FileProps> props(String path) {
+    return null;
+  }
+
+  @Override
+  public Promise<FileProps> lprops(String path) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> link(String link, String existing) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> symlink(String link, String existing) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> unlink(String link) {
+    return null;
+  }
+
+  @Override
+  public Promise<String> readSymlink(String link) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> delete(String path) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> deleteRecursive(String path, boolean recursive) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> mkdir(String path) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> mkdir(String path, String perms) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> mkdirs(String path) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> mkdirs(String path, String perms) {
+    return null;
+  }
+
+  @Override
+  public Promise<List<String>> readDir(String path) {
+    return null;
+  }
+
+  @Override
+  public Promise<List<String>> readDir(String path, String filter) {
+    return null;
+  }
+
+  @Override
+  public Promise<Buffer> readFile(String path) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> writeFile(String path, Buffer data) {
+    return null;
+  }
+
+  @Override
+  public Promise<AsyncFile> open(String path, OpenOptions options) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> createFile(String path) {
+    return null;
+  }
+
+  @Override
+  public Promise<Void> createFile(String path, String perms) {
+    return null;
+  }
+
+  @Override
+  public Promise<Boolean> exists(String path) {
+    return null;
+  }
+
+  @Override
+  public Promise<FileSystemProps> fsProps(String path) {
+    return null;
   }
 }

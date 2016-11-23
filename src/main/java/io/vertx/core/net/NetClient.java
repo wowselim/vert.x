@@ -18,8 +18,8 @@ package io.vertx.core.net;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.VertxGen;
+import io.vertx.core.Promise;
 import io.vertx.core.metrics.Measured;
 
 /**
@@ -43,10 +43,19 @@ public interface NetClient extends Measured {
    *
    * @param port  the port
    * @param host  the host
-   * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  NetClient connect(int port, String host, Handler<AsyncResult<NetSocket>> connectHandler);
+  Promise<NetSocket> connect(int port, String host);
+
+  /**
+   * Open a connection to a server at the specific {@code port} and {@code host}.
+   * <p>
+   * {@code host} can be a valid host name or IP address. The connect is done asynchronously and on success, a
+   * {@link NetSocket} instance is supplied via the {@code connectHandler} instance
+   *
+   * @param port  the port
+   * @param host  the host
+   */
+  void connect(int port, String host, Handler<AsyncResult<NetSocket>> connectHandler);
 
   /**
    * Close the client.

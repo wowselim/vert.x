@@ -288,7 +288,7 @@ public interface Vertx extends Measured {
    * <p>
    * The actual close is asynchronous and may not complete until after the call has returned.
    */
-  void close();
+  Promise<Void> close();
 
   /**
    * Like {@link #close} but the completionHandler will be called when the close is complete
@@ -307,7 +307,7 @@ public interface Vertx extends Measured {
    * @param verticle  the verticle instance to deploy.
    */
   @GenIgnore
-  void deployVerticle(Verticle verticle);
+  Promise<String> deployVerticle(Verticle verticle);
 
   /**
    * Like {@link #deployVerticle(Verticle)} but the completionHandler will be notified when the deployment is complete.
@@ -331,7 +331,7 @@ public interface Vertx extends Measured {
    * @param options  the deployment options.
    */
   @GenIgnore
-  void deployVerticle(Verticle verticle, DeploymentOptions options);
+  Promise<String> deployVerticle(Verticle verticle, DeploymentOptions options);
 
   /**
    * Like {@link #deployVerticle(Verticle, Handler)} but {@link io.vertx.core.DeploymentOptions} are provided to configure the
@@ -353,7 +353,7 @@ public interface Vertx extends Measured {
    *
    * @param name  the name.
    */
-  void deployVerticle(String name);
+  Promise<String> deployVerticle(String name);
 
   /**
    * Like {@link #deployVerticle(String)} but the completionHandler will be notified when the deployment is complete.
@@ -376,7 +376,7 @@ public interface Vertx extends Measured {
    * @param name  the name
    * @param options  the deployment options.
    */
-  void deployVerticle(String name, DeploymentOptions options);
+  Promise<String> deployVerticle(String name, DeploymentOptions options);
 
   /**
    * Like {@link #deployVerticle(String, Handler)} but {@link io.vertx.core.DeploymentOptions} are provided to configure the
@@ -395,7 +395,7 @@ public interface Vertx extends Measured {
    *
    * @param deploymentID  the deployment ID
    */
-  void undeploy(String deploymentID);
+  Promise<Void> undeploy(String deploymentID);
 
   /**
    * Like {@link #undeploy(String) } but the completionHandler will be notified when the undeployment is complete.

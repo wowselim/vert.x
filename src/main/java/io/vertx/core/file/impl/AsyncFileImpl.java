@@ -20,6 +20,7 @@ import io.netty.buffer.ByteBuf;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.AsyncFile;
 import io.vertx.core.file.FileSystemException;
@@ -108,8 +109,10 @@ public class AsyncFileImpl implements AsyncFile {
   }
 
   @Override
-  public void close() {
-    closeInternal(null);
+  public Promise<Void> close() {
+    Future<Void> fut = Future.future();
+    closeInternal(fut.completer());
+    return fut;
   }
 
   @Override
@@ -255,9 +258,10 @@ public class AsyncFileImpl implements AsyncFile {
 
 
   @Override
-  public AsyncFile flush() {
-    doFlush(null);
-    return this;
+  public Promise<Void> flush() {
+    Future<Void> fut = Future.future();
+    doFlush(fut.completer());
+    return fut;
   }
 
   @Override
@@ -482,4 +486,8 @@ public class AsyncFileImpl implements AsyncFile {
     }
   }
 
+  @Override
+  public Promise<Buffer> read(Buffer buffer, int offset, long position, int length) {
+    return null;
+  }
 }

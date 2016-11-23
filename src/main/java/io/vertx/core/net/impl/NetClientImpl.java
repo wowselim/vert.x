@@ -34,6 +34,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Promise;
 import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.logging.Logger;
@@ -92,10 +93,16 @@ public class NetClientImpl implements NetClient, MetricsProvider {
     this.metrics = vertx.metricsSPI().createMetrics(this, options);
   }
 
-  public synchronized NetClient connect(int port, String host, Handler<AsyncResult<NetSocket>> connectHandler) {
+  @Override
+  public Promise<NetSocket> connect(int port, String host) {
+    Future<NetSocket> fut = Future.future();
+    connect(port, host, fut.completer());
+    return fut;
+  }
+
+  public synchronized void connect(int port, String host, Handler<AsyncResult<NetSocket>> connectHandler) {
     checkClosed();
     connect(port, host, connectHandler, options.getReconnectAttempts());
-    return this;
   }
 
   @Override

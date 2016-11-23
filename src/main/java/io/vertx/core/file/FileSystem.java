@@ -19,7 +19,9 @@ package io.vertx.core.file;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Promise;
 import io.vertx.core.Handler;
+import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.codegen.annotations.VertxGen;
 
@@ -58,6 +60,8 @@ public interface FileSystem {
   @Fluent
   FileSystem copy(String from, String to, Handler<AsyncResult<Void>> handler);
 
+  Promise<Void> copy(String from, String to);
+
   /**
    * Blocking version of {@link #copy(String, String, Handler)}
    */
@@ -81,6 +85,8 @@ public interface FileSystem {
   @Fluent
   FileSystem copyRecursive(String from, String to, boolean recursive, Handler<AsyncResult<Void>> handler);
 
+  Promise<Void> copyRecursive(String from, String to, boolean recursive);
+
   /**
    * Blocking version of {@link #copyRecursive(String, String, boolean, Handler)}
    */
@@ -99,6 +105,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem move(String from, String to, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> move(String from, String to);
 
   /**
    * Blocking version of {@link #move(String, String, Handler)}
@@ -119,6 +127,8 @@ public interface FileSystem {
   @Fluent
   FileSystem truncate(String path, long len, Handler<AsyncResult<Void>> handler);
 
+  Promise<Void> truncate(String path, long len);
+
   /**
    * Blocking version of {@link #truncate(String, long, Handler)}
    */
@@ -138,6 +148,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem chmod(String path, String perms, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> chmod(String path, String perms);
 
   /**
    * Blocking version of {@link #chmod(String, String, Handler) }
@@ -162,6 +174,8 @@ public interface FileSystem {
   @Fluent
   FileSystem chmodRecursive(String path, String perms, String dirPerms, Handler<AsyncResult<Void>> handler);
 
+  Promise<Void> chmodRecursive(String path, String perms, String dirPerms);
+
   /**
    * Blocking version of {@link #chmodRecursive(String, String, String, Handler)}
    */
@@ -180,6 +194,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem chown(String path, @Nullable String user, @Nullable String group, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> chown(String path, @Nullable String user, @Nullable String group);
 
   /**
    * Blocking version of {@link #chown(String, String, String, Handler)}
@@ -200,6 +216,8 @@ public interface FileSystem {
   @Fluent
   FileSystem props(String path, Handler<AsyncResult<FileProps>> handler);
 
+  Promise<FileProps> props(String path);
+
   /**
    * Blocking version of {@link #props(String, Handler)}
    */
@@ -217,6 +235,8 @@ public interface FileSystem {
   @Fluent
   FileSystem lprops(String path, Handler<AsyncResult<FileProps>> handler);
 
+  Promise<FileProps> lprops(String path);
+
   /**
    * Blocking version of {@link #lprops(String, Handler)}
    */
@@ -232,6 +252,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem link(String link, String existing, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> link(String link, String existing);
 
   /**
    * Blocking version of {@link #link(String, String, Handler)}
@@ -250,6 +272,8 @@ public interface FileSystem {
   @Fluent
   FileSystem symlink(String link, String existing, Handler<AsyncResult<Void>> handler);
 
+  Promise<Void> symlink(String link, String existing);
+
   /**
    * Blocking version of {@link #link(String, String, Handler)}
    */
@@ -265,6 +289,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem unlink(String link, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> unlink(String link);
 
   /**
    * Blocking version of {@link #unlink(String, Handler)}
@@ -282,6 +308,8 @@ public interface FileSystem {
   @Fluent
   FileSystem readSymlink(String link, Handler<AsyncResult<String>> handler);
 
+  Promise<String> readSymlink(String link);
+
   /**
    * Blocking version of {@link #readSymlink(String, Handler)}
    */
@@ -296,6 +324,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem delete(String path, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> delete(String path);
 
   /**
    * Blocking version of {@link #delete(String, Handler)}
@@ -317,6 +347,8 @@ public interface FileSystem {
   @Fluent
   FileSystem deleteRecursive(String path, boolean recursive, Handler<AsyncResult<Void>> handler);
 
+  Promise<Void> deleteRecursive(String path, boolean recursive);
+
   /**
    * Blocking version of {@link #deleteRecursive(String, boolean, Handler)}
    */
@@ -334,6 +366,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem mkdir(String path, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> mkdir(String path);
 
   /**
    * Blocking version of {@link #mkdir(String, Handler)}
@@ -359,6 +393,8 @@ public interface FileSystem {
   @Fluent
   FileSystem mkdir(String path, String perms, Handler<AsyncResult<Void>> handler);
 
+  Promise<Void> mkdir(String path, String perms);
+
   /**
    * Blocking version of {@link #mkdir(String, String, Handler)}
    */
@@ -376,6 +412,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem mkdirs(String path, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> mkdirs(String path);
 
   /**
    * Blocking version of {@link #mkdirs(String, Handler)}
@@ -401,6 +439,8 @@ public interface FileSystem {
   @Fluent
   FileSystem mkdirs(String path, String perms, Handler<AsyncResult<Void>> handler);
 
+  Promise<Void> mkdirs(String path, String perms);
+
   /**
    * Blocking version of {@link #mkdirs(String, String, Handler)}
    */
@@ -418,6 +458,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem readDir(String path, Handler<AsyncResult<List<String>>> handler);
+
+  Promise<List<String>> readDir(String path);
 
   /**
    * Blocking version of {@link #readDir(String, Handler)}
@@ -440,6 +482,8 @@ public interface FileSystem {
   @Fluent
   FileSystem readDir(String path, String filter, Handler<AsyncResult<List<String>>> handler);
 
+  Promise<List<String>> readDir(String path, String filter);
+
   /**
    * Blocking version of {@link #readDir(String, String, Handler)}
    */
@@ -457,6 +501,8 @@ public interface FileSystem {
   @Fluent
   FileSystem readFile(String path, Handler<AsyncResult<Buffer>> handler);
 
+  Promise<Buffer> readFile(String path);
+
   /**
    * Blocking version of {@link #readFile(String, Handler)}
    */
@@ -472,6 +518,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem writeFile(String path, Buffer data, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> writeFile(String path, Buffer data);
 
   /**
    * Blocking version of {@link #writeFile(String, Buffer, Handler)}
@@ -492,6 +540,8 @@ public interface FileSystem {
   @Fluent
   FileSystem open(String path, OpenOptions options, Handler<AsyncResult<AsyncFile>> handler);
 
+  Promise<AsyncFile> open(String path, OpenOptions options);
+
   /**
    * Blocking version of {@link #open(String, io.vertx.core.file.OpenOptions, Handler)}
    */
@@ -506,6 +556,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem createFile(String path, Handler<AsyncResult<Void>> handler);
+
+  Promise<Void> createFile(String path);
 
   /**
    * Blocking version of {@link #createFile(String, Handler)}
@@ -524,6 +576,8 @@ public interface FileSystem {
   @Fluent
   FileSystem createFile(String path, String perms, Handler<AsyncResult<Void>> handler);
 
+  Promise<Void> createFile(String path, String perms);
+
   /**
    * Blocking version of {@link #createFile(String, String, Handler)}
    */
@@ -540,6 +594,8 @@ public interface FileSystem {
   @Fluent
   FileSystem exists(String path, Handler<AsyncResult<Boolean>> handler);
 
+  Promise<Boolean> exists(String path);
+
   /**
    * Blocking version of {@link #exists(String, Handler)}
    */
@@ -554,6 +610,8 @@ public interface FileSystem {
    */
   @Fluent
   FileSystem fsProps(String path, Handler<AsyncResult<FileSystemProps>> handler);
+
+  Promise<FileSystemProps> fsProps(String path);
 
   /**
    * Blocking version of {@link #fsProps(String, Handler)}

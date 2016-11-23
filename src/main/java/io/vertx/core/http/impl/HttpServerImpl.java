@@ -61,7 +61,6 @@ import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.AsyncResultHandler;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -207,31 +206,37 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public HttpServer listen() {
-    return listen(options.getPort(), options.getHost(), null);
+  public Future<HttpServer> listen() {
+    Future<HttpServer> fut = Future.future();
+    listen(options.getPort(), options.getHost(), fut.completer());
+    return fut;
   }
 
   @Override
-  public HttpServer listen(Handler<AsyncResult<HttpServer>> listenHandler) {
-    return listen(options.getPort(), options.getHost(), listenHandler);
+  public void listen(Handler<AsyncResult<HttpServer>> listenHandler) {
+    listen(options.getPort(), options.getHost(), listenHandler);
   }
 
   @Override
-  public HttpServer listen(int port, String host) {
-    return listen(port, host, null);
+  public Future<HttpServer> listen(int port, String host) {
+    Future<HttpServer> fut = Future.future();
+    listen(port, host, fut.completer());
+    return fut;
   }
 
   @Override
-  public HttpServer listen(int port) {
-    return listen(port, "0.0.0.0", null);
+  public Future<HttpServer> listen(int port) {
+    Future<HttpServer> fut = Future.future();
+    listen(port, "0.0.0.0", fut.completer());
+    return fut;
   }
 
   @Override
-  public HttpServer listen(int port, Handler<AsyncResult<HttpServer>> listenHandler) {
-    return listen(port, "0.0.0.0", listenHandler);
+  public void listen(int port, Handler<AsyncResult<HttpServer>> listenHandler) {
+    listen(port, "0.0.0.0", listenHandler);
   }
 
-  public synchronized HttpServer listen(int port, String host, Handler<AsyncResult<HttpServer>> listenHandler) {
+  public synchronized void listen(int port, String host, Handler<AsyncResult<HttpServer>> listenHandler) {
     if (requestStream.handler() == null && wsStream.handler() == null) {
       throw new IllegalStateException("Set request or websocket handler first");
     }
@@ -313,7 +318,7 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
             log.error(t);
           }
           listening = false;
-          return this;
+          return;
         }
         vertx.sharedHttpServers().put(id, this);
         actualServer = this;
@@ -341,7 +346,6 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
         }
       });
     }
-    return this;
   }
 
   // Visible for testing
@@ -412,8 +416,10 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public void close() {
-    close(null);
+  public Future<Void> close() {
+    Future<Void> fut = Future.future();
+    close(fut.completer());
+    return fut;
   }
 
   @Override
