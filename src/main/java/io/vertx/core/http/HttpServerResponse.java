@@ -22,6 +22,7 @@ import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.buffer.Buffer;
@@ -257,8 +258,7 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    * @param filename  path to the file to serve
    * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  default HttpServerResponse sendFile(String filename) {
+  default Future<Void> sendFile(String filename) {
     return sendFile(filename, 0);
   }
 
@@ -270,8 +270,7 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    * @param offset offset to start serving from
    * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  default HttpServerResponse sendFile(String filename, long offset) {
+  default Future<Void> sendFile(String filename, long offset) {
     return sendFile(filename, offset, Long.MAX_VALUE);
   }
 
@@ -287,8 +286,7 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    * @param length length to serve to
    * @return a reference to this, so the API can be used fluently
    */
-  @Fluent
-  HttpServerResponse sendFile(String filename, long offset, long length);
+  Future<Void> sendFile(String filename, long offset, long length);
 
   /**
    * Like {@link #sendFile(String)} but providing a handler which will be notified once the file has been completely
@@ -385,18 +383,26 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
   /**
    * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)} with no headers.
    */
+  @Fluent
   HttpServerResponse push(HttpMethod method, String host, String path, Handler<AsyncResult<HttpServerResponse>> handler);
+
+  Future<HttpServerResponse> push(HttpMethod method, String host, String path);
 
   /**
    * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)} with the host copied from the current request.
    */
+  @Fluent
   HttpServerResponse push(HttpMethod method, String path, MultiMap headers, Handler<AsyncResult<HttpServerResponse>> handler);
+
+  Future<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers);
 
   /**
    * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)} with the host copied from the current request.
    */
   @Fluent
   HttpServerResponse push(HttpMethod method, String path, Handler<AsyncResult<HttpServerResponse>> handler);
+
+  Future<HttpServerResponse> push(HttpMethod method, String path);
 
   /**
    * Push a response to the client.<p/>
@@ -418,6 +424,8 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    */
   @Fluent
   HttpServerResponse push(HttpMethod method, String host, String path, MultiMap headers, Handler<AsyncResult<HttpServerResponse>> handler);
+
+  Future<HttpServerResponse> push(HttpMethod method, String host, String path, MultiMap headers);
 
   /**
    * Reset this HTTP/2 stream with the error code {@code 0}.

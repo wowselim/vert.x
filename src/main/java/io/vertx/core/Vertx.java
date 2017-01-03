@@ -102,6 +102,12 @@ public interface Vertx extends Measured {
     factory.clusteredVertx(options, resultHandler);
   }
 
+  static Future<Vertx> clusteredVertx(VertxOptions options) {
+    Future<Vertx> fut = Future.future();
+    factory.clusteredVertx(options, fut.completer());
+    return fut;
+  }
+
   /**
    * Gets the current context
    *

@@ -481,8 +481,10 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
   }
 
   @Override
-  public HttpServerResponse sendFile(String filename, long offset, long length) {
-    return sendFile(filename, offset, length, null);
+  public Future<Void> sendFile(String filename, long offset, long length) {
+    Future<Void> fut = Future.future();
+    sendFile(filename, offset, length, fut.completer());
+    return fut;
   }
 
   @Override
@@ -612,8 +614,28 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
   }
 
   @Override
+  public Future<HttpServerResponse> push(HttpMethod method, String host, String path) {
+    return push(method, host, path, (MultiMap) null);
+  }
+
+  @Override
   public HttpServerResponse push(HttpMethod method, String path, MultiMap headers, Handler<AsyncResult<HttpServerResponse>> handler) {
     return push(method, null, path, headers, handler);
+  }
+
+  @Override
+  public Future<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers) {
+    return push(method, null, path, headers);
+  }
+
+  @Override
+  public HttpServerResponse push(HttpMethod method, String path, Handler<AsyncResult<HttpServerResponse>> handler) {
+    return push(method, host, path, handler);
+  }
+
+  @Override
+  public Future<HttpServerResponse> push(HttpMethod method, String path) {
+    return push(method, host, path);
   }
 
   @Override
@@ -633,7 +655,9 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
   }
 
   @Override
-  public HttpServerResponse push(HttpMethod method, String path, Handler<AsyncResult<HttpServerResponse>> handler) {
-    return push(method, host, path, handler);
+  public Future<HttpServerResponse> push(HttpMethod method, String host, String path, MultiMap headers) {
+    Future<HttpServerResponse> fut = Future.future();
+    push(method, host, path, headers, fut.completer());
+    return fut;
   }
 }
