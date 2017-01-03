@@ -467,10 +467,14 @@ public interface Vertx extends Measured {
    */
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered, Handler<AsyncResult<T>> resultHandler);
 
+  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
+
   /**
    * Like {@link #executeBlocking(Handler, boolean, Handler)} called with ordered = true.
    */
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, Handler<AsyncResult<T>> resultHandler);
+
+  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler);
 
   /**
    * Return the Netty EventLoopGroup used by Vert.x

@@ -54,11 +54,17 @@ public interface WorkerExecutor extends Measured {
    */
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered, Handler<AsyncResult<T>> resultHandler);
 
+  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
+
   /**
    * Like {@link #executeBlocking(Handler, boolean, Handler)} called with ordered = true.
    */
   default <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, Handler<AsyncResult<T>> resultHandler) {
     executeBlocking(blockingCodeHandler, true, resultHandler);
+  }
+
+  default <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler) {
+    return executeBlocking(blockingCodeHandler, true);
   }
 
   /**

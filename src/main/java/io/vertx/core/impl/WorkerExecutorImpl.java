@@ -72,6 +72,13 @@ class WorkerExecutorImpl implements Closeable, MetricsProvider, WorkerExecutorIn
   }
 
   @Override
+  public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered) {
+    Future<T> fut = Future.future();
+    executeBlocking(blockingCodeHandler, ordered, fut.completer());
+    return fut;
+  }
+
+  @Override
   public void close() {
     synchronized (this) {
       if (!closed) {

@@ -242,9 +242,23 @@ public abstract class ContextImpl implements ContextInternal {
     executeBlocking(blockingCodeHandler, true, resultHandler);
   }
 
+  @Override
+  public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered) {
+    Future<T> fut = Future.future();
+    executeBlocking(blockingCodeHandler, ordered, fut.completer());
+    return fut;
+  }
+
+  @Override
+  public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler) {
+    Future<T> fut = Future.future();
+    executeBlocking(blockingCodeHandler, fut.completer());
+    return fut;
+  }
+
   <T> void executeBlocking(Action<T> action, Handler<Future<T>> blockingCodeHandler,
-      Handler<AsyncResult<T>> resultHandler,
-      Executor exec, PoolMetrics metrics) {
+                           Handler<AsyncResult<T>> resultHandler,
+                           Executor exec, PoolMetrics metrics) {
     Object queueMetric = metrics != null ? metrics.submitted() : null;
     try {
       exec.execute(() -> {

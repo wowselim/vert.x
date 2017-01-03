@@ -123,6 +123,8 @@ public interface Context {
    */
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered, Handler<AsyncResult<T>> resultHandler);
 
+  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
+
   /**
    * Invoke {@link #executeBlocking(Handler, boolean, Handler)} with order = true.
    * @param blockingCodeHandler  handler representing the blocking code to run
@@ -130,6 +132,8 @@ public interface Context {
    * @param <T> the type of the result
    */
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, Handler<AsyncResult<T>> resultHandler);
+
+  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler);
 
   /**
    * If the context is associated with a Verticle deployment, this returns the deployment ID of that deployment.
