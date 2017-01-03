@@ -31,7 +31,7 @@ import java.util.function.Function;
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 @VertxGen
-public interface Future<T> extends AsyncResult<T>, Promise<T> {
+public interface Future<T> extends AsyncResult<T> {
 
   /**
    * Create a future that hasn't completed yet

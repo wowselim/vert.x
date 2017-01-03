@@ -19,9 +19,9 @@ package io.vertx.core.net;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.VertxGen;
-import io.vertx.core.Promise;
 import io.vertx.core.metrics.Measured;
 import io.vertx.core.streams.ReadStream;
 
@@ -62,7 +62,7 @@ public interface NetServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  Promise<NetServer> listen();
+  Future<NetServer> listen();
 
   /**
    * Like {@link #listen} but providing a handler that will be notified when the server is listening, or fails.
@@ -83,7 +83,7 @@ public interface NetServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  Promise<NetServer> listen(int port, String host);
+  Future<NetServer> listen(int port, String host);
 
   /**
    * Like {@link #listen(int, String)} but providing a handler that will be notified when the server is listening, or fails.
@@ -104,7 +104,7 @@ public interface NetServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  Promise<NetServer> listen(int port);
+  Future<NetServer> listen(int port);
 
   /**
    * Like {@link #listen(int)} but providing a handler that will be notified when the server is listening, or fails.
@@ -118,7 +118,7 @@ public interface NetServer extends Measured {
    * Close the server. This will close any currently open connections. The close may not complete until after this
    * method has returned.
    */
-  Promise<Void> close();
+  Future<Void> close();
 
   /**
    * Like {@link #close} but supplying a handler that will be notified when close is complete.

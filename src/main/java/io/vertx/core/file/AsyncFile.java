@@ -20,7 +20,7 @@ import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import io.vertx.core.Promise;
+import io.vertx.core.Future;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
@@ -71,7 +71,7 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
   /**
    * Close the file. The actual close happens asynchronously.
    */
-  Promise<Void> close();
+  Future<Void> close();
 
   /**
    * Close the file. The actual close happens asynchronously.
@@ -100,7 +100,7 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
   @Fluent
   AsyncFile write(Buffer buffer, long position, Handler<AsyncResult<Void>> handler);
 
-  Promise<Buffer> read(Buffer buffer, int offset, long position, int length);
+  Future<Buffer> read(Buffer buffer, int offset, long position, int length);
 
   /**
    * Reads {@code length} bytes of data from the file at position {@code position} in the file, asynchronously.
@@ -131,7 +131,7 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  Promise<Void> flush();
+  Future<Void> flush();
 
   /**
    * Same as {@link #flush} but the handler will be called when the flush is complete or if an error occurs

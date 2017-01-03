@@ -17,9 +17,9 @@
 package io.vertx.core.net;
 
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.VertxGen;
-import io.vertx.core.Promise;
 import io.vertx.core.metrics.Measured;
 
 /**
@@ -44,7 +44,7 @@ public interface NetClient extends Measured {
    * @param port  the port
    * @param host  the host
    */
-  Promise<NetSocket> connect(int port, String host);
+  Future<NetSocket> connect(int port, String host);
 
   /**
    * Open a connection to a server at the specific {@code port} and {@code host}.

@@ -20,7 +20,6 @@ import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.Promise;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.AsyncFile;
 import io.vertx.core.file.FileProps;
@@ -814,142 +813,142 @@ public class FileSystemImpl implements FileSystem {
   }
 
   @Override
-  public Promise<Void> copy(String from, String to) {
+  public Future<Void> copy(String from, String to) {
     return null;
   }
 
   @Override
-  public Promise<Void> copyRecursive(String from, String to, boolean recursive) {
+  public Future<Void> copyRecursive(String from, String to, boolean recursive) {
     return null;
   }
 
   @Override
-  public Promise<Void> move(String from, String to) {
+  public Future<Void> move(String from, String to) {
     return null;
   }
 
   @Override
-  public Promise<Void> truncate(String path, long len) {
+  public Future<Void> truncate(String path, long len) {
     return null;
   }
 
   @Override
-  public Promise<Void> chmod(String path, String perms) {
+  public Future<Void> chmod(String path, String perms) {
     return null;
   }
 
   @Override
-  public Promise<Void> chmodRecursive(String path, String perms, String dirPerms) {
+  public Future<Void> chmodRecursive(String path, String perms, String dirPerms) {
     return null;
   }
 
   @Override
-  public Promise<Void> chown(String path, @Nullable String user, @Nullable String group) {
+  public Future<Void> chown(String path, @Nullable String user, @Nullable String group) {
     return null;
   }
 
   @Override
-  public Promise<FileProps> props(String path) {
+  public Future<FileProps> props(String path) {
     return null;
   }
 
   @Override
-  public Promise<FileProps> lprops(String path) {
+  public Future<FileProps> lprops(String path) {
     return null;
   }
 
   @Override
-  public Promise<Void> link(String link, String existing) {
+  public Future<Void> link(String link, String existing) {
     return null;
   }
 
   @Override
-  public Promise<Void> symlink(String link, String existing) {
+  public Future<Void> symlink(String link, String existing) {
     return null;
   }
 
   @Override
-  public Promise<Void> unlink(String link) {
+  public Future<Void> unlink(String link) {
     return null;
   }
 
   @Override
-  public Promise<String> readSymlink(String link) {
+  public Future<String> readSymlink(String link) {
     return null;
   }
 
   @Override
-  public Promise<Void> delete(String path) {
+  public Future<Void> delete(String path) {
     return null;
   }
 
   @Override
-  public Promise<Void> deleteRecursive(String path, boolean recursive) {
+  public Future<Void> deleteRecursive(String path, boolean recursive) {
     return null;
   }
 
   @Override
-  public Promise<Void> mkdir(String path) {
+  public Future<Void> mkdir(String path) {
     return null;
   }
 
   @Override
-  public Promise<Void> mkdir(String path, String perms) {
+  public Future<Void> mkdir(String path, String perms) {
     return null;
   }
 
   @Override
-  public Promise<Void> mkdirs(String path) {
+  public Future<Void> mkdirs(String path) {
     return null;
   }
 
   @Override
-  public Promise<Void> mkdirs(String path, String perms) {
+  public Future<Void> mkdirs(String path, String perms) {
     return null;
   }
 
   @Override
-  public Promise<List<String>> readDir(String path) {
+  public Future<List<String>> readDir(String path) {
     return null;
   }
 
   @Override
-  public Promise<List<String>> readDir(String path, String filter) {
+  public Future<List<String>> readDir(String path, String filter) {
     return null;
   }
 
   @Override
-  public Promise<Buffer> readFile(String path) {
+  public Future<Buffer> readFile(String path) {
     return null;
   }
 
   @Override
-  public Promise<Void> writeFile(String path, Buffer data) {
+  public Future<Void> writeFile(String path, Buffer data) {
     return null;
   }
 
   @Override
-  public Promise<AsyncFile> open(String path, OpenOptions options) {
+  public Future<AsyncFile> open(String path, OpenOptions options) {
     return null;
   }
 
   @Override
-  public Promise<Void> createFile(String path) {
+  public Future<Void> createFile(String path) {
     return null;
   }
 
   @Override
-  public Promise<Void> createFile(String path, String perms) {
+  public Future<Void> createFile(String path, String perms) {
     return null;
   }
 
   @Override
-  public Promise<Boolean> exists(String path) {
+  public Future<Boolean> exists(String path) {
     return null;
   }
 
   @Override
-  public Promise<FileSystemProps> fsProps(String path) {
+  public Future<FileSystemProps> fsProps(String path) {
     return null;
   }
 }

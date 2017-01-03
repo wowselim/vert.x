@@ -31,7 +31,6 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Closeable;
-import io.vertx.core.Promise;
 import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.logging.Logger;
@@ -107,14 +106,14 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public Promise<NetServer> listen(int port, String host) {
+  public Future<NetServer> listen(int port, String host) {
     Future<NetServer> fut = Future.future();
     listen(port, host, fut.completer());
     return fut;
   }
 
   @Override
-  public Promise<NetServer> listen(int port) {
+  public Future<NetServer> listen(int port) {
     Future<NetServer> fut = Future.future();
     listen(port, "0.0.0.0", fut.completer());
     return fut;
@@ -126,7 +125,7 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public Promise<NetServer> listen() {
+  public Future<NetServer> listen() {
     Future<NetServer> fut = Future.future();
     listen(fut.completer());
     return fut;
@@ -258,7 +257,7 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
     }
   }
 
-  public Promise<Void> close() {
+  public Future<Void> close() {
     Future<Void> fut = Future.future();
     close(fut.completer());
     return fut;

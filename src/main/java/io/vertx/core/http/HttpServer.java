@@ -19,10 +19,10 @@ package io.vertx.core.http;
 import io.vertx.codegen.annotations.CacheReturn;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.VertxGen;
-import io.vertx.core.Promise;
 import io.vertx.core.metrics.Measured;
 
 /**
@@ -103,7 +103,7 @@ public interface HttpServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  Promise<HttpServer> listen();
+  Future<HttpServer> listen();
 
   /**
    * Tell the server to start listening. The server will listen on the port and host specified here,
@@ -116,7 +116,7 @@ public interface HttpServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  Promise<HttpServer> listen(int port, String host);
+  Future<HttpServer> listen(int port, String host);
 
   /**
    * Like {@link #listen(int, String)} but supplying a handler that will be called when the server is actually
@@ -136,7 +136,7 @@ public interface HttpServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  Promise<HttpServer> listen(int port);
+  Future<HttpServer> listen(int port);
 
   /**
    * Like {@link #listen(int)} but supplying a handler that will be called when the server is actually listening (or has failed).
@@ -158,7 +158,7 @@ public interface HttpServer extends Measured {
    * <p>
    * The close happens asynchronously and the server may not be closed until some time after the call has returned.
    */
-  Promise<Void> close();
+  Future<Void> close();
 
   /**
    * Like {@link #close} but supplying a handler that will be called when the server is actually closed (or has failed).
