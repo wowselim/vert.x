@@ -20,6 +20,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Future;
 import io.vertx.core.impl.Arguments;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.shareddata.AsyncMap;
@@ -67,6 +68,13 @@ public class SharedDataImpl implements SharedData {
         resultHandler.handle(Future.failedFuture(ar.cause()));
       }
     });
+  }
+
+  @Override
+  public <K, V> Future<AsyncMap<K, V>> getClusterWideMap(String name) {
+    Future<AsyncMap<K, V>> ret = Future.future();
+    getClusterWideMap(name, ret.completer());
+    return ret;
   }
 
   @Override
@@ -177,10 +185,22 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
+    public Future<V> get(K k) {
+      return delegate.get(k);
+    }
+
+    @Override
     public void put(K k, V v, Handler<AsyncResult<Void>> completionHandler) {
       checkType(k);
       checkType(v);
       delegate.put(k, v, completionHandler);
+    }
+
+    @Override
+    public Future<Void> put(K k, V v) {
+      checkType(k);
+      checkType(v);
+      return delegate.put(k, v);
     }
 
     @Override
@@ -191,10 +211,24 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
+    public Future<Void> put(K k, V v, long ttl) {
+      checkType(k);
+      checkType(v);
+      return delegate.put(k, v, ttl);
+    }
+
+    @Override
     public void putIfAbsent(K k, V v, Handler<AsyncResult<V>> completionHandler) {
       checkType(k);
       checkType(v);
       delegate.putIfAbsent(k, v, completionHandler);
+    }
+
+    @Override
+    public Future<V> putIfAbsent(K k, V v) {
+      checkType(k);
+      checkType(v);
+      return delegate.putIfAbsent(k, v);
     }
 
     @Override
@@ -205,8 +239,20 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
+    public Future<V> putIfAbsent(K k, V v, long ttl) {
+      checkType(k);
+      checkType(v);
+      return delegate.putIfAbsent(k, v, ttl);
+    }
+
+    @Override
     public void remove(K k, Handler<AsyncResult<V>> resultHandler) {
       delegate.remove(k, resultHandler);
+    }
+
+    @Override
+    public Future<V> remove(K k) {
+      return delegate.remove(k);
     }
 
     @Override
@@ -215,8 +261,18 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
+    public Future<Boolean> removeIfPresent(K k, V v) {
+      return delegate.removeIfPresent(k, v);
+    }
+
+    @Override
     public void replace(K k, V v, Handler<AsyncResult<V>> resultHandler) {
       delegate.replace(k, v, resultHandler);
+    }
+
+    @Override
+    public Future<V> replace(K k, V v) {
+      return delegate.replace(k, v);
     }
 
     @Override
@@ -225,13 +281,28 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
+    public Future<Boolean> replaceIfPresent(K k, V oldValue, V newValue) {
+      return delegate.replaceIfPresent(k, oldValue, newValue);
+    }
+
+    @Override
     public void clear(Handler<AsyncResult<Void>> resultHandler) {
       delegate.clear(resultHandler);
     }
 
     @Override
+    public Future<Void> clear() {
+      return delegate.clear();
+    }
+
+    @Override
     public void size(Handler<AsyncResult<Integer>> resultHandler) {
       delegate.size(resultHandler);
+    }
+
+    @Override
+    public Future<Integer> size() {
+      return delegate.size();
     }
   }
 

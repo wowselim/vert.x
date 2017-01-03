@@ -19,6 +19,7 @@ package io.vertx.core.shareddata;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
+import io.vertx.core.Future;
 
 
 /**
@@ -39,6 +40,8 @@ public interface AsyncMap<K, V> {
    */
   void get(K k, Handler<AsyncResult<V>> resultHandler);
 
+  Future<V> get(K k);
+
   /**
    * Put a value in the map, asynchronously.
    *
@@ -47,6 +50,8 @@ public interface AsyncMap<K, V> {
    * @param completionHandler - this will be called some time later to signify the value has been put
    */
   void put(K k, V v, Handler<AsyncResult<Void>> completionHandler);
+
+  Future<Void> put(K k, V v);
 
   /**
    * Like {@link #put} but specifying a time to live for the entry. Entry will expire and get evicted after the
@@ -59,6 +64,8 @@ public interface AsyncMap<K, V> {
    */
   void put(K k, V v, long ttl, Handler<AsyncResult<Void>> completionHandler);
 
+  Future<Void> put(K k, V v, long ttl);
+
   /**
    * Put the entry only if there is no entry with the key already present. If key already present then the existing
    * value will be returned to the handler, otherwise null.
@@ -68,6 +75,8 @@ public interface AsyncMap<K, V> {
    * @param completionHandler  the handler
    */
   void putIfAbsent(K k, V v, Handler<AsyncResult<V>> completionHandler);
+
+  Future<V> putIfAbsent(K k, V v);
 
   /**
    * Link {@link #putIfAbsent} but specifying a time to live for the entry. Entry will expire and get evicted
@@ -80,6 +89,8 @@ public interface AsyncMap<K, V> {
    */
   void putIfAbsent(K k, V v, long ttl, Handler<AsyncResult<V>> completionHandler);
 
+  Future<V> putIfAbsent(K k, V v, long ttl);
+
   /**
    * Remove a value from the map, asynchronously.
    *
@@ -87,6 +98,8 @@ public interface AsyncMap<K, V> {
    * @param resultHandler - this will be called some time later to signify the value has been removed
    */
   void remove(K k, Handler<AsyncResult<V>> resultHandler);
+
+  Future<V> remove(K k);
 
   /**
    * Remove a value from the map, only if entry already exists with same value.
@@ -97,6 +110,7 @@ public interface AsyncMap<K, V> {
    */
   void removeIfPresent(K k, V v, Handler<AsyncResult<Boolean>> resultHandler);
 
+  Future<Boolean> removeIfPresent(K k, V v);
 
   /**
    * Replace the entry only if it is currently mapped to some value
@@ -106,6 +120,8 @@ public interface AsyncMap<K, V> {
    * @param resultHandler  the result handler will be passed the previous value
    */
   void replace(K k, V v, Handler<AsyncResult<V>> resultHandler);
+
+  Future<V> replace(K k, V v);
 
   /**
    * Replace the entry only if it is currently mapped to a specific value
@@ -117,6 +133,8 @@ public interface AsyncMap<K, V> {
    */
   void replaceIfPresent(K k, V oldValue, V newValue, Handler<AsyncResult<Boolean>> resultHandler);
 
+  Future<Boolean> replaceIfPresent(K k, V oldValue, V newValue);
+
   /**
    * Clear all entries in the map
    *
@@ -124,11 +142,15 @@ public interface AsyncMap<K, V> {
    */
   void clear(Handler<AsyncResult<Void>> resultHandler);
 
+  Future<Void> clear();
+
   /**
    * Provide the number of entries in the map
    *
    * @param resultHandler  handler which will receive the number of entries
    */
   void size(Handler<AsyncResult<Integer>> resultHandler);
+
+  Future<Integer> size();
 
 }

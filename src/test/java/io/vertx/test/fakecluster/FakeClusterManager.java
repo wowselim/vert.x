@@ -243,71 +243,126 @@ public class FakeClusterManager implements ClusterManager {
 
     @Override
     public void get(final K k, Handler<AsyncResult<V>> resultHandler) {
-      vertx.executeBlocking(fut -> fut.complete(map.get(k)), resultHandler);
+      get(k).setHandler(resultHandler);
+    }
+
+    @Override
+    public Future<V> get(K k) {
+      return vertx.executeBlocking(fut -> fut.complete(map.get(k)));
     }
 
     @Override
     public void put(final K k, final V v, Handler<AsyncResult<Void>> resultHandler) {
-      vertx.executeBlocking(fut -> {
+      put(k, v).setHandler(resultHandler);
+    }
+
+    @Override
+    public Future<Void> put(K k, V v) {
+      return vertx.executeBlocking(fut -> {
         map.put(k, v);
         fut.complete();
-      }, resultHandler);
+      });
     }
 
     @Override
     public void putIfAbsent(K k, V v, Handler<AsyncResult<V>> resultHandler) {
-      vertx.executeBlocking(fut -> fut.complete(map.putIfAbsent(k, v)), resultHandler);
+      putIfAbsent(k, v).setHandler(resultHandler);
+    }
+
+    @Override
+    public Future<V> putIfAbsent(K k, V v) {
+      return vertx.executeBlocking(fut -> fut.complete(map.putIfAbsent(k, v)));
     }
 
     @Override
     public void put(K k, V v, long timeout, Handler<AsyncResult<Void>> completionHandler) {
-      put(k, v, completionHandler);
+      put(k, v, timeout).setHandler(completionHandler);
+    }
+
+    @Override
+    public Future<Void> put(K k, V v, long timeout) {
+      Future<Void> fut = put(k, v);
       vertx.setTimer(timeout, tid -> map.remove(k));
+      return fut;
     }
 
     @Override
     public void putIfAbsent(K k, V v, long timeout, Handler<AsyncResult<V>> completionHandler) {
+      putIfAbsent(k, v, timeout).setHandler(completionHandler);
+    }
+
+    @Override
+    public Future<V> putIfAbsent(K k, V v, long timeout) {
       Future<V> future = Future.future();
-      putIfAbsent(k, v, future.completer());
-      future.map(vv -> {
+      Future<V> tt = putIfAbsent(k, v);
+      return future.map(vv -> {
         if (vv == null) vertx.setTimer(timeout, tid -> map.remove(k));
         return vv;
-      }).setHandler(completionHandler);
+      });
     }
 
     @Override
     public void removeIfPresent(K k, V v, Handler<AsyncResult<Boolean>> resultHandler) {
-      vertx.executeBlocking(fut -> fut.complete(map.remove(k, v)), resultHandler);
+      removeIfPresent(k, v).setHandler(resultHandler);
+    }
+
+    @Override
+    public Future<Boolean> removeIfPresent(K k, V v) {
+      return vertx.executeBlocking(fut -> fut.complete(map.remove(k, v)));
     }
 
     @Override
     public void replace(K k, V v, Handler<AsyncResult<V>> resultHandler) {
-      vertx.executeBlocking(fut -> fut.complete(map.replace(k, v)), resultHandler);
+      replace(k, v).setHandler(resultHandler);
+    }
+
+    @Override
+    public Future<V> replace(K k, V v) {
+      return vertx.executeBlocking(fut -> fut.complete(map.replace(k, v)));
     }
 
     @Override
     public void replaceIfPresent(K k, V oldValue, V newValue, Handler<AsyncResult<Boolean>> resultHandler) {
-      vertx.executeBlocking(fut -> fut.complete(map.replace(k, oldValue, newValue)), resultHandler);
+      replaceIfPresent(k, oldValue, newValue).setHandler(resultHandler);
+    }
+
+    @Override
+    public Future<Boolean> replaceIfPresent(K k, V oldValue, V newValue) {
+      return vertx.executeBlocking(fut -> fut.complete(map.replace(k, oldValue, newValue)));
     }
 
     @Override
     public void clear(Handler<AsyncResult<Void>> resultHandler) {
-      vertx.executeBlocking(fut -> {
+      clear().setHandler(resultHandler);
+    }
+
+    @Override
+    public Future<Void> clear() {
+      return vertx.executeBlocking(fut -> {
         map.clear();
         fut.complete();
-      }, resultHandler);
+      });
     }
 
     @Override
     public void size(Handler<AsyncResult<Integer>> resultHandler) {
-      vertx.executeBlocking(fut -> fut.complete(map.size()), resultHandler);
+      size().setHandler(resultHandler);
+    }
+
+    @Override
+    public Future<Integer> size() {
+      return vertx.executeBlocking(fut -> fut.complete(map.size()));
     }
 
     @Override
     public void remove(final K k, Handler<AsyncResult<V>> resultHandler) {
-      vertx.executeBlocking(fut -> fut.complete(map.remove(k)), resultHandler);
+      remove(k).setHandler(resultHandler);
     }
 
+    @Override
+    public Future<V> remove(K k) {
+      return vertx.executeBlocking(fut -> fut.complete(map.remove(k)));
+    }
   }
 
   private class FakeAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {

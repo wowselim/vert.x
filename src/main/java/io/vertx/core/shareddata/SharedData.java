@@ -18,6 +18,7 @@ package io.vertx.core.shareddata;
 
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 
 /**
@@ -46,6 +47,8 @@ public interface SharedData {
    * @param resultHandler  the map will be returned asynchronously in this handler
    */
   <K, V> void getClusterWideMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> resultHandler);
+
+  <K, V> Future<AsyncMap<K, V>> getClusterWideMap(String name);
 
   /**
    * Get a cluster wide lock with the specified name. The lock will be passed to the handler when it is available.
