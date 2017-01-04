@@ -25,6 +25,7 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -100,9 +101,23 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
+  public Future<@Nullable String> lookup4(String name) {
+    Future<String> fut = Future.future();
+    lookup4(name, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DnsClient lookup6(String name, Handler<AsyncResult<String>> handler) {
     lookup(name, new HandlerAdapter<String>(handler), DnsEntry.TYPE_AAAA);
     return this;
+  }
+
+  @Override
+  public Future<@Nullable String> lookup6(String name) {
+    Future<String> fut = Future.future();
+    lookup6(name, fut.completer());
+    return fut;
   }
 
   @Override
@@ -112,15 +127,36 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
+  public Future<@Nullable String> lookup(String name) {
+    Future<String> fut = Future.future();
+    lookup(name, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DnsClient resolveA(String name, Handler<AsyncResult<List<String>>> handler) {
     lookup(name, handler, DnsEntry.TYPE_A);
     return this;
   }
 
   @Override
+  public Future<List<String>> resolveA(String name) {
+    Future<List<String>> fut = Future.future();
+    resolveA(name, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DnsClient resolveCNAME(String name, Handler<AsyncResult<List<String> >> handler) {
     lookup(name, handler, DnsEntry.TYPE_CNAME);
     return this;
+  }
+
+  @Override
+  public Future<List<String>> resolveCNAME(String name) {
+    Future<List<String>> fut = Future.future();
+    resolveCNAME(name, fut.completer());
+    return fut;
   }
 
   @Override
@@ -132,6 +168,13 @@ public final class DnsClientImpl implements DnsClient {
       }
     }, DnsEntry.TYPE_MX);
     return this;
+  }
+
+  @Override
+  public Future<List<MxRecord>> resolveMX(String name) {
+    Future<List<MxRecord>> fut = Future.future();
+    resolveMX(name, fut.completer());
+    return fut;
   }
 
   @Override
@@ -156,9 +199,23 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
+  public Future<List<String>> resolveTXT(String name) {
+    Future<List<String>> fut = Future.future();
+    resolveTXT(name, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DnsClient resolvePTR(String name, Handler<AsyncResult<String>> handler) {
     lookup(name, new HandlerAdapter<String>(handler), DnsEntry.TYPE_PTR);
     return this;
+  }
+
+  @Override
+  public Future<@Nullable String> resolvePTR(String name) {
+    Future<String> fut = Future.future();
+    resolvePTR(name, fut.completer());
+    return fut;
   }
 
   @Override
@@ -168,9 +225,23 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
+  public Future<List<String>> resolveAAAA(String name) {
+    Future<List<String>> fut = Future.future();
+    resolveAAAA(name, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DnsClient resolveNS(String name, Handler<AsyncResult<List<String>>> handler) {
     lookup(name, handler, DnsEntry.TYPE_NS);
     return this;
+  }
+
+  @Override
+  public Future<List<String>> resolveNS(String name) {
+    Future<List<String>> fut = Future.future();
+    resolveNS(name, fut.completer());
+    return fut;
   }
 
   @Override
@@ -182,6 +253,13 @@ public final class DnsClientImpl implements DnsClient {
       }
     }, DnsEntry.TYPE_SRV);
     return this;
+  }
+
+  @Override
+  public Future<List<SrvRecord>> resolveSRV(String name) {
+    Future<List<SrvRecord>> fut = Future.future();
+    resolveSRV(name, fut.completer());
+    return fut;
   }
 
   @Override
@@ -227,6 +305,13 @@ public final class DnsClientImpl implements DnsClient {
       actualCtx.runOnContext((v) -> handler.handle(Future.failedFuture(e)));
     }
     return this;
+  }
+
+  @Override
+  public Future<@Nullable String> reverseLookup(String ipaddress) {
+    Future<String> fut = Future.future();
+    reverseLookup(ipaddress, fut.completer());
+    return fut;
   }
 
   @SuppressWarnings("unchecked")
