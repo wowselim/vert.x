@@ -492,12 +492,10 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
     synchronized (conn) {
       checkEnded();
 
-      Context resultCtx = resultHandler != null ? stream.vertx.getOrCreateContext() : null;
-
       File file = stream.vertx.resolveFile(filename);
       if (!file.exists()) {
         if (resultHandler != null) {
-          resultCtx.runOnContext((v) -> resultHandler.handle(Future.failedFuture(new FileNotFoundException())));
+          resultHandler.handle(Future.failedFuture(new FileNotFoundException()));
         } else {
            log.error("File not found: " + filename);
         }
@@ -509,7 +507,7 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
         raf = new RandomAccessFile(file, "r");
       } catch (IOException e) {
         if (resultHandler != null) {
-          resultCtx.runOnContext((v) -> resultHandler.handle(Future.failedFuture(e)));
+          resultHandler.handle(Future.failedFuture(e));
         } else {
           log.error("Failed to send file", e);
         }
@@ -534,9 +532,7 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
           end();
         }
         if (resultHandler != null) {
-          resultCtx.runOnContext(v -> {
-            resultHandler.handle(Future.succeededFuture());
-          });
+          resultHandler.handle(Future.succeededFuture());
         }
       }, stream, offset, contentLength);
       drainHandler(fileChannel.drainHandler);

@@ -19,6 +19,7 @@ package io.vertx.core.net;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.CacheReturn;
 import io.vertx.codegen.annotations.Fluent;
@@ -106,10 +107,9 @@ public interface NetSocket extends ReadStream<Buffer>, WriteStream<Buffer> {
    * bypassing userspace altogether (where supported by the underlying operating system. This is a very efficient way to stream files.
    *
    * @param filename  file name of the file to send
-   * @return a reference to this, so the API can be used fluently
+   * @return a future that will be resolved when the send has completed or a failure has occurred
    */
-  @Fluent
-  default NetSocket sendFile(String filename) {
+  default Future<Void> sendFile(String filename) {
     return sendFile(filename, 0, Long.MAX_VALUE);
   }
 
@@ -119,10 +119,9 @@ public interface NetSocket extends ReadStream<Buffer>, WriteStream<Buffer> {
    *
    * @param filename  file name of the file to send
    * @param offset offset
-   * @return a reference to this, so the API can be used fluently
+   * @return a future that will be resolved when the send has completed or a failure has occurred
    */
-  @Fluent
-  default NetSocket sendFile(String filename, long offset) {
+  default Future<Void> sendFile(String filename, long offset) {
     return sendFile(filename, offset, Long.MAX_VALUE);
   }
 
@@ -133,10 +132,9 @@ public interface NetSocket extends ReadStream<Buffer>, WriteStream<Buffer> {
    * @param filename  file name of the file to send
    * @param offset offset
    * @param length length
-   * @return a reference to this, so the API can be used fluently
+   * @return a future that will be resolved when the send has completed or a failure has occurred
    */
-  @Fluent
-  NetSocket sendFile(String filename, long offset, long length);
+  Future<Void> sendFile(String filename, long offset, long length);
 
   /**
    * Same as {@link #sendFile(String)} but also takes a handler that will be called when the send has completed or

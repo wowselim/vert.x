@@ -29,7 +29,6 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.*;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -441,8 +440,7 @@ public class HttpServerResponseImpl implements HttpServerResponse {
 
       if (!file.exists()) {
         if (resultHandler != null) {
-          ContextImpl ctx = vertx.getOrCreateContext();
-          ctx.runOnContext((v) -> resultHandler.handle(Future.failedFuture(new FileNotFoundException())));
+          resultHandler.handle(Future.failedFuture(new FileNotFoundException()));
         } else {
           log.error("File not found: " + filename);
         }
@@ -475,8 +473,7 @@ public class HttpServerResponseImpl implements HttpServerResponse {
         } catch (IOException ignore) {
         }
         if (resultHandler != null) {
-          ContextImpl ctx = vertx.getOrCreateContext();
-          ctx.runOnContext((v) -> resultHandler.handle(Future.failedFuture(e)));
+          resultHandler.handle(Future.failedFuture(e));
         } else {
           log.error("Failed to send file", e);
         }
@@ -488,15 +485,12 @@ public class HttpServerResponseImpl implements HttpServerResponse {
       written = true;
 
       if (resultHandler != null) {
-        ContextImpl ctx = vertx.getOrCreateContext();
         channelFuture.addListener(future -> {
-          AsyncResult<Void> res;
           if (future.isSuccess()) {
-            res = Future.succeededFuture();
+            resultHandler.handle(Future.succeededFuture());
           } else {
-            res = Future.failedFuture(future.cause());
+            resultHandler.handle(Future.failedFuture(future.cause()));
           }
-          ctx.runOnContext((v) -> resultHandler.handle(res));
         });
       }
 

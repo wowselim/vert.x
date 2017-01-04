@@ -179,12 +179,14 @@ public class NetSocketImpl extends ConnectionBase implements NetSocket {
   }
 
   @Override
-  public NetSocket sendFile(String filename, long offset, long length) {
-    return sendFile(filename, offset, length, null);
+  public Future<Void> sendFile(String filename, long offset, long length) {
+    Future<Void> fut = Future.future();
+    sendFile(filename, offset, length, fut.completer());
+    return fut;
   }
 
   @Override
-  public NetSocket sendFile(String filename, long offset, long length, final Handler<AsyncResult<Void>> resultHandler) {
+  public NetSocket sendFile(String filename, long offset, long length, Handler<AsyncResult<Void>> resultHandler) {
     File f = vertx.resolveFile(filename);
     if (f.isDirectory()) {
       throw new IllegalArgumentException("filename must point to a file and not to a directory");
@@ -194,14 +196,12 @@ public class NetSocketImpl extends ConnectionBase implements NetSocket {
       raf = new RandomAccessFile(f, "r");
       ChannelFuture future = super.sendFile(raf, Math.min(offset, f.length()), Math.min(length, f.length() - offset));
       if (resultHandler != null) {
-        future.addListener(fut -> {
-          final AsyncResult<Void> res;
+        future.addListener(f2 -> {
           if (future.isSuccess()) {
-            res = Future.succeededFuture();
+            resultHandler.handle(Future.succeededFuture());
           } else {
-            res = Future.failedFuture(future.cause());
+            resultHandler.handle(Future.failedFuture(future.cause()));
           }
-          vertx.runOnContext(v -> resultHandler.handle(res));
         });
       }
     } catch (IOException e) {
@@ -212,7 +212,7 @@ public class NetSocketImpl extends ConnectionBase implements NetSocket {
       } catch (IOException ignore) {
       }
       if (resultHandler != null) {
-        vertx.runOnContext(v -> resultHandler.handle(Future.failedFuture(e)));
+        resultHandler.handle(Future.failedFuture(e));
       } else {
         log.error("Failed to send file", e);
       }

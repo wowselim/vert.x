@@ -21,12 +21,13 @@ import io.netty.handler.codec.http2.Http2Stream;
 import io.netty.util.CharsetUtil;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.StreamResetException;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.net.NetSocket;
 import io.vertx.core.net.SocketAddress;
 
@@ -42,6 +43,8 @@ import java.nio.charset.Charset;
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
  */
 class VertxHttp2NetSocket<C extends Http2ConnectionBase> extends VertxHttp2Stream<C> implements NetSocket {
+
+  private static final Logger log = LoggerFactory.getLogger(VertxHttp2NetSocket.class);
 
   private Handler<Throwable> exceptionHandler;
   private Handler<Void> closeHandler;
@@ -184,21 +187,22 @@ class VertxHttp2NetSocket<C extends Http2ConnectionBase> extends VertxHttp2Strea
   }
 
   @Override
-  public NetSocket sendFile(String filename, long offset, long length) {
-    return sendFile(filename, offset, length, null);
+  public Future<Void> sendFile(String filename, long offset, long length) {
+    Future<Void> fut = Future.future();
+    sendFile(filename, offset, length, fut.completer());
+    return fut;
   }
 
   @Override
   public NetSocket sendFile(String filename, long offset, long length, Handler<AsyncResult<Void>> resultHandler) {
     synchronized (conn) {
-      Context resultCtx = resultHandler != null ? vertx.getOrCreateContext() : null;
 
       File file = vertx.resolveFile(filename);
       if (!file.exists()) {
         if (resultHandler != null) {
-          resultCtx.runOnContext((v) -> resultHandler.handle(Future.failedFuture(new FileNotFoundException())));
+          resultHandler.handle(Future.failedFuture(new FileNotFoundException()));
         } else {
-          // log.error("File not found: " + filename);
+           log.error("File not found: " + filename);
         }
         return this;
       }
@@ -208,9 +212,9 @@ class VertxHttp2NetSocket<C extends Http2ConnectionBase> extends VertxHttp2Strea
         raf = new RandomAccessFile(file, "r");
       } catch (IOException e) {
         if (resultHandler != null) {
-          resultCtx.runOnContext((v) -> resultHandler.handle(Future.failedFuture(e)));
+          resultHandler.handle(Future.failedFuture(e));
         } else {
-          //log.error("Failed to send file", e);
+          log.error("Failed to send file", e);
         }
         return this;
       }
@@ -219,15 +223,14 @@ class VertxHttp2NetSocket<C extends Http2ConnectionBase> extends VertxHttp2Strea
 
       FileStreamChannel fileChannel = new FileStreamChannel(ar -> {
         if (resultHandler != null) {
-          resultCtx.runOnContext(v -> {
-            resultHandler.handle(Future.succeededFuture());
-          });
+          resultHandler.handle(Future.succeededFuture());
         }
       }, this, offset, contentLength);
       drainHandler(fileChannel.drainHandler);
       handlerContext.channel().eventLoop().register(fileChannel);
       fileChannel.pipeline().fireUserEventTriggered(raf);
     }
+
     return this;
   }
 
