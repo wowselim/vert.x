@@ -443,7 +443,7 @@ public abstract class HttpTest extends HttpTestBase {
   public void testServerChainingSendFile() throws Exception {
     File file = setupFile("test-server-chaining.dat", "blah");
     server.requestHandler(req -> {
-      assertTrue(req.response().sendFile(file.getAbsolutePath()) == req.response());
+      assertTrue(req.response().sendFile(file.getAbsolutePath(), ar -> {}) == req.response());
       assertTrue(req.response().ended());
       file.delete();
       testComplete();
