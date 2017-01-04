@@ -2104,7 +2104,8 @@ public class Http1xTest extends HttpTest {
     HttpServer server2 = vertx.createHttpServer().requestHandler(req -> {
       server2Count.incrementAndGet();
       req.response().end();
-    }).listen(8080, onSuccess(s -> {
+    });
+    server2.listen(8080, onSuccess(s -> {
       latch1.countDown();
     }));
     awaitLatch(latch1);
@@ -2179,7 +2180,8 @@ public class Http1xTest extends HttpTest {
         .setHost("localhost").setPort(8080)).requestHandler(req -> {
       assertEquals(req.getParam("t"), longParam);
       req.response().end();
-    }).listen(onSuccess(res -> {
+    });
+    server.listen(onSuccess(res -> {
       HttpClientRequest req = vertx.createHttpClient(new HttpClientOptions())
           .request(HttpMethod.GET, 8080, "localhost", "/?t=" + longParam);
       req.handler(resp -> {
