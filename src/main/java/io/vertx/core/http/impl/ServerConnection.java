@@ -29,6 +29,7 @@ import io.netty.handler.stream.ChunkedFile;
 import io.netty.util.ReferenceCountUtil;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
@@ -528,8 +529,8 @@ class ServerConnection extends ConnectionBase implements HttpConnection {
   }
 
   @Override
-  public HttpConnection updateSettings(Http2Settings settings) {
-    throw new UnsupportedOperationException("HTTP/1.x connections don't support SETTINGS");
+  public Future<Void> updateSettings(Http2Settings settings) {
+    return Future.failedFuture(new UnsupportedOperationException("HTTP/1.x connections don't support SETTINGS"));
   }
 
   @Override
@@ -550,6 +551,11 @@ class ServerConnection extends ConnectionBase implements HttpConnection {
   @Override
   public HttpConnection ping(Buffer data, Handler<AsyncResult<Buffer>> pongHandler) {
     throw new UnsupportedOperationException("HTTP/1.x connections don't support PING");
+  }
+
+  @Override
+  public Future<Buffer> ping(Buffer data) {
+    return Future.failedFuture(new UnsupportedOperationException("HTTP/1.x connections don't support PING"));
   }
 
   @Override

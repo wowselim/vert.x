@@ -390,8 +390,10 @@ abstract class Http2ConnectionBase extends ConnectionBase implements Http2FrameL
   }
 
   @Override
-  public HttpConnection updateSettings(io.vertx.core.http.Http2Settings settings) {
-    return updateSettings(settings, null);
+  public Future<Void> updateSettings(io.vertx.core.http.Http2Settings settings) {
+    Future<Void> fut = Future.future();
+    updateSettings(settings, fut.completer());
+    return fut;
   }
 
   @Override
@@ -445,6 +447,13 @@ abstract class Http2ConnectionBase extends ConnectionBase implements Http2FrameL
       }
     });
     return this;
+  }
+
+  @Override
+  public Future<Buffer> ping(Buffer data) {
+    Future<Buffer> fut = Future.future();
+    ping(data, fut.completer());
+    return fut;
   }
 
   @Override

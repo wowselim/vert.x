@@ -21,6 +21,7 @@ import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.SocketAddress;
@@ -164,15 +165,11 @@ public interface HttpConnection {
   Http2Settings settings();
 
   /**
-   * Send to the remote endpoint an update of the server settings.
-   * <p/>
-   * This is not implemented for HTTP/1.x.
+   * The fluent future version of {@link #updateSettings(Http2Settings, Handler)}.
    *
-   * @param settings the new settings
-   * @return a reference to this, so the API can be used fluently
+   * @return the future notified when the settings have been acknowledged by the remote endpoint
    */
-  @Fluent
-  HttpConnection updateSettings(Http2Settings settings);
+  Future<Void> updateSettings(Http2Settings settings);
 
   /**
    * Send to the remote endpoint an update of this endpoint settings
@@ -210,11 +207,18 @@ public interface HttpConnection {
    * This is not implemented for HTTP/1.x.
    *
    * @param data the 8 bytes data of the frame
-   * @param pongHandler an async result handler notified with pong reply or the failure
+   * @param pongHandler an async result handler notified with the pong reply or the failure
    * @return a reference to this, so the API can be used fluently
    */
   @Fluent
   HttpConnection ping(Buffer data, Handler<AsyncResult<Buffer>> pongHandler);
+
+  /**
+   * The fluent future version of {@link #ping(Buffer, Handler)}.
+   *
+   * @return the future notified with the pong reply or the failure
+   */
+  Future<Buffer> ping(Buffer data);
 
   /**
    * Set an handler notified when a {@literal PING} frame is received from the remote endpoint.
