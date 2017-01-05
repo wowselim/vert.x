@@ -100,7 +100,11 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
   @Fluent
   AsyncFile write(Buffer buffer, long position, Handler<AsyncResult<Void>> handler);
 
-  Future<Buffer> read(Buffer buffer, int offset, long position, int length);
+  default Future<Void> write(Buffer buffer, long position) {
+    Future<Void> fut = Future.future();
+    write(buffer, position, fut.completer());
+    return fut;
+  }
 
   /**
    * Reads {@code length} bytes of data from the file at position {@code position} in the file, asynchronously.
@@ -121,6 +125,8 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
    */
   @Fluent
   AsyncFile read(Buffer buffer, int offset, long position, int length, Handler<AsyncResult<Buffer>> handler);
+
+  Future<Buffer> read(Buffer buffer, int offset, long position, int length);
 
   /**
    * Flush any writes made to this file to underlying persistent storage.

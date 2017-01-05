@@ -58,6 +58,12 @@ public interface SharedData {
    */
   void getLock(String name, Handler<AsyncResult<Lock>> resultHandler);
 
+  default Future<Lock> getLock(String name) {
+    Future<Lock> fut = Future.future();
+    getLock(name, fut.completer());
+    return fut;
+  }
+
   /**
    * Like {@link #getLock(String, Handler)} but specifying a timeout. If the lock is not obtained within the timeout
    * a failure will be sent to the handler
@@ -67,6 +73,12 @@ public interface SharedData {
    */
   void getLockWithTimeout(String name, long timeout, Handler<AsyncResult<Lock>> resultHandler);
 
+  default Future<Lock> getLockWithTimeout(String name, long timeout) {
+    Future<Lock> fut = Future.future();
+    getLockWithTimeout(name, timeout, fut.completer());
+    return fut;
+  }
+
   /**
    * Get a cluster wide counter. The counter will be passed to the handler.
    *
@@ -74,6 +86,12 @@ public interface SharedData {
    * @param resultHandler  the handler
    */
   void getCounter(String name, Handler<AsyncResult<Counter>> resultHandler);
+
+  default Future<Counter> getCounter(String name) {
+    Future<Counter> fut = Future.future();
+    getCounter(name, fut.completer());
+    return fut;
+  }
 
   /**
    * Return a {@code LocalMap} with the specific {@code name}.
