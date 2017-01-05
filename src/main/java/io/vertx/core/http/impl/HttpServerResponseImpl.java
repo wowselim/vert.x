@@ -316,7 +316,7 @@ public class HttpServerResponseImpl implements HttpServerResponse {
         if (headWritten) {
           closeConnAfterWrite();
         } else {
-          conn.close();
+          conn.doClose();
         }
         closed = true;
       }
@@ -521,7 +521,7 @@ public class HttpServerResponseImpl implements HttpServerResponse {
 
   private void closeConnAfterWrite() {
     if (channelFuture != null) {
-      channelFuture.addListener(fut -> conn.close());
+      channelFuture.addListener(fut -> conn.doClose());
     }
   }
 

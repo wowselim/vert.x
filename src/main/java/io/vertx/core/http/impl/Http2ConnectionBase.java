@@ -361,7 +361,7 @@ abstract class Http2ConnectionBase extends ConnectionBase implements Http2FrameL
   }
 
   @Override
-  public void close() {
+  public void doClose() {
     endReadAndFlush();
     shutdown(0L);
   }
@@ -460,6 +460,11 @@ abstract class Http2ConnectionBase extends ConnectionBase implements Http2FrameL
   public synchronized HttpConnection pingHandler(Handler<Buffer> handler) {
     pingHandler = handler;
     return this;
+  }
+
+  @Override
+  public void close() {
+    doClose();
   }
 
   @Override

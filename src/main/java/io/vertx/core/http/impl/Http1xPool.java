@@ -17,7 +17,6 @@
 package io.vertx.core.http.impl;
 
 import io.netty.channel.Channel;
-import io.vertx.core.Context;
 import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpVersion;
 import io.vertx.core.impl.ContextImpl;
@@ -106,7 +105,7 @@ public class Http1xPool implements ConnectionManager.Pool<ClientConnection> {
 
   void responseEnded(ClientConnection conn, boolean close) {
     if (!keepAlive || close) {
-      conn.close();
+      conn.doClose();
     } else {
       ContextImpl ctx = conn.getContext();
       ctx.runOnContext(v -> {
@@ -151,7 +150,7 @@ public class Http1xPool implements ConnectionManager.Pool<ClientConnection> {
     // Close outside sync block to avoid deadlock
     for (ClientConnection conn : copy) {
       try {
-        conn.close();
+        conn.doClose();
       } catch (Throwable t) {
         ConnectionManager.log.error("Failed to close connection", t);
       }

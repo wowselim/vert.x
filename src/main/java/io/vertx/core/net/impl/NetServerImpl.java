@@ -357,7 +357,7 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
     ContextImpl currCon = vertx.getContext();
 
     for (NetSocketImpl sock : socketMap.values()) {
-      sock.close();
+      sock.doClose();
     }
 
     // Sanity check

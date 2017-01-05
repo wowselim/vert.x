@@ -18,7 +18,6 @@ package io.vertx.core.http.impl;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
-import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.websocketx.*;
@@ -213,7 +212,7 @@ class ClientConnection extends ConnectionBase implements HttpClientConnection, H
                   ctx.fireChannelRead(m);
                 }
               } catch (WebSocketHandshakeException e) {
-                close();
+                doClose();
                 handleException(e);
               }
             }
@@ -570,7 +569,7 @@ class ClientConnection extends ConnectionBase implements HttpClientConnection, H
   @Override
   public synchronized void close() {
     if (handshaker == null) {
-      super.close();
+      doClose();
     } else {
       // make sure everything is flushed out on close
       endReadAndFlush();

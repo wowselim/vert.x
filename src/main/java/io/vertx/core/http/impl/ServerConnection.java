@@ -316,7 +316,7 @@ class ServerConnection extends ConnectionBase implements HttpConnection {
   @Override
   public void close() {
     if (handshaker == null) {
-      super.close();
+      doClose();
     } else {
       endReadAndFlush();
       handshaker.close(channel, new CloseWebSocketFrame(1000, null));

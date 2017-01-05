@@ -128,7 +128,7 @@ public abstract class ConnectionBase {
   /**
    * Close the connection
    */
-  public void close() {
+  public void doClose() {
     // make sure everything is flushed out on close
     endReadAndFlush();
     channel.close();

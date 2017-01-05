@@ -543,10 +543,10 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
     ContextImpl currCon = vertx.getContext();
 
     for (ServerConnection conn : connectionMap.values()) {
-      conn.close();
+      conn.doClose();
     }
     for (Http2ServerConnection conn : connectionMap2.values()) {
-      conn.close();
+      conn.doClose();
     }
 
     // Sanity check

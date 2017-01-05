@@ -25,7 +25,6 @@ import io.netty.handler.codec.http2.DefaultHttp2Headers;
 import io.netty.handler.codec.http2.Http2Headers;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
@@ -544,7 +543,7 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
 
   @Override
   public void close() {
-    conn.close();
+    conn.doClose();
   }
 
   @Override

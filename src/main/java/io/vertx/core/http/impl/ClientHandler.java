@@ -22,7 +22,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpResponse;
-import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.LastHttpContent;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.impl.ws.WebSocketFrameImpl;
@@ -62,7 +61,7 @@ class ClientHandler extends VertxHttpHandler<ClientConnection> {
         // Close the connection as Netty's HttpResponseDecoder will not try further processing
         // see https://github.com/netty/netty/issues/3362
         conn.handleException(result.cause());
-        conn.close();
+        conn.doClose();
         return;
       }
       conn.handleResponse(response);

@@ -88,7 +88,7 @@ public abstract class WebSocketImplBase implements WebSocketBase {
   public void close() {
     synchronized (conn) {
       checkClosed();
-      conn.close();
+      conn.doClose();
       cleanupHandlers();
     }
   }

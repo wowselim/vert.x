@@ -246,7 +246,7 @@ public class NetSocketImpl extends ConnectionBase implements NetSocket {
       writeFuture.addListener(ChannelFutureListener.CLOSE);
       channel.flush();
     } else {
-      super.close();
+      doClose();
     }
   }
 
@@ -290,7 +290,7 @@ public class NetSocketImpl extends ConnectionBase implements NetSocket {
 
   @Override
   public void end() {
-    close();
+    doClose();
   }
 
   @Override

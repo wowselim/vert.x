@@ -19,17 +19,14 @@ package io.vertx.core.http.impl;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.http2.Http2Exception;
-import io.netty.handler.timeout.IdleStateHandler;
 import io.vertx.core.http.HttpVersion;
 import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.spi.metrics.HttpClientMetrics;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -156,6 +153,6 @@ class Http2Pool implements ConnectionManager.Pool<Http2ClientConnection> {
       toClose = new ArrayList<>(allConnections);
     }
     // Close outside sync block to avoid deadlock
-    toClose.forEach(Http2ConnectionBase::close);
+    toClose.forEach(Http2ConnectionBase::doClose);
   }
 }

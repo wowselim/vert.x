@@ -410,11 +410,16 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
+  public void close() {
+    doClose();
+  }
+
+  @Override
   protected void finalize() throws Throwable {
     // Make sure this gets cleaned up if there are no more references to it
     // so as not to leave connections and resources dangling until the system is shutdown
     // which could make the JVM run out of file handles.
-    close();
+    doClose();
     super.finalize();
   }
 
