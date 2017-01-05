@@ -23,6 +23,7 @@ import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.InternetProtocolFamily;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.logging.LoggingHandler;
+import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -91,6 +92,13 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
+  public Future<DatagramSocket> listenMulticastGroup(String multicastAddress) {
+    Future<DatagramSocket> fut = Future.future();
+    listenMulticastGroup(multicastAddress, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DatagramSocket listenMulticastGroup(String multicastAddress, String networkInterface, String source, Handler<AsyncResult<DatagramSocket>> handler) {
     try {
       InetAddress sourceAddress;
@@ -108,6 +116,13 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
+  public Future<DatagramSocket> listenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source) {
+    Future<DatagramSocket> fut = Future.future();
+    listenMulticastGroup(multicastAddress, networkInterface, source, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DatagramSocket unlistenMulticastGroup(String multicastAddress, Handler<AsyncResult<DatagramSocket>> handler) {
     try {
       addListener(channel().leaveGroup(InetAddress.getByName(multicastAddress)), handler);
@@ -115,6 +130,13 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
       notifyException(handler, e);
     }
     return this;
+  }
+
+  @Override
+  public Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress) {
+    Future<DatagramSocket> fut = Future.future();
+    unlistenMulticastGroup(multicastAddress, fut.completer());
+    return fut;
   }
 
   @Override
@@ -135,6 +157,13 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
+  public Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source) {
+    Future<DatagramSocket> fut = Future.future();
+    unlistenMulticastGroup(multicastAddress, networkInterface, source, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DatagramSocket blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock, Handler<AsyncResult<DatagramSocket>> handler) {
     try {
       InetAddress sourceAddress;
@@ -152,6 +181,13 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
+  public Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock) {
+    Future<DatagramSocket> fut = Future.future();
+    blockMulticastGroup(multicastAddress, networkInterface, sourceToBlock, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DatagramSocket blockMulticastGroup(String multicastAddress, String sourceToBlock, Handler<AsyncResult<DatagramSocket>> handler) {
     try {
       addListener(channel().block(InetAddress.getByName(multicastAddress), InetAddress.getByName(sourceToBlock)), handler);
@@ -162,8 +198,22 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
+  public Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String sourceToBlock) {
+    Future<DatagramSocket> fut = Future.future();
+    blockMulticastGroup(multicastAddress, sourceToBlock, fut.completer());
+    return fut;
+  }
+
+  @Override
   public DatagramSocket listen(int port, String address, Handler<AsyncResult<DatagramSocket>> handler) {
     return listen(new SocketAddressImpl(port, address), handler);
+  }
+
+  @Override
+  public Future<DatagramSocket> listen(int port, String host) {
+    Future<DatagramSocket> fut = Future.future();
+    listen(port, host, fut.completer());
+    return fut;
   }
 
   @Override
@@ -244,6 +294,20 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
     return this;
   }
 
+  @Override
+  public Future<DatagramSocket> send(String str, String enc, int port, String host) {
+    Future<DatagramSocket> fut = Future.future();
+    send(str, enc, port, host, fut.completer());
+    return fut;
+  }
+
+  @Override
+  public Future<DatagramSocket> send(Buffer packet, int port, String host) {
+    Future<DatagramSocket> fut = Future.future();
+    send(packet, port, host, fut.completer());
+    return fut;
+  }
+
   private void doSend(Buffer packet, InetSocketAddress addr, Handler<AsyncResult<DatagramSocket>> handler) {
     ChannelFuture future = channel().writeAndFlush(new DatagramPacket(packet.getByteBuf(), addr));
     addListener(future, handler);
@@ -259,6 +323,13 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   @Override
   public DatagramSocket send(String str, int port, String host, Handler<AsyncResult<DatagramSocket>> handler) {
     return send(Buffer.buffer(str), port, host, handler);
+  }
+
+  @Override
+  public Future<DatagramSocket> send(String str, int port, String host) {
+    Future<DatagramSocket> fut = Future.future();
+    send(str, port, host, fut.completer());
+    return fut;
   }
 
   @Override

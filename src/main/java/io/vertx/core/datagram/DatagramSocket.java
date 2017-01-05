@@ -17,6 +17,7 @@ package io.vertx.core.datagram;
 
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.codegen.annotations.CacheReturn;
@@ -57,6 +58,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket send(Buffer packet, int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
+  Future<DatagramSocket> send(Buffer packet, int port, String host);
+
   /**
    * Returns a {@link io.vertx.core.datagram.PacketWritestream} able to send {@link Buffer} to the
    * {@link io.vertx.core.net.SocketAddress}.
@@ -80,6 +83,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket send(String str, int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
+  Future<DatagramSocket> send(String str, int port, String host);
+
   /**
    * Write the given {@link String} to the {@link io.vertx.core.net.SocketAddress} using the given encoding.
    * The {@link Handler} will be notified once the write completes.
@@ -93,6 +98,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
    */
   @Fluent
   DatagramSocket send(String str, String enc, int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
+
+  Future<DatagramSocket> send(String str, String enc, int port, String host);
 
   /**
    * Closes the {@link io.vertx.core.datagram.DatagramSocket} implementation asynchronous
@@ -127,6 +134,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket listenMulticastGroup(String multicastAddress, Handler<AsyncResult<DatagramSocket>> handler);
 
+  Future<DatagramSocket> listenMulticastGroup(String multicastAddress);
+
   /**
    * Joins a multicast group and listens for packets send to it on the given network interface.
    * The {@link Handler} is notified once the operation completes.
@@ -141,6 +150,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket listenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source,
                                       Handler<AsyncResult<DatagramSocket>> handler);
 
+  Future<DatagramSocket> listenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source);
+
   /**
    * Leaves a multicast group and stops listening for packets send to it.
    * The {@link Handler} is notified once the operation completes.
@@ -151,6 +162,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
    */
   @Fluent
   DatagramSocket unlistenMulticastGroup(String multicastAddress, Handler<AsyncResult<DatagramSocket>> handler);
+
+  Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress);
 
   /**
    * Leaves a multicast group and stops listening for packets send to it on the given network interface.
@@ -166,6 +179,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket unlistenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source,
                                         Handler<AsyncResult<DatagramSocket>> handler);
 
+  Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source);
+
   /**
    * Block the given address for the given multicast address and notifies the {@link Handler} once
    * the operation completes.
@@ -179,6 +194,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket blockMulticastGroup(String multicastAddress, String sourceToBlock,
                                      Handler<AsyncResult<DatagramSocket>> handler);
+
+  Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String sourceToBlock);
 
   /**
    * Block the given address for the given multicast address on the given network interface and notifies
@@ -195,6 +212,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock,
                                      Handler<AsyncResult<DatagramSocket>> handler);
 
+  Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock);
+
   /**
    * Start listening on the given port and host. The handler will be called when the socket is listening.
    *
@@ -205,6 +224,8 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
    */
   @Fluent
   DatagramSocket listen(int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
+
+  Future<DatagramSocket> listen(int port, String host);
 
   @Override
   DatagramSocket pause();
