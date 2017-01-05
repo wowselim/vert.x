@@ -349,6 +349,14 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
+  public Future<Void> close() {
+    Future<Void> fut = Future.future();
+    close(fut.completer());
+    return fut;
+  }
+
+
+  @Override
   public boolean isMetricsEnabled() {
     return metrics != null && metrics.isEnabled();
   }
@@ -407,11 +415,6 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
 
   private void notifyException(final Handler<AsyncResult<DatagramSocket>> handler, final Throwable cause) {
     context.executeFromIO(() -> handler.handle(Future.failedFuture(cause)));
-  }
-
-  @Override
-  public void close() {
-    doClose();
   }
 
   @Override

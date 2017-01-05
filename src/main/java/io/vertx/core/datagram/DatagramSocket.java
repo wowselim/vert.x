@@ -112,7 +112,7 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   /**
    * Closes the {@link io.vertx.core.datagram.DatagramSocket}. The close itself is asynchronous.
    */
-  void close();
+  Future<Void> close();
 
   /**
    * Return the {@link io.vertx.core.net.SocketAddress} to which
