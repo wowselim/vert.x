@@ -265,6 +265,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket listen(int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #listen(int, String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<DatagramSocket> listen(int port, String host);
 
   @Override
