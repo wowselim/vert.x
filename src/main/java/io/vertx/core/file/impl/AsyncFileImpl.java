@@ -110,7 +110,7 @@ public class AsyncFileImpl implements AsyncFile {
   @Override
   public Future<Void> close() {
     Future<Void> fut = Future.future();
-    closeInternal(fut.completer());
+    close(fut.completer());
     return fut;
   }
 
@@ -141,6 +141,12 @@ public class AsyncFileImpl implements AsyncFile {
   public AsyncFile write(Buffer buffer, long position, Handler<AsyncResult<Void>> handler) {
     Objects.requireNonNull(handler, "handler");
     return doWrite(buffer, position, handler);
+  }
+
+  public Future<Void> write(Buffer buffer, long position) {
+    Future<Void> fut = Future.future();
+    write(buffer, position, fut.completer());
+    return fut;
   }
 
   private synchronized AsyncFile doWrite(Buffer buffer, long position, Handler<AsyncResult<Void>> handler) {
@@ -259,7 +265,7 @@ public class AsyncFileImpl implements AsyncFile {
   @Override
   public Future<Void> flush() {
     Future<Void> fut = Future.future();
-    doFlush(fut.completer());
+    flush(fut.completer());
     return fut;
   }
 
@@ -487,6 +493,8 @@ public class AsyncFileImpl implements AsyncFile {
 
   @Override
   public Future<Buffer> read(Buffer buffer, int offset, long position, int length) {
-    return null;
+    Future<Buffer> fut = Future.future();
+    read(buffer, offset, position, length, fut.completer());
+    return fut;
   }
 }

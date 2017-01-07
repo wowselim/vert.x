@@ -38,6 +38,10 @@ public interface Counter {
    */
   void get(Handler<AsyncResult<Long>> resultHandler);
 
+  /**
+   * Like {@link #get(Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Long> get() {
     Future<Long> fut = Future.future();
     get(fut.completer());
@@ -51,6 +55,10 @@ public interface Counter {
    */
   void incrementAndGet(Handler<AsyncResult<Long>> resultHandler);
 
+  /**
+   * Like {@link #incrementAndGet(Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Long> incrementAndGet() {
     Future<Long> fut = Future.future();
     incrementAndGet(fut.completer());
@@ -64,6 +72,10 @@ public interface Counter {
    */
   void getAndIncrement(Handler<AsyncResult<Long>> resultHandler);
 
+  /**
+   * Like {@link #getAndIncrement(Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Long> getAndIncrement() {
     Future<Long> fut = Future.future();
     getAndIncrement(fut.completer());
@@ -77,6 +89,10 @@ public interface Counter {
    */
   void decrementAndGet(Handler<AsyncResult<Long>> resultHandler);
 
+  /**
+   * Like {@link #decrementAndGet(Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Long> decrementAndGet() {
     Future<Long> fut = Future.future();
     decrementAndGet(fut.completer());
@@ -91,6 +107,10 @@ public interface Counter {
    */
   void addAndGet(long value, Handler<AsyncResult<Long>> resultHandler);
 
+  /**
+   * Like {@link #addAndGet(long, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Long> addAndGet(long value) {
     Future<Long> fut = Future.future();
     addAndGet(value, fut.completer());
@@ -105,6 +125,10 @@ public interface Counter {
    */
   void getAndAdd(long value, Handler<AsyncResult<Long>> resultHandler);
 
+  /**
+   * Like {@link #getAndAdd(long, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Long> getAndAdd(long value) {
     Future<Long> fut = Future.future();
     getAndAdd(value, fut.completer());
@@ -121,6 +145,10 @@ public interface Counter {
    */
   void compareAndSet(long expected, long value, Handler<AsyncResult<Boolean>> resultHandler);
 
+  /**
+   * Like {@link #compareAndSet(long, long, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Boolean> compareAndSet(long expected, long value) {
     Future<Boolean> fut = Future.future();
     compareAndSet(expected, value, fut.completer());

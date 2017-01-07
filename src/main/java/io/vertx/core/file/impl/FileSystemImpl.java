@@ -814,141 +814,197 @@ public class FileSystemImpl implements FileSystem {
 
   @Override
   public Future<Void> copy(String from, String to) {
-    return null;
+    Future<Void> fut = Future.future();
+    copy(from, to, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> copyRecursive(String from, String to, boolean recursive) {
-    return null;
+    Future<Void> fut = Future.future();
+    copyRecursive(from, to, recursive, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> move(String from, String to) {
-    return null;
+    Future<Void> fut = Future.future();
+    move(from, to, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> truncate(String path, long len) {
-    return null;
+    Future<Void> fut = Future.future();
+    truncate(path, len, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> chmod(String path, String perms) {
-    return null;
+    Future<Void> fut = Future.future();
+    chmod(path, perms, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> chmodRecursive(String path, String perms, String dirPerms) {
-    return null;
+    Future<Void> fut = Future.future();
+    chmodRecursive(path, perms, dirPerms, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> chown(String path, @Nullable String user, @Nullable String group) {
-    return null;
+    Future<Void> fut = Future.future();
+    chown(path, user, group, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<FileProps> props(String path) {
-    return null;
+    Future<FileProps> fut = Future.future();
+    props(path, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<FileProps> lprops(String path) {
-    return null;
+    Future<FileProps> fut = Future.future();
+    lprops(path, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> link(String link, String existing) {
-    return null;
+    Future<Void> fut = Future.future();
+    link(link, existing, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> symlink(String link, String existing) {
-    return null;
+    Future<Void> fut = Future.future();
+    symlink(link, existing, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> unlink(String link) {
-    return null;
+    Future<Void> fut = Future.future();
+    unlink(link, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<String> readSymlink(String link) {
-    return null;
+    Future<String> fut = Future.future();
+    readSymlink(link, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> delete(String path) {
-    return null;
+    Future<Void> fut = Future.future();
+    delete(path, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> deleteRecursive(String path, boolean recursive) {
-    return null;
+    Future<Void> fut = Future.future();
+    deleteRecursive(path, recursive, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> mkdir(String path) {
-    return null;
+    Future<Void> fut = Future.future();
+    mkdir(path, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> mkdir(String path, String perms) {
-    return null;
+    Future<Void> fut = Future.future();
+    mkdir(path, perms, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> mkdirs(String path) {
-    return null;
+    Future<Void> fut = Future.future();
+    mkdirs(path, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> mkdirs(String path, String perms) {
-    return null;
+    Future<Void> fut = Future.future();
+    mkdirs(path, perms, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<List<String>> readDir(String path) {
-    return null;
+    Future<List<String>> fut = Future.future();
+    readDir(path, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<List<String>> readDir(String path, String filter) {
-    return null;
+    Future<List<String>> fut = Future.future();
+    readDir(path, filter, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Buffer> readFile(String path) {
-    return null;
+    Future<Buffer> fut = Future.future();
+    readFile(path, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> writeFile(String path, Buffer data) {
-    return null;
+    Future<Void> fut = Future.future();
+    writeFile(path, data, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<AsyncFile> open(String path, OpenOptions options) {
-    return null;
+    Future<AsyncFile> fut = Future.future();
+    open(path, options, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> createFile(String path) {
-    return null;
+    Future<Void> fut = Future.future();
+    createFile(path, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Void> createFile(String path, String perms) {
-    return null;
+    Future<Void> fut = Future.future();
+    createFile(path, perms, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<Boolean> exists(String path) {
-    return null;
+    Future<Boolean> fut = Future.future();
+    exists(path, fut.completer());
+    return fut;
   }
 
   @Override
   public Future<FileSystemProps> fsProps(String path) {
-    return null;
+    Future<FileSystemProps> fut = Future.future();
+    fsProps(path, fut.completer());
+    return fut;
   }
 }

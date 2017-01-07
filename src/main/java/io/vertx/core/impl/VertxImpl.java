@@ -641,8 +641,9 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
 
   @Override
   public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered) {
-    ContextImpl context = getOrCreateContext();
-    return context.executeBlocking(blockingCodeHandler, ordered);
+    Future<T> fut = Future.future();
+    executeBlocking(blockingCodeHandler, ordered, fut.completer());
+    return fut;
   }
 
   @Override
@@ -653,7 +654,9 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
 
   @Override
   public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler) {
-    return executeBlocking(blockingCodeHandler, true);
+    Future<T> fut = Future.future();
+    executeBlocking(blockingCodeHandler, fut.completer());
+    return fut;
   }
 
   @Override

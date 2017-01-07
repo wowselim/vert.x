@@ -70,6 +70,8 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
 
   /**
    * Close the file. The actual close happens asynchronously.
+   *
+   * @return a {@code Future} that will be completed once the operation completes.
    */
   Future<Void> close();
 
@@ -100,11 +102,11 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
   @Fluent
   AsyncFile write(Buffer buffer, long position, Handler<AsyncResult<Void>> handler);
 
-  default Future<Void> write(Buffer buffer, long position) {
-    Future<Void> fut = Future.future();
-    write(buffer, position, fut.completer());
-    return fut;
-  }
+  /**
+   * Like {@link #write(Buffer, long, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
+  Future<Void> write(Buffer buffer, long position);
 
   /**
    * Reads {@code length} bytes of data from the file at position {@code position} in the file, asynchronously.
@@ -126,7 +128,17 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
   @Fluent
   AsyncFile read(Buffer buffer, int offset, long position, int length, Handler<AsyncResult<Buffer>> handler);
 
+  /**
+   * Like {@link #read(Buffer, int, long, int, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Buffer> read(Buffer buffer, int offset, long position, int length);
+
+  /**
+   * Like {@link #flush(Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
+  Future<Void> flush();
 
   /**
    * Flush any writes made to this file to underlying persistent storage.
@@ -134,13 +146,8 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
    * If the file was opened with {@code flush} set to {@code true} then calling this method will have no effect.
    * <p>
    * The actual flush will happen asynchronously.
-   *
-   * @return a reference to this, so the API can be used fluently
-   */
-  Future<Void> flush();
-
-  /**
-   * Same as {@link #flush} but the handler will be called when the flush is complete or if an error occurs
+   * <p>
+   * The handler will be called when the flush is complete or if an error occurs
    */
   @Fluent
   AsyncFile flush(Handler<AsyncResult<Void>> handler);

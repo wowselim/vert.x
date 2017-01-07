@@ -610,7 +610,9 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
 
   @Override
   public Future<HttpServerResponse> push(HttpMethod method, String host, String path) {
-    return push(method, host, path, (MultiMap) null);
+    Future<HttpServerResponse> fut = Future.future();
+    push(method, host, path, fut.completer());
+    return fut;
   }
 
   @Override
@@ -620,7 +622,9 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
 
   @Override
   public Future<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers) {
-    return push(method, null, path, headers);
+    Future<HttpServerResponse> fut = Future.future();
+    push(method, path, headers, fut.completer());
+    return fut;
   }
 
   @Override
@@ -630,7 +634,9 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
 
   @Override
   public Future<HttpServerResponse> push(HttpMethod method, String path) {
-    return push(method, host, path);
+    Future<HttpServerResponse> fut = Future.future();
+    push(method, path, fut.completer());
+    return fut;
   }
 
   @Override

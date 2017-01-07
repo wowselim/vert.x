@@ -43,6 +43,7 @@ public interface NetClient extends Measured {
    *
    * @param port  the port
    * @param host  the host
+   * @return a {@code Future} that will be completed once the operation completes.
    */
   Future<NetSocket> connect(int port, String host);
 

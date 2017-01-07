@@ -333,7 +333,7 @@ public class HttpServerResponseImpl implements HttpServerResponse {
   @Override
   public Future<Void> sendFile(String filename, long offset, long length) {
     Future<Void> fut = Future.future();
-    doSendFile(filename, offset, length, fut.completer());
+    sendFile(filename, offset, length, fut.completer());
     return fut;
   }
 

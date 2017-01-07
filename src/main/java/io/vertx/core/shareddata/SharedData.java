@@ -48,6 +48,10 @@ public interface SharedData {
    */
   <K, V> void getClusterWideMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> resultHandler);
 
+  /**
+   * Like {@link #getClusterWideMap(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   <K, V> Future<AsyncMap<K, V>> getClusterWideMap(String name);
 
   /**
@@ -58,6 +62,10 @@ public interface SharedData {
    */
   void getLock(String name, Handler<AsyncResult<Lock>> resultHandler);
 
+  /**
+   * Like {@link #getLock(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Lock> getLock(String name) {
     Future<Lock> fut = Future.future();
     getLock(name, fut.completer());
@@ -73,6 +81,10 @@ public interface SharedData {
    */
   void getLockWithTimeout(String name, long timeout, Handler<AsyncResult<Lock>> resultHandler);
 
+  /**
+   * Like {@link #getLockWithTimeout(String, long, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Lock> getLockWithTimeout(String name, long timeout) {
     Future<Lock> fut = Future.future();
     getLockWithTimeout(name, timeout, fut.completer());
@@ -87,6 +99,10 @@ public interface SharedData {
    */
   void getCounter(String name, Handler<AsyncResult<Counter>> resultHandler);
 
+  /**
+   * Like {@link #getCounter(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   default Future<Counter> getCounter(String name) {
     Future<Counter> fut = Future.future();
     getCounter(name, fut.completer());

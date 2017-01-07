@@ -473,6 +473,10 @@ public interface Vertx extends Measured {
    */
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered, Handler<AsyncResult<T>> resultHandler);
 
+  /**
+   * Like {@link #executeBlocking(Handler, boolean, Handler)} but returns a {@code Future} that will be
+   * completed with the result of the {@code blockingCodeHandler}
+   */
   <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
 
   /**
@@ -480,6 +484,10 @@ public interface Vertx extends Measured {
    */
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, Handler<AsyncResult<T>> resultHandler);
 
+  /**
+   * Like {@link #executeBlocking(Handler, Handler)} but returns a {@code Future} that will be
+   * completed with the result of the {@code blockingCodeHandler}
+   */
   <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler);
 
   /**

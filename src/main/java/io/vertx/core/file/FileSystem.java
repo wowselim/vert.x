@@ -59,6 +59,10 @@ public interface FileSystem {
   @Fluent
   FileSystem copy(String from, String to, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #copy(String, String)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> copy(String from, String to);
 
   /**
@@ -84,6 +88,10 @@ public interface FileSystem {
   @Fluent
   FileSystem copyRecursive(String from, String to, boolean recursive, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #copyRecursive(String, String, boolean, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> copyRecursive(String from, String to, boolean recursive);
 
   /**
@@ -105,6 +113,10 @@ public interface FileSystem {
   @Fluent
   FileSystem move(String from, String to, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #move(String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> move(String from, String to);
 
   /**
@@ -126,6 +138,10 @@ public interface FileSystem {
   @Fluent
   FileSystem truncate(String path, long len, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #truncate(String, long, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> truncate(String path, long len);
 
   /**
@@ -148,6 +164,10 @@ public interface FileSystem {
   @Fluent
   FileSystem chmod(String path, String perms, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #chmod(String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> chmod(String path, String perms);
 
   /**
@@ -173,6 +193,10 @@ public interface FileSystem {
   @Fluent
   FileSystem chmodRecursive(String path, String perms, String dirPerms, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #chmodRecursive(String, String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> chmodRecursive(String path, String perms, String dirPerms);
 
   /**
@@ -194,6 +218,10 @@ public interface FileSystem {
   @Fluent
   FileSystem chown(String path, @Nullable String user, @Nullable String group, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #chown(String, String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> chown(String path, @Nullable String user, @Nullable String group);
 
   /**
@@ -215,6 +243,10 @@ public interface FileSystem {
   @Fluent
   FileSystem props(String path, Handler<AsyncResult<FileProps>> handler);
 
+  /**
+   * Like {@link #props(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<FileProps> props(String path);
 
   /**
@@ -234,6 +266,10 @@ public interface FileSystem {
   @Fluent
   FileSystem lprops(String path, Handler<AsyncResult<FileProps>> handler);
 
+  /**
+   * Like {@link #lprops(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<FileProps> lprops(String path);
 
   /**
@@ -252,6 +288,10 @@ public interface FileSystem {
   @Fluent
   FileSystem link(String link, String existing, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #lprops(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> link(String link, String existing);
 
   /**
@@ -271,6 +311,10 @@ public interface FileSystem {
   @Fluent
   FileSystem symlink(String link, String existing, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #symlink(String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> symlink(String link, String existing);
 
   /**
@@ -289,6 +333,10 @@ public interface FileSystem {
   @Fluent
   FileSystem unlink(String link, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #unlink(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> unlink(String link);
 
   /**
@@ -307,6 +355,10 @@ public interface FileSystem {
   @Fluent
   FileSystem readSymlink(String link, Handler<AsyncResult<String>> handler);
 
+  /**
+   * Like {@link #readSymlink(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<String> readSymlink(String link);
 
   /**
@@ -324,6 +376,10 @@ public interface FileSystem {
   @Fluent
   FileSystem delete(String path, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #delete(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> delete(String path);
 
   /**
@@ -346,6 +402,10 @@ public interface FileSystem {
   @Fluent
   FileSystem deleteRecursive(String path, boolean recursive, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #deleteRecursive(String, boolean, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> deleteRecursive(String path, boolean recursive);
 
   /**
@@ -366,6 +426,10 @@ public interface FileSystem {
   @Fluent
   FileSystem mkdir(String path, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #mkdir(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> mkdir(String path);
 
   /**
@@ -392,6 +456,10 @@ public interface FileSystem {
   @Fluent
   FileSystem mkdir(String path, String perms, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #mkdir(String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> mkdir(String path, String perms);
 
   /**
@@ -412,6 +480,10 @@ public interface FileSystem {
   @Fluent
   FileSystem mkdirs(String path, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #mkdirs(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> mkdirs(String path);
 
   /**
@@ -438,6 +510,10 @@ public interface FileSystem {
   @Fluent
   FileSystem mkdirs(String path, String perms, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #mkdirs(String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> mkdirs(String path, String perms);
 
   /**
@@ -458,6 +534,10 @@ public interface FileSystem {
   @Fluent
   FileSystem readDir(String path, Handler<AsyncResult<List<String>>> handler);
 
+  /**
+   * Like {@link #readDir(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<List<String>> readDir(String path);
 
   /**
@@ -481,6 +561,10 @@ public interface FileSystem {
   @Fluent
   FileSystem readDir(String path, String filter, Handler<AsyncResult<List<String>>> handler);
 
+  /**
+   * Like {@link #readDir(String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<List<String>> readDir(String path, String filter);
 
   /**
@@ -500,6 +584,10 @@ public interface FileSystem {
   @Fluent
   FileSystem readFile(String path, Handler<AsyncResult<Buffer>> handler);
 
+  /**
+   * Like {@link #readFile(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Buffer> readFile(String path);
 
   /**
@@ -518,6 +606,10 @@ public interface FileSystem {
   @Fluent
   FileSystem writeFile(String path, Buffer data, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #writeFile(String, Buffer, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> writeFile(String path, Buffer data);
 
   /**
@@ -539,6 +631,10 @@ public interface FileSystem {
   @Fluent
   FileSystem open(String path, OpenOptions options, Handler<AsyncResult<AsyncFile>> handler);
 
+  /**
+   * Like {@link #open(String, OpenOptions, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<AsyncFile> open(String path, OpenOptions options);
 
   /**
@@ -556,6 +652,10 @@ public interface FileSystem {
   @Fluent
   FileSystem createFile(String path, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #createFile(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> createFile(String path);
 
   /**
@@ -575,6 +675,10 @@ public interface FileSystem {
   @Fluent
   FileSystem createFile(String path, String perms, Handler<AsyncResult<Void>> handler);
 
+  /**
+   * Like {@link #createFile(String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> createFile(String path, String perms);
 
   /**
@@ -593,6 +697,10 @@ public interface FileSystem {
   @Fluent
   FileSystem exists(String path, Handler<AsyncResult<Boolean>> handler);
 
+  /**
+   * Like {@link #exists(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Boolean> exists(String path);
 
   /**
@@ -610,6 +718,10 @@ public interface FileSystem {
   @Fluent
   FileSystem fsProps(String path, Handler<AsyncResult<FileSystemProps>> handler);
 
+  /**
+   * Like {@link #fsProps(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<FileSystemProps> fsProps(String path);
 
   /**

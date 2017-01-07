@@ -47,6 +47,10 @@ public interface DnsClient {
   @Fluent
   DnsClient lookup(String name, Handler<AsyncResult<@Nullable String>> handler);
 
+  /**
+   * Like {@link #lookup(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<@Nullable String> lookup(String name);
 
   /**
@@ -61,6 +65,10 @@ public interface DnsClient {
   @Fluent
   DnsClient lookup4(String name, Handler<AsyncResult<@Nullable String>> handler);
 
+  /**
+   * Like {@link #lookup4(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<@Nullable String> lookup4(String name);
 
   /**
@@ -75,6 +83,10 @@ public interface DnsClient {
   @Fluent
   DnsClient lookup6(String name, Handler<AsyncResult<@Nullable String>> handler);
 
+  /**
+   * Like {@link #lookup6(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<@Nullable String> lookup6(String name);
 
   /**
@@ -90,6 +102,10 @@ public interface DnsClient {
   @Fluent
   DnsClient resolveA(String name, Handler<AsyncResult<List<String>>> handler);
 
+  /**
+   * Like {@link #resolveA(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<List<String>> resolveA(String name);
 
   /**
@@ -105,6 +121,10 @@ public interface DnsClient {
   @Fluent
   DnsClient resolveAAAA(String name, Handler<AsyncResult<List<String>>> handler);
 
+  /**
+   * Like {@link #resolveAAAA(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<List<String>> resolveAAAA(String name);
 
   /**
@@ -119,6 +139,10 @@ public interface DnsClient {
   @Fluent
   DnsClient resolveCNAME(String name, Handler<AsyncResult<List<String>>> handler);
 
+  /**
+   * Like {@link #resolveCNAME(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<List<String>> resolveCNAME(String name);
 
   /**
@@ -134,6 +158,10 @@ public interface DnsClient {
   @Fluent
   DnsClient resolveMX(String name, Handler<AsyncResult<List<MxRecord>>> handler);
 
+  /**
+   * Like {@link #resolveMX(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<List<MxRecord>> resolveMX(String name);
 
   /**
@@ -148,6 +176,10 @@ public interface DnsClient {
   @Fluent
   DnsClient resolveTXT(String name, Handler<AsyncResult<List<String>>> handler);
 
+  /**
+   * Like {@link #resolveTXT(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<List<String>> resolveTXT(String name);
 
   /**
@@ -162,6 +194,10 @@ public interface DnsClient {
   @Fluent
   DnsClient resolvePTR(String name, Handler<AsyncResult<@Nullable String>> handler);
 
+  /**
+   * Like {@link #resolvePTR(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<@Nullable String> resolvePTR(String name);
 
   /**
@@ -176,6 +212,10 @@ public interface DnsClient {
   @Fluent
   DnsClient resolveNS(String name, Handler<AsyncResult<List<String>>> handler);
 
+  /**
+   * Like {@link #resolveNS(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<List<String>> resolveNS(String name);
 
   /**
@@ -190,6 +230,10 @@ public interface DnsClient {
   @Fluent
   DnsClient resolveSRV(String name, Handler<AsyncResult<List<SrvRecord>>> handler);
 
+  /**
+   * Like {@link #resolveSRV(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<List<SrvRecord>> resolveSRV(String name);
 
   /**
@@ -205,5 +249,9 @@ public interface DnsClient {
   @Fluent
   DnsClient reverseLookup(String ipaddress, Handler<AsyncResult<@Nullable String>> handler);
 
+  /**
+   * Like {@link #reverseLookup(String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<@Nullable String> reverseLookup(String ipaddress);
 }

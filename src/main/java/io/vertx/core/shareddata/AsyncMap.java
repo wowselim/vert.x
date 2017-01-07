@@ -40,6 +40,10 @@ public interface AsyncMap<K, V> {
    */
   void get(K k, Handler<AsyncResult<V>> resultHandler);
 
+  /**
+   * Like {@link #get(Object, Handler)}but returns a {@code Future} that will be
+   * completed with the result once the operation completes.
+   */
   Future<V> get(K k);
 
   /**
@@ -51,6 +55,10 @@ public interface AsyncMap<K, V> {
    */
   void put(K k, V v, Handler<AsyncResult<Void>> completionHandler);
 
+  /**
+   * Like {@link #put(Object, Object, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> put(K k, V v);
 
   /**
@@ -64,6 +72,10 @@ public interface AsyncMap<K, V> {
    */
   void put(K k, V v, long ttl, Handler<AsyncResult<Void>> completionHandler);
 
+  /**
+   * Like {@link #put(Object, Object, long, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> put(K k, V v, long ttl);
 
   /**
@@ -76,6 +88,10 @@ public interface AsyncMap<K, V> {
    */
   void putIfAbsent(K k, V v, Handler<AsyncResult<V>> completionHandler);
 
+  /**
+   * Like {@link #putIfAbsent(Object, Object, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<V> putIfAbsent(K k, V v);
 
   /**
@@ -89,6 +105,10 @@ public interface AsyncMap<K, V> {
    */
   void putIfAbsent(K k, V v, long ttl, Handler<AsyncResult<V>> completionHandler);
 
+  /**
+   * Like {@link #putIfAbsent(Object, Object, long, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<V> putIfAbsent(K k, V v, long ttl);
 
   /**
@@ -99,6 +119,10 @@ public interface AsyncMap<K, V> {
    */
   void remove(K k, Handler<AsyncResult<V>> resultHandler);
 
+  /**
+   * Like {@link #remove(Object, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<V> remove(K k);
 
   /**
@@ -110,6 +134,10 @@ public interface AsyncMap<K, V> {
    */
   void removeIfPresent(K k, V v, Handler<AsyncResult<Boolean>> resultHandler);
 
+  /**
+   * Like {@link #removeIfPresent(Object, Object, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Boolean> removeIfPresent(K k, V v);
 
   /**
@@ -121,6 +149,10 @@ public interface AsyncMap<K, V> {
    */
   void replace(K k, V v, Handler<AsyncResult<V>> resultHandler);
 
+  /**
+   * Like {@link #replace(Object, Object, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<V> replace(K k, V v);
 
   /**
@@ -133,6 +165,10 @@ public interface AsyncMap<K, V> {
    */
   void replaceIfPresent(K k, V oldValue, V newValue, Handler<AsyncResult<Boolean>> resultHandler);
 
+  /**
+   * Like {@link #replaceIfPresent(Object, Object, Object, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Boolean> replaceIfPresent(K k, V oldValue, V newValue);
 
   /**
@@ -142,6 +178,10 @@ public interface AsyncMap<K, V> {
    */
   void clear(Handler<AsyncResult<Void>> resultHandler);
 
+  /**
+   * Like {@link #clear(Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Void> clear();
 
   /**
@@ -151,6 +191,10 @@ public interface AsyncMap<K, V> {
    */
   void size(Handler<AsyncResult<Integer>> resultHandler);
 
+  /**
+   * Like {@link #size(Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<Integer> size();
 
 }

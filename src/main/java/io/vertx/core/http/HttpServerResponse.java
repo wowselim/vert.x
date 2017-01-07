@@ -256,7 +256,7 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    * Same as {@link #sendFile(String, long)} using offset @code{0} which means starting from the beginning of the file.
    *
    * @param filename  path to the file to serve
-   * @return a reference to this, so the API can be used fluently
+   * @return returns a {@code Future} that will be completed once the send completes.
    */
   default Future<Void> sendFile(String filename) {
     return sendFile(filename, 0);
@@ -268,7 +268,7 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    *
    * @param filename  path to the file to serve
    * @param offset offset to start serving from
-   * @return a reference to this, so the API can be used fluently
+   * @return returns a {@code Future} that will be completed once the send completes.
    */
   default Future<Void> sendFile(String filename, long offset) {
     return sendFile(filename, offset, Long.MAX_VALUE);
@@ -284,7 +284,7 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    * @param filename  path to the file to serve
    * @param offset offset to start serving from
    * @param length length to serve to
-   * @return a reference to this, so the API can be used fluently
+   * @return returns a {@code Future} that will be completed once the send completes.
    */
   Future<Void> sendFile(String filename, long offset, long length);
 
@@ -386,6 +386,10 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
   @Fluent
   HttpServerResponse push(HttpMethod method, String host, String path, Handler<AsyncResult<HttpServerResponse>> handler);
 
+  /**
+   * Like {@link #push(HttpMethod, String, String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<HttpServerResponse> push(HttpMethod method, String host, String path);
 
   /**
@@ -394,6 +398,10 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
   @Fluent
   HttpServerResponse push(HttpMethod method, String path, MultiMap headers, Handler<AsyncResult<HttpServerResponse>> handler);
 
+  /**
+   * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers);
 
   /**
@@ -402,6 +410,10 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
   @Fluent
   HttpServerResponse push(HttpMethod method, String path, Handler<AsyncResult<HttpServerResponse>> handler);
 
+  /**
+   * Like {@link #push(HttpMethod, String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<HttpServerResponse> push(HttpMethod method, String path);
 
   /**
@@ -425,6 +437,10 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
   @Fluent
   HttpServerResponse push(HttpMethod method, String host, String path, MultiMap headers, Handler<AsyncResult<HttpServerResponse>> handler);
 
+  /**
+   * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<HttpServerResponse> push(HttpMethod method, String host, String path, MultiMap headers);
 
   /**

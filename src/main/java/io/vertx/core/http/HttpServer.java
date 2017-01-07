@@ -101,7 +101,7 @@ public interface HttpServer extends Measured {
    * <p>
    * The listen happens asynchronously and the server may not be listening until some time after the call has returned.
    *
-   * @return a reference to this, so the API can be used fluently
+   * @return returns a {@code Future} that will be completed once the operation completes.
    */
   Future<HttpServer> listen();
 
@@ -114,7 +114,7 @@ public interface HttpServer extends Measured {
    * @param port  the port to listen on
    * @param host  the host to listen on
    *
-   * @return a reference to this, so the API can be used fluently
+   * @return returns a {@code Future} that will be completed once the operation completes.
    */
   Future<HttpServer> listen(int port, String host);
 
@@ -134,7 +134,7 @@ public interface HttpServer extends Measured {
    *
    * @param port  the port to listen on
    *
-   * @return a reference to this, so the API can be used fluently
+   * @return returns a {@code Future} that will be completed once the operation completes.
    */
   Future<HttpServer> listen(int port);
 
@@ -157,6 +157,8 @@ public interface HttpServer extends Measured {
    * Close the server. Any open HTTP connections will be closed.
    * <p>
    * The close happens asynchronously and the server may not be closed until some time after the call has returned.
+   *
+   * @return returns a {@code Future} that will be completed once the operation completes.
    */
   Future<Void> close();
 

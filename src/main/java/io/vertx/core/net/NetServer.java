@@ -60,7 +60,7 @@ public interface NetServer extends Measured {
    * <p>
    * The server may not be listening until some time after the call to listen has returned.
    *
-   * @return a reference to this, so the API can be used fluently
+   * @return a {@code Future} that will be completed once the operation completes.
    */
   Future<NetServer> listen();
 
@@ -81,7 +81,7 @@ public interface NetServer extends Measured {
    * <p>
    * The server may not be listening until some time after the call to listen has returned.
    *
-   * @return a reference to this, so the API can be used fluently
+   * @return a {@code Future} that will be completed once the operation completes.
    */
   Future<NetServer> listen(int port, String host);
 
@@ -117,6 +117,8 @@ public interface NetServer extends Measured {
   /**
    * Close the server. This will close any currently open connections. The close may not complete until after this
    * method has returned.
+   *
+   * @return a {@code Future} that will be completed once the operation completes.
    */
   Future<Void> close();
 

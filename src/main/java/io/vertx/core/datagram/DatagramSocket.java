@@ -58,6 +58,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket send(Buffer packet, int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #send(Buffer, int, String, Handler)} but returns a {@code Future} that will be
+   * completed once the writes completes.
+   */
   Future<DatagramSocket> send(Buffer packet, int port, String host);
 
   /**
@@ -83,6 +87,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket send(String str, int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #send(String, int, String, Handler)} but returns a {@code Future} that will be
+   * completed once the writes completes
+   */
   Future<DatagramSocket> send(String str, int port, String host);
 
   /**
@@ -99,6 +107,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket send(String str, String enc, int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #send(String, String, int, String, Handler)} but returns a {@code Future} that will be
+   * completed once the writes completes
+   */
   Future<DatagramSocket> send(String str, String enc, int port, String host);
 
   /**
@@ -111,6 +123,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
 
   /**
    * Closes the {@link io.vertx.core.datagram.DatagramSocket}. The close itself is asynchronous.
+   *
+   /**
+   * Like {@link #close(Handler)} but returns a {@code Future} that will be
+   * completed once the socket is closed.
    */
   Future<Void> close();
 
@@ -134,6 +150,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket listenMulticastGroup(String multicastAddress, Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #listenMulticastGroup(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<DatagramSocket> listenMulticastGroup(String multicastAddress);
 
   /**
@@ -150,6 +170,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket listenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source,
                                       Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #listenMulticastGroup(String, String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<DatagramSocket> listenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source);
 
   /**
@@ -163,6 +187,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   @Fluent
   DatagramSocket unlistenMulticastGroup(String multicastAddress, Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #unlistenMulticastGroup(String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress);
 
   /**
@@ -179,6 +207,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket unlistenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source,
                                         Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #unlistenMulticastGroup(String, String, String, Handler)} but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source);
 
   /**
@@ -195,6 +227,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket blockMulticastGroup(String multicastAddress, String sourceToBlock,
                                      Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #blockMulticastGroup(String, String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String sourceToBlock);
 
   /**
@@ -212,6 +248,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock,
                                      Handler<AsyncResult<DatagramSocket>> handler);
 
+  /**
+   * Like {@link #blockMulticastGroup(String, String, String, Handler)}but returns a {@code Future} that will be
+   * completed once the operation completes.
+   */
   Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock);
 
   /**

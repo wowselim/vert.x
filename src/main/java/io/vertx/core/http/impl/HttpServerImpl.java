@@ -208,7 +208,7 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
   @Override
   public Future<HttpServer> listen() {
     Future<HttpServer> fut = Future.future();
-    listen(options.getPort(), options.getHost(), fut.completer());
+    listen(fut.completer());
     return fut;
   }
 
@@ -227,7 +227,7 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
   @Override
   public Future<HttpServer> listen(int port) {
     Future<HttpServer> fut = Future.future();
-    listen(port, "0.0.0.0", fut.completer());
+    listen(port, fut.completer());
     return fut;
   }
 
