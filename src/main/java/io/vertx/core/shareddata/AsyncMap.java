@@ -19,7 +19,8 @@ package io.vertx.core.shareddata;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import io.vertx.core.Future;
+
+import java.util.concurrent.CompletionStage;
 
 
 /**
@@ -41,10 +42,10 @@ public interface AsyncMap<K, V> {
   void get(K k, Handler<AsyncResult<V>> resultHandler);
 
   /**
-   * Like {@link #get(Object, Handler)}but returns a {@code Future} that will be
+   * Like {@link #get(Object, Handler)}but returns a {@code CompletionStage} that will be
    * completed with the result once the operation completes.
    */
-  Future<V> get(K k);
+  CompletionStage<V> get(K k);
 
   /**
    * Put a value in the map, asynchronously.
@@ -56,10 +57,10 @@ public interface AsyncMap<K, V> {
   void put(K k, V v, Handler<AsyncResult<Void>> completionHandler);
 
   /**
-   * Like {@link #put(Object, Object, Handler)}but returns a {@code Future} that will be
+   * Like {@link #put(Object, Object, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> put(K k, V v);
+  CompletionStage<Void> put(K k, V v);
 
   /**
    * Like {@link #put} but specifying a time to live for the entry. Entry will expire and get evicted after the
@@ -73,10 +74,10 @@ public interface AsyncMap<K, V> {
   void put(K k, V v, long ttl, Handler<AsyncResult<Void>> completionHandler);
 
   /**
-   * Like {@link #put(Object, Object, long, Handler)}but returns a {@code Future} that will be
+   * Like {@link #put(Object, Object, long, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> put(K k, V v, long ttl);
+  CompletionStage<Void> put(K k, V v, long ttl);
 
   /**
    * Put the entry only if there is no entry with the key already present. If key already present then the existing
@@ -89,10 +90,10 @@ public interface AsyncMap<K, V> {
   void putIfAbsent(K k, V v, Handler<AsyncResult<V>> completionHandler);
 
   /**
-   * Like {@link #putIfAbsent(Object, Object, Handler)}but returns a {@code Future} that will be
+   * Like {@link #putIfAbsent(Object, Object, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<V> putIfAbsent(K k, V v);
+  CompletionStage<V> putIfAbsent(K k, V v);
 
   /**
    * Link {@link #putIfAbsent} but specifying a time to live for the entry. Entry will expire and get evicted
@@ -106,10 +107,10 @@ public interface AsyncMap<K, V> {
   void putIfAbsent(K k, V v, long ttl, Handler<AsyncResult<V>> completionHandler);
 
   /**
-   * Like {@link #putIfAbsent(Object, Object, long, Handler)}but returns a {@code Future} that will be
+   * Like {@link #putIfAbsent(Object, Object, long, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<V> putIfAbsent(K k, V v, long ttl);
+  CompletionStage<V> putIfAbsent(K k, V v, long ttl);
 
   /**
    * Remove a value from the map, asynchronously.
@@ -120,10 +121,10 @@ public interface AsyncMap<K, V> {
   void remove(K k, Handler<AsyncResult<V>> resultHandler);
 
   /**
-   * Like {@link #remove(Object, Handler)}but returns a {@code Future} that will be
+   * Like {@link #remove(Object, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<V> remove(K k);
+  CompletionStage<V> remove(K k);
 
   /**
    * Remove a value from the map, only if entry already exists with same value.
@@ -135,10 +136,10 @@ public interface AsyncMap<K, V> {
   void removeIfPresent(K k, V v, Handler<AsyncResult<Boolean>> resultHandler);
 
   /**
-   * Like {@link #removeIfPresent(Object, Object, Handler)}but returns a {@code Future} that will be
+   * Like {@link #removeIfPresent(Object, Object, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Boolean> removeIfPresent(K k, V v);
+  CompletionStage<Boolean> removeIfPresent(K k, V v);
 
   /**
    * Replace the entry only if it is currently mapped to some value
@@ -150,10 +151,10 @@ public interface AsyncMap<K, V> {
   void replace(K k, V v, Handler<AsyncResult<V>> resultHandler);
 
   /**
-   * Like {@link #replace(Object, Object, Handler)}but returns a {@code Future} that will be
+   * Like {@link #replace(Object, Object, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<V> replace(K k, V v);
+  CompletionStage<V> replace(K k, V v);
 
   /**
    * Replace the entry only if it is currently mapped to a specific value
@@ -166,10 +167,10 @@ public interface AsyncMap<K, V> {
   void replaceIfPresent(K k, V oldValue, V newValue, Handler<AsyncResult<Boolean>> resultHandler);
 
   /**
-   * Like {@link #replaceIfPresent(Object, Object, Object, Handler)}but returns a {@code Future} that will be
+   * Like {@link #replaceIfPresent(Object, Object, Object, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Boolean> replaceIfPresent(K k, V oldValue, V newValue);
+  CompletionStage<Boolean> replaceIfPresent(K k, V oldValue, V newValue);
 
   /**
    * Clear all entries in the map
@@ -179,10 +180,10 @@ public interface AsyncMap<K, V> {
   void clear(Handler<AsyncResult<Void>> resultHandler);
 
   /**
-   * Like {@link #clear(Handler)}but returns a {@code Future} that will be
+   * Like {@link #clear(Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> clear();
+  CompletionStage<Void> clear();
 
   /**
    * Provide the number of entries in the map
@@ -192,9 +193,9 @@ public interface AsyncMap<K, V> {
   void size(Handler<AsyncResult<Integer>> resultHandler);
 
   /**
-   * Like {@link #size(Handler)}but returns a {@code Future} that will be
+   * Like {@link #size(Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Integer> size();
+  CompletionStage<Integer> size();
 
 }

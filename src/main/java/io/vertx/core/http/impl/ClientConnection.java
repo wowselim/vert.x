@@ -24,7 +24,6 @@ import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.ReferenceCountUtil;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.VertxException;
@@ -40,6 +39,7 @@ import io.vertx.core.net.NetSocket;
 import io.vertx.core.net.impl.ConnectionBase;
 import io.vertx.core.net.impl.NetSocketImpl;
 import io.vertx.core.net.impl.VertxNetHandler;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.spi.metrics.HttpClientMetrics;
 
 import java.net.URI;
@@ -48,6 +48,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.CompletionStage;
 
 import static io.vertx.core.http.HttpHeaders.ACCEPT_ENCODING;
 import static io.vertx.core.http.HttpHeaders.CLOSE;
@@ -674,8 +675,10 @@ class ClientConnection extends ConnectionBase implements HttpClientConnection, H
   }
 
   @Override
-  public Future<Void> updateSettings(Http2Settings settings) {
-    return Future.failedFuture(new UnsupportedOperationException("HTTP/1.x connections don't support SETTINGS"));
+  public CompletionStage<Void> updateSettings(Http2Settings settings) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    updateSettings(settings, fut);
+    return fut;
   }
 
   @Override
@@ -699,8 +702,10 @@ class ClientConnection extends ConnectionBase implements HttpClientConnection, H
   }
 
   @Override
-  public Future<Buffer> ping(Buffer data) {
-    return Future.failedFuture(new UnsupportedOperationException("HTTP/1.x connections don't support PING"));
+  public CompletionStage<Buffer> ping(Buffer data) {
+    CompletableStage<Buffer> fut = CompletableStage.create();
+    ping(data, fut);
+    return fut;
   }
 
   @Override

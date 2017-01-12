@@ -19,11 +19,12 @@ package io.vertx.core.http;
 import io.vertx.codegen.annotations.CacheReturn;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.metrics.Measured;
+
+import java.util.concurrent.CompletionStage;
 
 /**
  * An HTTP and WebSockets server.
@@ -101,9 +102,9 @@ public interface HttpServer extends Measured {
    * <p>
    * The listen happens asynchronously and the server may not be listening until some time after the call has returned.
    *
-   * @return returns a {@code Future} that will be completed once the operation completes.
+   * @return returns a {@code CompletionStage} that will be completed once the operation completes.
    */
-  Future<HttpServer> listen();
+  CompletionStage<HttpServer> listen();
 
   /**
    * Tell the server to start listening. The server will listen on the port and host specified here,
@@ -114,9 +115,9 @@ public interface HttpServer extends Measured {
    * @param port  the port to listen on
    * @param host  the host to listen on
    *
-   * @return returns a {@code Future} that will be completed once the operation completes.
+   * @return returns a {@code CompletionStage} that will be completed once the operation completes.
    */
-  Future<HttpServer> listen(int port, String host);
+  CompletionStage<HttpServer> listen(int port, String host);
 
   /**
    * Like {@link #listen(int, String)} but supplying a handler that will be called when the server is actually
@@ -134,9 +135,9 @@ public interface HttpServer extends Measured {
    *
    * @param port  the port to listen on
    *
-   * @return returns a {@code Future} that will be completed once the operation completes.
+   * @return returns a {@code CompletionStage} that will be completed once the operation completes.
    */
-  Future<HttpServer> listen(int port);
+  CompletionStage<HttpServer> listen(int port);
 
   /**
    * Like {@link #listen(int)} but supplying a handler that will be called when the server is actually listening (or has failed).
@@ -158,9 +159,9 @@ public interface HttpServer extends Measured {
    * <p>
    * The close happens asynchronously and the server may not be closed until some time after the call has returned.
    *
-   * @return returns a {@code Future} that will be completed once the operation completes.
+   * @return returns a {@code CompletionStage} that will be completed once the operation completes.
    */
-  Future<Void> close();
+  CompletionStage<Void> close();
 
   /**
    * Like {@link #close} but supplying a handler that will be called when the server is actually closed (or has failed).

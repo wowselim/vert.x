@@ -17,10 +17,11 @@
 package io.vertx.core.net;
 
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.metrics.Measured;
+
+import java.util.concurrent.CompletionStage;
 
 /**
  * A TCP client.
@@ -43,9 +44,9 @@ public interface NetClient extends Measured {
    *
    * @param port  the port
    * @param host  the host
-   * @return a {@code Future} that will be completed once the operation completes.
+   * @return a {@code CompletionStage} that will be completed once the operation completes.
    */
-  Future<NetSocket> connect(int port, String host);
+  CompletionStage<NetSocket> connect(int port, String host);
 
   /**
    * Open a connection to a server at the specific {@code port} and {@code host}.

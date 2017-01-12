@@ -18,7 +18,6 @@ package io.vertx.core.file.impl;
 
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.file.AsyncFile;
@@ -30,6 +29,7 @@ import io.vertx.core.file.OpenOptions;
 import io.vertx.core.impl.Action;
 import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.impl.VertxInternal;
+import io.vertx.core.spi.concurrent.CompletableStage;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -57,6 +57,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletionStage;
 import java.util.regex.Pattern;
 
 /**
@@ -813,198 +814,198 @@ public class FileSystemImpl implements FileSystem {
   }
 
   @Override
-  public Future<Void> copy(String from, String to) {
-    Future<Void> fut = Future.future();
-    copy(from, to, fut.completer());
+  public CompletionStage<Void> copy(String from, String to) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    copy(from, to, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> copyRecursive(String from, String to, boolean recursive) {
-    Future<Void> fut = Future.future();
-    copyRecursive(from, to, recursive, fut.completer());
+  public CompletionStage<Void> copyRecursive(String from, String to, boolean recursive) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    copyRecursive(from, to, recursive, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> move(String from, String to) {
-    Future<Void> fut = Future.future();
-    move(from, to, fut.completer());
+  public CompletionStage<Void> move(String from, String to) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    move(from, to, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> truncate(String path, long len) {
-    Future<Void> fut = Future.future();
-    truncate(path, len, fut.completer());
+  public CompletionStage<Void> truncate(String path, long len) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    truncate(path, len, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> chmod(String path, String perms) {
-    Future<Void> fut = Future.future();
-    chmod(path, perms, fut.completer());
+  public CompletionStage<Void> chmod(String path, String perms) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    chmod(path, perms, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> chmodRecursive(String path, String perms, String dirPerms) {
-    Future<Void> fut = Future.future();
-    chmodRecursive(path, perms, dirPerms, fut.completer());
+  public CompletionStage<Void> chmodRecursive(String path, String perms, String dirPerms) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    chmodRecursive(path, perms, dirPerms, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> chown(String path, @Nullable String user, @Nullable String group) {
-    Future<Void> fut = Future.future();
-    chown(path, user, group, fut.completer());
+  public CompletionStage<Void> chown(String path, @Nullable String user, @Nullable String group) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    chown(path, user, group, fut);
     return fut;
   }
 
   @Override
-  public Future<FileProps> props(String path) {
-    Future<FileProps> fut = Future.future();
-    props(path, fut.completer());
+  public CompletionStage<FileProps> props(String path) {
+    CompletableStage<FileProps> fut = CompletableStage.create();
+    props(path, fut);
     return fut;
   }
 
   @Override
-  public Future<FileProps> lprops(String path) {
-    Future<FileProps> fut = Future.future();
-    lprops(path, fut.completer());
+  public CompletionStage<FileProps> lprops(String path) {
+    CompletableStage<FileProps> fut = CompletableStage.create();
+    lprops(path, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> link(String link, String existing) {
-    Future<Void> fut = Future.future();
-    link(link, existing, fut.completer());
+  public CompletionStage<Void> link(String link, String existing) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    link(link, existing, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> symlink(String link, String existing) {
-    Future<Void> fut = Future.future();
-    symlink(link, existing, fut.completer());
+  public CompletionStage<Void> symlink(String link, String existing) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    symlink(link, existing, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> unlink(String link) {
-    Future<Void> fut = Future.future();
-    unlink(link, fut.completer());
+  public CompletionStage<Void> unlink(String link) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    unlink(link, fut);
     return fut;
   }
 
   @Override
-  public Future<String> readSymlink(String link) {
-    Future<String> fut = Future.future();
-    readSymlink(link, fut.completer());
+  public CompletionStage<String> readSymlink(String link) {
+    CompletableStage<String> fut = CompletableStage.create();
+    readSymlink(link, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> delete(String path) {
-    Future<Void> fut = Future.future();
-    delete(path, fut.completer());
+  public CompletionStage<Void> delete(String path) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    delete(path, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> deleteRecursive(String path, boolean recursive) {
-    Future<Void> fut = Future.future();
-    deleteRecursive(path, recursive, fut.completer());
+  public CompletionStage<Void> deleteRecursive(String path, boolean recursive) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    deleteRecursive(path, recursive, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> mkdir(String path) {
-    Future<Void> fut = Future.future();
-    mkdir(path, fut.completer());
+  public CompletionStage<Void> mkdir(String path) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    mkdir(path, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> mkdir(String path, String perms) {
-    Future<Void> fut = Future.future();
-    mkdir(path, perms, fut.completer());
+  public CompletionStage<Void> mkdir(String path, String perms) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    mkdir(path, perms, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> mkdirs(String path) {
-    Future<Void> fut = Future.future();
-    mkdirs(path, fut.completer());
+  public CompletionStage<Void> mkdirs(String path) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    mkdirs(path, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> mkdirs(String path, String perms) {
-    Future<Void> fut = Future.future();
-    mkdirs(path, perms, fut.completer());
+  public CompletionStage<Void> mkdirs(String path, String perms) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    mkdirs(path, perms, fut);
     return fut;
   }
 
   @Override
-  public Future<List<String>> readDir(String path) {
-    Future<List<String>> fut = Future.future();
-    readDir(path, fut.completer());
+  public CompletionStage<List<String>> readDir(String path) {
+    CompletableStage<List<String>> fut = CompletableStage.create();
+    readDir(path, fut);
     return fut;
   }
 
   @Override
-  public Future<List<String>> readDir(String path, String filter) {
-    Future<List<String>> fut = Future.future();
-    readDir(path, filter, fut.completer());
+  public CompletionStage<List<String>> readDir(String path, String filter) {
+    CompletableStage<List<String>> fut = CompletableStage.create();
+    readDir(path, filter, fut);
     return fut;
   }
 
   @Override
-  public Future<Buffer> readFile(String path) {
-    Future<Buffer> fut = Future.future();
-    readFile(path, fut.completer());
+  public CompletionStage<Buffer> readFile(String path) {
+    CompletableStage<Buffer> fut = CompletableStage.create();
+    readFile(path, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> writeFile(String path, Buffer data) {
-    Future<Void> fut = Future.future();
-    writeFile(path, data, fut.completer());
+  public CompletionStage<Void> writeFile(String path, Buffer data) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    writeFile(path, data, fut);
     return fut;
   }
 
   @Override
-  public Future<AsyncFile> open(String path, OpenOptions options) {
-    Future<AsyncFile> fut = Future.future();
-    open(path, options, fut.completer());
+  public CompletionStage<AsyncFile> open(String path, OpenOptions options) {
+    CompletableStage<AsyncFile> fut = CompletableStage.create();
+    open(path, options, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> createFile(String path) {
-    Future<Void> fut = Future.future();
-    createFile(path, fut.completer());
+  public CompletionStage<Void> createFile(String path) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    createFile(path, fut);
     return fut;
   }
 
   @Override
-  public Future<Void> createFile(String path, String perms) {
-    Future<Void> fut = Future.future();
-    createFile(path, perms, fut.completer());
+  public CompletionStage<Void> createFile(String path, String perms) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    createFile(path, perms, fut);
     return fut;
   }
 
   @Override
-  public Future<Boolean> exists(String path) {
-    Future<Boolean> fut = Future.future();
-    exists(path, fut.completer());
+  public CompletionStage<Boolean> exists(String path) {
+    CompletableStage<Boolean> fut = CompletableStage.create();
+    exists(path, fut);
     return fut;
   }
 
   @Override
-  public Future<FileSystemProps> fsProps(String path) {
-    Future<FileSystemProps> fut = Future.future();
-    fsProps(path, fut.completer());
+  public CompletionStage<FileSystemProps> fsProps(String path) {
+    CompletableStage<FileSystemProps> fut = CompletableStage.create();
+    fsProps(path, fut);
     return fut;
   }
 }

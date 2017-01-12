@@ -17,7 +17,6 @@ package io.vertx.core.datagram;
 
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.codegen.annotations.CacheReturn;
@@ -26,7 +25,8 @@ import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.metrics.Measured;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.core.streams.ReadStream;
-import io.vertx.core.streams.WriteStream;
+
+import java.util.concurrent.CompletionStage;
 
 /**
  * A datagram socket can be used to send {@link DatagramPacket}'s to remote datagram servers
@@ -59,10 +59,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket send(Buffer packet, int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #send(Buffer, int, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #send(Buffer, int, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the writes completes.
    */
-  Future<DatagramSocket> send(Buffer packet, int port, String host);
+  CompletionStage<DatagramSocket> send(Buffer packet, int port, String host);
 
   /**
    * Returns a {@link io.vertx.core.datagram.PacketWritestream} able to send {@link Buffer} to the
@@ -88,10 +88,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket send(String str, int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #send(String, int, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #send(String, int, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the writes completes
    */
-  Future<DatagramSocket> send(String str, int port, String host);
+  CompletionStage<DatagramSocket> send(String str, int port, String host);
 
   /**
    * Write the given {@link String} to the {@link io.vertx.core.net.SocketAddress} using the given encoding.
@@ -108,10 +108,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket send(String str, String enc, int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #send(String, String, int, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #send(String, String, int, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the writes completes
    */
-  Future<DatagramSocket> send(String str, String enc, int port, String host);
+  CompletionStage<DatagramSocket> send(String str, String enc, int port, String host);
 
   /**
    * Closes the {@link io.vertx.core.datagram.DatagramSocket} implementation asynchronous
@@ -125,10 +125,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
    * Closes the {@link io.vertx.core.datagram.DatagramSocket}. The close itself is asynchronous.
    *
    /**
-   * Like {@link #close(Handler)} but returns a {@code Future} that will be
+   * Like {@link #close(Handler)} but returns a {@code CompletionStage} that will be
    * completed once the socket is closed.
    */
-  Future<Void> close();
+  CompletionStage<Void> close();
 
   /**
    * Return the {@link io.vertx.core.net.SocketAddress} to which
@@ -151,10 +151,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket listenMulticastGroup(String multicastAddress, Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #listenMulticastGroup(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #listenMulticastGroup(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<DatagramSocket> listenMulticastGroup(String multicastAddress);
+  CompletionStage<DatagramSocket> listenMulticastGroup(String multicastAddress);
 
   /**
    * Joins a multicast group and listens for packets send to it on the given network interface.
@@ -171,10 +171,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
                                       Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #listenMulticastGroup(String, String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #listenMulticastGroup(String, String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<DatagramSocket> listenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source);
+  CompletionStage<DatagramSocket> listenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source);
 
   /**
    * Leaves a multicast group and stops listening for packets send to it.
@@ -188,10 +188,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket unlistenMulticastGroup(String multicastAddress, Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #unlistenMulticastGroup(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #unlistenMulticastGroup(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress);
+  CompletionStage<DatagramSocket> unlistenMulticastGroup(String multicastAddress);
 
   /**
    * Leaves a multicast group and stops listening for packets send to it on the given network interface.
@@ -208,10 +208,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
                                         Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #unlistenMulticastGroup(String, String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #unlistenMulticastGroup(String, String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source);
+  CompletionStage<DatagramSocket> unlistenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source);
 
   /**
    * Block the given address for the given multicast address and notifies the {@link Handler} once
@@ -228,10 +228,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
                                      Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #blockMulticastGroup(String, String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #blockMulticastGroup(String, String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String sourceToBlock);
+  CompletionStage<DatagramSocket> blockMulticastGroup(String multicastAddress, String sourceToBlock);
 
   /**
    * Block the given address for the given multicast address on the given network interface and notifies
@@ -249,10 +249,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
                                      Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #blockMulticastGroup(String, String, String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #blockMulticastGroup(String, String, String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock);
+  CompletionStage<DatagramSocket> blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock);
 
   /**
    * Start listening on the given port and host. The handler will be called when the socket is listening.
@@ -266,10 +266,10 @@ public interface DatagramSocket extends ReadStream<DatagramPacket>, Measured {
   DatagramSocket listen(int port, String host, Handler<AsyncResult<DatagramSocket>> handler);
 
   /**
-   * Like {@link #listen(int, String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #listen(int, String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<DatagramSocket> listen(int port, String host);
+  CompletionStage<DatagramSocket> listen(int port, String host);
 
   @Override
   DatagramSocket pause();

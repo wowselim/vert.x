@@ -24,6 +24,7 @@ import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.json.JsonObject;
 
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 /**
  * The execution context of a {@link io.vertx.core.Handler} execution.
@@ -124,10 +125,10 @@ public interface Context {
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered, Handler<AsyncResult<T>> resultHandler);
 
   /**
-   * Like {@link #executeBlocking(Handler, boolean, Handler)} but returns a {@code Future} that will be
+   * Like {@link #executeBlocking(Handler, boolean, Handler)} but returns a {@code CompletionStage} that will be
    * completed with the result of the {@code blockingCodeHandler}
    */
-  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
+  <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
 
   /**
    * Invoke {@link #executeBlocking(Handler, boolean, Handler)} with order = true.
@@ -138,10 +139,10 @@ public interface Context {
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, Handler<AsyncResult<T>> resultHandler);
 
   /**
-   * Like {@link #executeBlocking(Handler, Handler)} but returns a {@code Future} that will be
+   * Like {@link #executeBlocking(Handler, Handler)} but returns a {@code CompletionStage} that will be
    * completed with the result of the {@code blockingCodeHandler}
    */
-  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler);
+  <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler);
 
   /**
    * If the context is associated with a Verticle deployment, this returns the deployment ID of that deployment.

@@ -19,6 +19,8 @@ package io.vertx.core;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.metrics.Measured;
 
+import java.util.concurrent.CompletionStage;
+
 /**
  * An executor for executing blocking code in Vert.x .<p>
  *
@@ -55,10 +57,10 @@ public interface WorkerExecutor extends Measured {
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered, Handler<AsyncResult<T>> resultHandler);
 
   /**
-   * Like {@link #executeBlocking(Handler, boolean, Handler)} but returns a {@code Future} that will be
+   * Like {@link #executeBlocking(Handler, boolean, Handler)} but returns a {@code CompletionStage} that will be
    * completed with the result of the {@code blockingCodeHandler}
    */
-  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
+  <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
 
   /**
    * Like {@link #executeBlocking(Handler, boolean, Handler)} called with ordered = true.
@@ -68,10 +70,10 @@ public interface WorkerExecutor extends Measured {
   }
 
   /**
-   * Like {@link #executeBlocking(Handler, Handler)} but returns a {@code Future} that will be
+   * Like {@link #executeBlocking(Handler, Handler)} but returns a {@code CompletionStage} that will be
    * completed with the result of the {@code blockingCodeHandler}
    */
-  default <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler) {
+  default <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler) {
     return executeBlocking(blockingCodeHandler, true);
   }
 

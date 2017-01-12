@@ -39,6 +39,7 @@ import io.vertx.core.net.SocketAddress;
 import io.vertx.core.net.impl.ConnectionBase;
 import io.vertx.core.net.impl.PartialPooledByteBufAllocator;
 import io.vertx.core.net.impl.SocketAddressImpl;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.spi.metrics.DatagramSocketMetrics;
 import io.vertx.core.spi.metrics.Metrics;
 import io.vertx.core.spi.metrics.MetricsProvider;
@@ -46,6 +47,7 @@ import io.vertx.core.spi.metrics.NetworkMetrics;
 
 import java.net.*;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author <a href="mailto:nmaurer@redhat.com">Norman Maurer</a>
@@ -92,9 +94,9 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<DatagramSocket> listenMulticastGroup(String multicastAddress) {
-    Future<DatagramSocket> fut = Future.future();
-    listenMulticastGroup(multicastAddress, fut.completer());
+  public CompletionStage<DatagramSocket> listenMulticastGroup(String multicastAddress) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    listenMulticastGroup(multicastAddress, fut);
     return fut;
   }
 
@@ -116,9 +118,9 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<DatagramSocket> listenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source) {
-    Future<DatagramSocket> fut = Future.future();
-    listenMulticastGroup(multicastAddress, networkInterface, source, fut.completer());
+  public CompletionStage<DatagramSocket> listenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    listenMulticastGroup(multicastAddress, networkInterface, source, fut);
     return fut;
   }
 
@@ -133,9 +135,9 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress) {
-    Future<DatagramSocket> fut = Future.future();
-    unlistenMulticastGroup(multicastAddress, fut.completer());
+  public CompletionStage<DatagramSocket> unlistenMulticastGroup(String multicastAddress) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    unlistenMulticastGroup(multicastAddress, fut);
     return fut;
   }
 
@@ -157,9 +159,9 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<DatagramSocket> unlistenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source) {
-    Future<DatagramSocket> fut = Future.future();
-    unlistenMulticastGroup(multicastAddress, networkInterface, source, fut.completer());
+  public CompletableStage<DatagramSocket> unlistenMulticastGroup(String multicastAddress, String networkInterface, @Nullable String source) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    unlistenMulticastGroup(multicastAddress, networkInterface, source, fut);
     return fut;
   }
 
@@ -181,9 +183,9 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock) {
-    Future<DatagramSocket> fut = Future.future();
-    blockMulticastGroup(multicastAddress, networkInterface, sourceToBlock, fut.completer());
+  public CompletionStage<DatagramSocket> blockMulticastGroup(String multicastAddress, String networkInterface, String sourceToBlock) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    blockMulticastGroup(multicastAddress, networkInterface, sourceToBlock, fut);
     return fut;
   }
 
@@ -198,9 +200,9 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<DatagramSocket> blockMulticastGroup(String multicastAddress, String sourceToBlock) {
-    Future<DatagramSocket> fut = Future.future();
-    blockMulticastGroup(multicastAddress, sourceToBlock, fut.completer());
+  public CompletionStage<DatagramSocket> blockMulticastGroup(String multicastAddress, String sourceToBlock) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    blockMulticastGroup(multicastAddress, sourceToBlock, fut);
     return fut;
   }
 
@@ -210,9 +212,9 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<DatagramSocket> listen(int port, String host) {
-    Future<DatagramSocket> fut = Future.future();
-    listen(port, host, fut.completer());
+  public CompletionStage<DatagramSocket> listen(int port, String host) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    listen(port, host, fut);
     return fut;
   }
 
@@ -295,16 +297,16 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<DatagramSocket> send(String str, String enc, int port, String host) {
-    Future<DatagramSocket> fut = Future.future();
-    send(str, enc, port, host, fut.completer());
+  public CompletionStage<DatagramSocket> send(String str, String enc, int port, String host) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    send(str, enc, port, host, fut);
     return fut;
   }
 
   @Override
-  public Future<DatagramSocket> send(Buffer packet, int port, String host) {
-    Future<DatagramSocket> fut = Future.future();
-    send(packet, port, host, fut.completer());
+  public CompletionStage<DatagramSocket> send(Buffer packet, int port, String host) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    send(packet, port, host, fut);
     return fut;
   }
 
@@ -326,9 +328,9 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<DatagramSocket> send(String str, int port, String host) {
-    Future<DatagramSocket> fut = Future.future();
-    send(str, port, host, fut.completer());
+  public CompletionStage<DatagramSocket> send(String str, int port, String host) {
+    CompletableStage<DatagramSocket> fut = CompletableStage.create();
+    send(str, port, host, fut);
     return fut;
   }
 
@@ -349,9 +351,9 @@ public class DatagramSocketImpl extends ConnectionBase implements DatagramSocket
   }
 
   @Override
-  public Future<Void> close() {
-    Future<Void> fut = Future.future();
-    close(fut.completer());
+  public CompletionStage<Void> close() {
+    CompletableStage<Void> fut = CompletableStage.create();
+    close(fut);
     return fut;
   }
 

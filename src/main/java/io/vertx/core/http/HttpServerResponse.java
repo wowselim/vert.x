@@ -22,11 +22,12 @@ import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.streams.WriteStream;
+
+import java.util.concurrent.CompletionStage;
 
 /**
  * Represents a server-side HTTP response.
@@ -256,9 +257,9 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    * Same as {@link #sendFile(String, long)} using offset @code{0} which means starting from the beginning of the file.
    *
    * @param filename  path to the file to serve
-   * @return returns a {@code Future} that will be completed once the send completes.
+   * @return returns a {@code CompletionStage} that will be completed once the send completes.
    */
-  default Future<Void> sendFile(String filename) {
+  default CompletionStage<Void> sendFile(String filename) {
     return sendFile(filename, 0);
   }
 
@@ -268,9 +269,9 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    *
    * @param filename  path to the file to serve
    * @param offset offset to start serving from
-   * @return returns a {@code Future} that will be completed once the send completes.
+   * @return returns a {@code CompletionStage} that will be completed once the send completes.
    */
-  default Future<Void> sendFile(String filename, long offset) {
+  default CompletionStage<Void> sendFile(String filename, long offset) {
     return sendFile(filename, offset, Long.MAX_VALUE);
   }
 
@@ -284,9 +285,9 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
    * @param filename  path to the file to serve
    * @param offset offset to start serving from
    * @param length length to serve to
-   * @return returns a {@code Future} that will be completed once the send completes.
+   * @return returns a {@code CompletionStage} that will be completed once the send completes.
    */
-  Future<Void> sendFile(String filename, long offset, long length);
+  CompletionStage<Void> sendFile(String filename, long offset, long length);
 
   /**
    * Like {@link #sendFile(String)} but providing a handler which will be notified once the file has been completely
@@ -387,10 +388,10 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
   HttpServerResponse push(HttpMethod method, String host, String path, Handler<AsyncResult<HttpServerResponse>> handler);
 
   /**
-   * Like {@link #push(HttpMethod, String, String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #push(HttpMethod, String, String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<HttpServerResponse> push(HttpMethod method, String host, String path);
+  CompletionStage<HttpServerResponse> push(HttpMethod method, String host, String path);
 
   /**
    * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)} with the host copied from the current request.
@@ -399,10 +400,10 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
   HttpServerResponse push(HttpMethod method, String path, MultiMap headers, Handler<AsyncResult<HttpServerResponse>> handler);
 
   /**
-   * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)}but returns a {@code Future} that will be
+   * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers);
+  CompletionStage<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers);
 
   /**
    * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)} with the host copied from the current request.
@@ -411,10 +412,10 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
   HttpServerResponse push(HttpMethod method, String path, Handler<AsyncResult<HttpServerResponse>> handler);
 
   /**
-   * Like {@link #push(HttpMethod, String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #push(HttpMethod, String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<HttpServerResponse> push(HttpMethod method, String path);
+  CompletionStage<HttpServerResponse> push(HttpMethod method, String path);
 
   /**
    * Push a response to the client.<p/>
@@ -438,10 +439,10 @@ public interface HttpServerResponse extends WriteStream<Buffer> {
   HttpServerResponse push(HttpMethod method, String host, String path, MultiMap headers, Handler<AsyncResult<HttpServerResponse>> handler);
 
   /**
-   * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)}but returns a {@code Future} that will be
+   * Like {@link #push(HttpMethod, String, String, MultiMap, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<HttpServerResponse> push(HttpMethod method, String host, String path, MultiMap headers);
+  CompletionStage<HttpServerResponse> push(HttpMethod method, String host, String path, MultiMap headers);
 
   /**
    * Reset this HTTP/2 stream with the error code {@code 0}.

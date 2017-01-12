@@ -20,10 +20,12 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.spi.metrics.Metrics;
 import io.vertx.core.spi.metrics.MetricsProvider;
 import io.vertx.core.spi.metrics.PoolMetrics;
 
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 
 /**
@@ -72,9 +74,9 @@ class WorkerExecutorImpl implements Closeable, MetricsProvider, WorkerExecutorIn
   }
 
   @Override
-  public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered) {
-    Future<T> fut = Future.future();
-    executeBlocking(blockingCodeHandler, ordered, fut.completer());
+  public <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered) {
+    CompletableStage<T> fut = CompletableStage.create();
+    executeBlocking(blockingCodeHandler, ordered, fut);
     return fut;
   }
 

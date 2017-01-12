@@ -47,6 +47,7 @@ import io.vertx.core.dns.impl.netty.decoder.record.ServiceRecord;
 import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.net.impl.PartialPooledByteBufAllocator;
+import io.vertx.core.spi.concurrent.CompletableStage;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -57,6 +58,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -101,9 +103,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<@Nullable String> lookup4(String name) {
-    Future<String> fut = Future.future();
-    lookup4(name, fut.completer());
+  public CompletionStage<@Nullable String> lookup4(String name) {
+    CompletableStage<String> fut = CompletableStage.create();
+    lookup4(name, fut);
     return fut;
   }
 
@@ -114,9 +116,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<@Nullable String> lookup6(String name) {
-    Future<String> fut = Future.future();
-    lookup6(name, fut.completer());
+  public CompletionStage<@Nullable String> lookup6(String name) {
+    CompletableStage<String> fut = CompletableStage.create();
+    lookup6(name, fut);
     return fut;
   }
 
@@ -127,9 +129,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<@Nullable String> lookup(String name) {
-    Future<String> fut = Future.future();
-    lookup(name, fut.completer());
+  public CompletionStage<@Nullable String> lookup(String name) {
+    CompletableStage<String> fut = CompletableStage.create();
+    lookup(name, fut);
     return fut;
   }
 
@@ -140,9 +142,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<List<String>> resolveA(String name) {
-    Future<List<String>> fut = Future.future();
-    resolveA(name, fut.completer());
+  public CompletionStage<List<String>> resolveA(String name) {
+    CompletableStage<List<String>> fut = CompletableStage.create();
+    resolveA(name, fut);
     return fut;
   }
 
@@ -153,9 +155,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<List<String>> resolveCNAME(String name) {
-    Future<List<String>> fut = Future.future();
-    resolveCNAME(name, fut.completer());
+  public CompletionStage<List<String>> resolveCNAME(String name) {
+    CompletableStage<List<String>> fut = CompletableStage.create();
+    resolveCNAME(name, fut);
     return fut;
   }
 
@@ -171,9 +173,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<List<MxRecord>> resolveMX(String name) {
-    Future<List<MxRecord>> fut = Future.future();
-    resolveMX(name, fut.completer());
+  public CompletionStage<List<MxRecord>> resolveMX(String name) {
+    CompletableStage<List<MxRecord>> fut = CompletableStage.create();
+    resolveMX(name, fut);
     return fut;
   }
 
@@ -199,9 +201,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<List<String>> resolveTXT(String name) {
-    Future<List<String>> fut = Future.future();
-    resolveTXT(name, fut.completer());
+  public CompletionStage<List<String>> resolveTXT(String name) {
+    CompletableStage<List<String>> fut = CompletableStage.create();
+    resolveTXT(name, fut);
     return fut;
   }
 
@@ -212,9 +214,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<@Nullable String> resolvePTR(String name) {
-    Future<String> fut = Future.future();
-    resolvePTR(name, fut.completer());
+  public CompletionStage<@Nullable String> resolvePTR(String name) {
+    CompletableStage<String> fut = CompletableStage.create();
+    resolvePTR(name, fut);
     return fut;
   }
 
@@ -225,9 +227,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<List<String>> resolveAAAA(String name) {
-    Future<List<String>> fut = Future.future();
-    resolveAAAA(name, fut.completer());
+  public CompletionStage<List<String>> resolveAAAA(String name) {
+    CompletableStage<List<String>> fut = CompletableStage.create();
+    resolveAAAA(name, fut);
     return fut;
   }
 
@@ -238,9 +240,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<List<String>> resolveNS(String name) {
-    Future<List<String>> fut = Future.future();
-    resolveNS(name, fut.completer());
+  public CompletionStage<List<String>> resolveNS(String name) {
+    CompletableStage<List<String>> fut = CompletableStage.create();
+    resolveNS(name, fut);
     return fut;
   }
 
@@ -256,9 +258,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<List<SrvRecord>> resolveSRV(String name) {
-    Future<List<SrvRecord>> fut = Future.future();
-    resolveSRV(name, fut.completer());
+  public CompletionStage<List<SrvRecord>> resolveSRV(String name) {
+    CompletableStage<List<SrvRecord>> fut = CompletableStage.create();
+    resolveSRV(name, fut);
     return fut;
   }
 
@@ -308,9 +310,9 @@ public final class DnsClientImpl implements DnsClient {
   }
 
   @Override
-  public Future<@Nullable String> reverseLookup(String ipaddress) {
-    Future<String> fut = Future.future();
-    reverseLookup(ipaddress, fut.completer());
+  public CompletionStage<@Nullable String> reverseLookup(String ipaddress) {
+    CompletableStage<String> fut = CompletableStage.create();
+    reverseLookup(ipaddress, fut);
     return fut;
   }
 

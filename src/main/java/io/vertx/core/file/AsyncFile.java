@@ -20,10 +20,11 @@ import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import io.vertx.core.Future;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
+
+import java.util.concurrent.CompletionStage;
 
 /**
  * Represents a file on the file-system which can be read from, or written to asynchronously.
@@ -71,9 +72,9 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
   /**
    * Close the file. The actual close happens asynchronously.
    *
-   * @return a {@code Future} that will be completed once the operation completes.
+   * @return a {@code CompletionStage} that will be completed once the operation completes.
    */
-  Future<Void> close();
+  CompletionStage<Void> close();
 
   /**
    * Close the file. The actual close happens asynchronously.
@@ -103,10 +104,10 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
   AsyncFile write(Buffer buffer, long position, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #write(Buffer, long, Handler)}but returns a {@code Future} that will be
+   * Like {@link #write(Buffer, long, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> write(Buffer buffer, long position);
+  CompletionStage<Void> write(Buffer buffer, long position);
 
   /**
    * Reads {@code length} bytes of data from the file at position {@code position} in the file, asynchronously.
@@ -129,16 +130,16 @@ public interface AsyncFile extends ReadStream<Buffer>, WriteStream<Buffer> {
   AsyncFile read(Buffer buffer, int offset, long position, int length, Handler<AsyncResult<Buffer>> handler);
 
   /**
-   * Like {@link #read(Buffer, int, long, int, Handler)}but returns a {@code Future} that will be
+   * Like {@link #read(Buffer, int, long, int, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Buffer> read(Buffer buffer, int offset, long position, int length);
+  CompletionStage<Buffer> read(Buffer buffer, int offset, long position, int length);
 
   /**
-   * Like {@link #flush(Handler)}but returns a {@code Future} that will be
+   * Like {@link #flush(Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> flush();
+  CompletionStage<Void> flush();
 
   /**
    * Flush any writes made to this file to underlying persistent storage.

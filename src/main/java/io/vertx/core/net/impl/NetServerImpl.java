@@ -39,12 +39,14 @@ import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.net.NetSocket;
 import io.vertx.core.net.NetSocketStream;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.spi.metrics.Metrics;
 import io.vertx.core.spi.metrics.MetricsProvider;
 import io.vertx.core.spi.metrics.TCPMetrics;
 
 import java.net.InetSocketAddress;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -106,16 +108,16 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public Future<NetServer> listen(int port, String host) {
-    Future<NetServer> fut = Future.future();
-    listen(port, host, fut.completer());
+  public CompletionStage<NetServer> listen(int port, String host) {
+    CompletableStage<NetServer> fut = CompletableStage.create();
+    listen(port, host, fut);
     return fut;
   }
 
   @Override
-  public Future<NetServer> listen(int port) {
-    Future<NetServer> fut = Future.future();
-    listen(port, "0.0.0.0", fut.completer());
+  public CompletionStage<NetServer> listen(int port) {
+    CompletableStage<NetServer> fut = CompletableStage.create();
+    listen(port, "0.0.0.0", fut);
     return fut;
   }
 
@@ -125,9 +127,9 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public Future<NetServer> listen() {
-    Future<NetServer> fut = Future.future();
-    listen(fut.completer());
+  public CompletionStage<NetServer> listen() {
+    CompletableStage<NetServer> fut = CompletableStage.create();
+    listen(fut);
     return fut;
   }
 
@@ -257,9 +259,9 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
     }
   }
 
-  public Future<Void> close() {
-    Future<Void> fut = Future.future();
-    close(fut.completer());
+  public CompletionStage<Void> close() {
+    CompletableStage<Void> fut = CompletableStage.create();
+    close(fut);
     return fut;
   }
 

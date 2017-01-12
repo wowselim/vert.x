@@ -18,8 +18,10 @@ package io.vertx.core.shareddata;
 
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.spi.concurrent.CompletableStage;
+
+import java.util.concurrent.CompletionStage;
 
 /**
  * An asynchronous counter that can be used to across the cluster to maintain a consistent count.
@@ -39,12 +41,12 @@ public interface Counter {
   void get(Handler<AsyncResult<Long>> resultHandler);
 
   /**
-   * Like {@link #get(Handler)}but returns a {@code Future} that will be
+   * Like {@link #get(Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Long> get() {
-    Future<Long> fut = Future.future();
-    get(fut.completer());
+  default CompletionStage<Long> get() {
+    CompletableStage<Long> fut = CompletableStage.create();
+    get(fut);
     return fut;
   }
 
@@ -56,12 +58,12 @@ public interface Counter {
   void incrementAndGet(Handler<AsyncResult<Long>> resultHandler);
 
   /**
-   * Like {@link #incrementAndGet(Handler)}but returns a {@code Future} that will be
+   * Like {@link #incrementAndGet(Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Long> incrementAndGet() {
-    Future<Long> fut = Future.future();
-    incrementAndGet(fut.completer());
+  default CompletionStage<Long> incrementAndGet() {
+    CompletableStage<Long> fut = CompletableStage.create();
+    incrementAndGet(fut);
     return fut;
   }
 
@@ -73,12 +75,12 @@ public interface Counter {
   void getAndIncrement(Handler<AsyncResult<Long>> resultHandler);
 
   /**
-   * Like {@link #getAndIncrement(Handler)}but returns a {@code Future} that will be
+   * Like {@link #getAndIncrement(Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Long> getAndIncrement() {
-    Future<Long> fut = Future.future();
-    getAndIncrement(fut.completer());
+  default CompletionStage<Long> getAndIncrement() {
+    CompletableStage<Long> fut = CompletableStage.create();
+    getAndIncrement(fut);
     return fut;
   }
 
@@ -90,12 +92,12 @@ public interface Counter {
   void decrementAndGet(Handler<AsyncResult<Long>> resultHandler);
 
   /**
-   * Like {@link #decrementAndGet(Handler)}but returns a {@code Future} that will be
+   * Like {@link #decrementAndGet(Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Long> decrementAndGet() {
-    Future<Long> fut = Future.future();
-    decrementAndGet(fut.completer());
+  default CompletionStage<Long> decrementAndGet() {
+    CompletableStage<Long> fut = CompletableStage.create();
+    decrementAndGet(fut);
     return fut;
   }
 
@@ -108,12 +110,12 @@ public interface Counter {
   void addAndGet(long value, Handler<AsyncResult<Long>> resultHandler);
 
   /**
-   * Like {@link #addAndGet(long, Handler)}but returns a {@code Future} that will be
+   * Like {@link #addAndGet(long, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Long> addAndGet(long value) {
-    Future<Long> fut = Future.future();
-    addAndGet(value, fut.completer());
+  default CompletionStage<Long> addAndGet(long value) {
+    CompletableStage<Long> fut = CompletableStage.create();
+    addAndGet(value, fut);
     return fut;
   }
 
@@ -126,12 +128,12 @@ public interface Counter {
   void getAndAdd(long value, Handler<AsyncResult<Long>> resultHandler);
 
   /**
-   * Like {@link #getAndAdd(long, Handler)}but returns a {@code Future} that will be
+   * Like {@link #getAndAdd(long, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Long> getAndAdd(long value) {
-    Future<Long> fut = Future.future();
-    getAndAdd(value, fut.completer());
+  default CompletionStage<Long> getAndAdd(long value) {
+    CompletableStage<Long> fut = CompletableStage.create();
+    getAndAdd(value, fut);
     return fut;
   }
 
@@ -146,12 +148,12 @@ public interface Counter {
   void compareAndSet(long expected, long value, Handler<AsyncResult<Boolean>> resultHandler);
 
   /**
-   * Like {@link #compareAndSet(long, long, Handler)}but returns a {@code Future} that will be
+   * Like {@link #compareAndSet(long, long, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Boolean> compareAndSet(long expected, long value) {
-    Future<Boolean> fut = Future.future();
-    compareAndSet(expected, value, fut.completer());
+  default CompletionStage<Boolean> compareAndSet(long expected, long value) {
+    CompletableStage<Boolean> fut = CompletableStage.create();
+    compareAndSet(expected, value, fut);
     return fut;
   }
 }

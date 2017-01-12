@@ -39,9 +39,11 @@ import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.shareddata.SharedData;
 import io.vertx.core.spi.VerticleFactory;
 import io.vertx.core.spi.VertxFactory;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.streams.ReadStream;
 
 import java.util.Set;
+import java.util.concurrent.CompletionStage;
 
 /**
  * The entry point into the Vert.x Core API.
@@ -102,9 +104,9 @@ public interface Vertx extends Measured {
     factory.clusteredVertx(options, resultHandler);
   }
 
-  static Future<Vertx> clusteredVertx(VertxOptions options) {
-    Future<Vertx> fut = Future.future();
-    factory.clusteredVertx(options, fut.completer());
+  static CompletionStage<Vertx> clusteredVertx(VertxOptions options) {
+    CompletableStage<Vertx> fut = CompletableStage.create();
+    factory.clusteredVertx(options, fut);
     return fut;
   }
 
@@ -294,7 +296,7 @@ public interface Vertx extends Measured {
    * <p>
    * The actual close is asynchronous and may not complete until after the call has returned.
    */
-  Future<Void> close();
+  CompletionStage<Void> close();
 
   /**
    * Like {@link #close} but the completionHandler will be called when the close is complete
@@ -313,7 +315,7 @@ public interface Vertx extends Measured {
    * @param verticle  the verticle instance to deploy.
    */
   @GenIgnore
-  Future<String> deployVerticle(Verticle verticle);
+  CompletionStage<String> deployVerticle(Verticle verticle);
 
   /**
    * Like {@link #deployVerticle(Verticle)} but the completionHandler will be notified when the deployment is complete.
@@ -337,7 +339,7 @@ public interface Vertx extends Measured {
    * @param options  the deployment options.
    */
   @GenIgnore
-  Future<String> deployVerticle(Verticle verticle, DeploymentOptions options);
+  CompletionStage<String> deployVerticle(Verticle verticle, DeploymentOptions options);
 
   /**
    * Like {@link #deployVerticle(Verticle, Handler)} but {@link io.vertx.core.DeploymentOptions} are provided to configure the
@@ -359,7 +361,7 @@ public interface Vertx extends Measured {
    *
    * @param name  the name.
    */
-  Future<String> deployVerticle(String name);
+  CompletionStage<String> deployVerticle(String name);
 
   /**
    * Like {@link #deployVerticle(String)} but the completionHandler will be notified when the deployment is complete.
@@ -382,7 +384,7 @@ public interface Vertx extends Measured {
    * @param name  the name
    * @param options  the deployment options.
    */
-  Future<String> deployVerticle(String name, DeploymentOptions options);
+  CompletionStage<String> deployVerticle(String name, DeploymentOptions options);
 
   /**
    * Like {@link #deployVerticle(String, Handler)} but {@link io.vertx.core.DeploymentOptions} are provided to configure the
@@ -401,7 +403,7 @@ public interface Vertx extends Measured {
    *
    * @param deploymentID  the deployment ID
    */
-  Future<Void> undeploy(String deploymentID);
+  CompletionStage<Void> undeploy(String deploymentID);
 
   /**
    * Like {@link #undeploy(String) } but the completionHandler will be notified when the undeployment is complete.
@@ -474,10 +476,10 @@ public interface Vertx extends Measured {
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered, Handler<AsyncResult<T>> resultHandler);
 
   /**
-   * Like {@link #executeBlocking(Handler, boolean, Handler)} but returns a {@code Future} that will be
+   * Like {@link #executeBlocking(Handler, boolean, Handler)} but returns a {@code CompletionStage} that will be
    * completed with the result of the {@code blockingCodeHandler}
    */
-  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
+  <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered);
 
   /**
    * Like {@link #executeBlocking(Handler, boolean, Handler)} called with ordered = true.
@@ -485,10 +487,10 @@ public interface Vertx extends Measured {
   <T> void executeBlocking(Handler<Future<T>> blockingCodeHandler, Handler<AsyncResult<T>> resultHandler);
 
   /**
-   * Like {@link #executeBlocking(Handler, Handler)} but returns a {@code Future} that will be
+   * Like {@link #executeBlocking(Handler, Handler)} but returns a {@code CompletionStage} that will be
    * completed with the result of the {@code blockingCodeHandler}
    */
-  <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler);
+  <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler);
 
   /**
    * Return the Netty EventLoopGroup used by Vert.x

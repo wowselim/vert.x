@@ -88,6 +88,7 @@ import io.vertx.core.net.impl.SSLHelper;
 import io.vertx.core.net.impl.ServerID;
 import io.vertx.core.net.impl.SocketAddressImpl;
 import io.vertx.core.net.impl.VertxEventLoopGroup;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.spi.metrics.HttpServerMetrics;
 import io.vertx.core.spi.metrics.Metrics;
 import io.vertx.core.spi.metrics.MetricsProvider;
@@ -99,6 +100,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -206,9 +208,9 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public Future<HttpServer> listen() {
-    Future<HttpServer> fut = Future.future();
-    listen(fut.completer());
+  public CompletionStage<HttpServer> listen() {
+    CompletableStage<HttpServer> fut = CompletableStage.create();
+    listen(fut);
     return fut;
   }
 
@@ -218,16 +220,16 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public Future<HttpServer> listen(int port, String host) {
-    Future<HttpServer> fut = Future.future();
-    listen(port, host, fut.completer());
+  public CompletionStage<HttpServer> listen(int port, String host) {
+    CompletableStage<HttpServer> fut = CompletableStage.create();
+    listen(port, host, fut);
     return fut;
   }
 
   @Override
-  public Future<HttpServer> listen(int port) {
-    Future<HttpServer> fut = Future.future();
-    listen(port, fut.completer());
+  public CompletionStage<HttpServer> listen(int port) {
+    CompletableStage<HttpServer> fut = CompletableStage.create();
+    listen(port, fut);
     return fut;
   }
 
@@ -416,9 +418,9 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public Future<Void> close() {
-    Future<Void> fut = Future.future();
-    close(fut.completer());
+  public CompletionStage<Void> close() {
+    CompletableStage<Void> fut = CompletableStage.create();
+    close(fut);
     return fut;
   }
 

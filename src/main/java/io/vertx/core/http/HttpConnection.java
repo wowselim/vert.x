@@ -21,10 +21,11 @@ import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.SocketAddress;
+
+import java.util.concurrent.CompletionStage;
 
 /**
  * Represents an HTTP connection.
@@ -169,7 +170,7 @@ public interface HttpConnection {
    *
    * @return the future notified when the settings have been acknowledged by the remote endpoint
    */
-  Future<Void> updateSettings(Http2Settings settings);
+  CompletionStage<Void> updateSettings(Http2Settings settings);
 
   /**
    * Send to the remote endpoint an update of this endpoint settings
@@ -218,7 +219,7 @@ public interface HttpConnection {
    *
    * @return the future notified with the pong reply or the failure
    */
-  Future<Buffer> ping(Buffer data);
+  CompletionStage<Buffer> ping(Buffer data);
 
   /**
    * Set an handler notified when a {@literal PING} frame is received from the remote endpoint.

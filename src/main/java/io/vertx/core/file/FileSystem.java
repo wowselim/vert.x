@@ -19,12 +19,12 @@ package io.vertx.core.file;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.codegen.annotations.VertxGen;
 
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Contains a broad set of operations for manipulating files on the file system.
@@ -60,10 +60,10 @@ public interface FileSystem {
   FileSystem copy(String from, String to, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #copy(String, String)} but returns a {@code Future} that will be
+   * Like {@link #copy(String, String)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> copy(String from, String to);
+  CompletionStage<Void> copy(String from, String to);
 
   /**
    * Blocking version of {@link #copy(String, String, Handler)}
@@ -89,10 +89,10 @@ public interface FileSystem {
   FileSystem copyRecursive(String from, String to, boolean recursive, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #copyRecursive(String, String, boolean, Handler)} but returns a {@code Future} that will be
+   * Like {@link #copyRecursive(String, String, boolean, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> copyRecursive(String from, String to, boolean recursive);
+  CompletionStage<Void> copyRecursive(String from, String to, boolean recursive);
 
   /**
    * Blocking version of {@link #copyRecursive(String, String, boolean, Handler)}
@@ -114,10 +114,10 @@ public interface FileSystem {
   FileSystem move(String from, String to, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #move(String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #move(String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> move(String from, String to);
+  CompletionStage<Void> move(String from, String to);
 
   /**
    * Blocking version of {@link #move(String, String, Handler)}
@@ -139,10 +139,10 @@ public interface FileSystem {
   FileSystem truncate(String path, long len, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #truncate(String, long, Handler)} but returns a {@code Future} that will be
+   * Like {@link #truncate(String, long, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> truncate(String path, long len);
+  CompletionStage<Void> truncate(String path, long len);
 
   /**
    * Blocking version of {@link #truncate(String, long, Handler)}
@@ -165,10 +165,10 @@ public interface FileSystem {
   FileSystem chmod(String path, String perms, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #chmod(String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #chmod(String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> chmod(String path, String perms);
+  CompletionStage<Void> chmod(String path, String perms);
 
   /**
    * Blocking version of {@link #chmod(String, String, Handler) }
@@ -194,10 +194,10 @@ public interface FileSystem {
   FileSystem chmodRecursive(String path, String perms, String dirPerms, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #chmodRecursive(String, String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #chmodRecursive(String, String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> chmodRecursive(String path, String perms, String dirPerms);
+  CompletionStage<Void> chmodRecursive(String path, String perms, String dirPerms);
 
   /**
    * Blocking version of {@link #chmodRecursive(String, String, String, Handler)}
@@ -219,10 +219,10 @@ public interface FileSystem {
   FileSystem chown(String path, @Nullable String user, @Nullable String group, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #chown(String, String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #chown(String, String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> chown(String path, @Nullable String user, @Nullable String group);
+  CompletionStage<Void> chown(String path, @Nullable String user, @Nullable String group);
 
   /**
    * Blocking version of {@link #chown(String, String, String, Handler)}
@@ -244,10 +244,10 @@ public interface FileSystem {
   FileSystem props(String path, Handler<AsyncResult<FileProps>> handler);
 
   /**
-   * Like {@link #props(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #props(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<FileProps> props(String path);
+  CompletionStage<FileProps> props(String path);
 
   /**
    * Blocking version of {@link #props(String, Handler)}
@@ -267,10 +267,10 @@ public interface FileSystem {
   FileSystem lprops(String path, Handler<AsyncResult<FileProps>> handler);
 
   /**
-   * Like {@link #lprops(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #lprops(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<FileProps> lprops(String path);
+  CompletionStage<FileProps> lprops(String path);
 
   /**
    * Blocking version of {@link #lprops(String, Handler)}
@@ -289,10 +289,10 @@ public interface FileSystem {
   FileSystem link(String link, String existing, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #lprops(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #lprops(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> link(String link, String existing);
+  CompletionStage<Void> link(String link, String existing);
 
   /**
    * Blocking version of {@link #link(String, String, Handler)}
@@ -312,10 +312,10 @@ public interface FileSystem {
   FileSystem symlink(String link, String existing, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #symlink(String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #symlink(String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> symlink(String link, String existing);
+  CompletionStage<Void> symlink(String link, String existing);
 
   /**
    * Blocking version of {@link #link(String, String, Handler)}
@@ -334,10 +334,10 @@ public interface FileSystem {
   FileSystem unlink(String link, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #unlink(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #unlink(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> unlink(String link);
+  CompletionStage<Void> unlink(String link);
 
   /**
    * Blocking version of {@link #unlink(String, Handler)}
@@ -356,10 +356,10 @@ public interface FileSystem {
   FileSystem readSymlink(String link, Handler<AsyncResult<String>> handler);
 
   /**
-   * Like {@link #readSymlink(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #readSymlink(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<String> readSymlink(String link);
+  CompletionStage<String> readSymlink(String link);
 
   /**
    * Blocking version of {@link #readSymlink(String, Handler)}
@@ -377,10 +377,10 @@ public interface FileSystem {
   FileSystem delete(String path, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #delete(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #delete(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> delete(String path);
+  CompletionStage<Void> delete(String path);
 
   /**
    * Blocking version of {@link #delete(String, Handler)}
@@ -403,10 +403,10 @@ public interface FileSystem {
   FileSystem deleteRecursive(String path, boolean recursive, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #deleteRecursive(String, boolean, Handler)} but returns a {@code Future} that will be
+   * Like {@link #deleteRecursive(String, boolean, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> deleteRecursive(String path, boolean recursive);
+  CompletionStage<Void> deleteRecursive(String path, boolean recursive);
 
   /**
    * Blocking version of {@link #deleteRecursive(String, boolean, Handler)}
@@ -427,10 +427,10 @@ public interface FileSystem {
   FileSystem mkdir(String path, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #mkdir(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #mkdir(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> mkdir(String path);
+  CompletionStage<Void> mkdir(String path);
 
   /**
    * Blocking version of {@link #mkdir(String, Handler)}
@@ -457,10 +457,10 @@ public interface FileSystem {
   FileSystem mkdir(String path, String perms, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #mkdir(String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #mkdir(String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> mkdir(String path, String perms);
+  CompletionStage<Void> mkdir(String path, String perms);
 
   /**
    * Blocking version of {@link #mkdir(String, String, Handler)}
@@ -481,10 +481,10 @@ public interface FileSystem {
   FileSystem mkdirs(String path, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #mkdirs(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #mkdirs(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> mkdirs(String path);
+  CompletionStage<Void> mkdirs(String path);
 
   /**
    * Blocking version of {@link #mkdirs(String, Handler)}
@@ -511,10 +511,10 @@ public interface FileSystem {
   FileSystem mkdirs(String path, String perms, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #mkdirs(String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #mkdirs(String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> mkdirs(String path, String perms);
+  CompletionStage<Void> mkdirs(String path, String perms);
 
   /**
    * Blocking version of {@link #mkdirs(String, String, Handler)}
@@ -535,10 +535,10 @@ public interface FileSystem {
   FileSystem readDir(String path, Handler<AsyncResult<List<String>>> handler);
 
   /**
-   * Like {@link #readDir(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #readDir(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<List<String>> readDir(String path);
+  CompletionStage<List<String>> readDir(String path);
 
   /**
    * Blocking version of {@link #readDir(String, Handler)}
@@ -562,10 +562,10 @@ public interface FileSystem {
   FileSystem readDir(String path, String filter, Handler<AsyncResult<List<String>>> handler);
 
   /**
-   * Like {@link #readDir(String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #readDir(String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<List<String>> readDir(String path, String filter);
+  CompletionStage<List<String>> readDir(String path, String filter);
 
   /**
    * Blocking version of {@link #readDir(String, String, Handler)}
@@ -585,10 +585,10 @@ public interface FileSystem {
   FileSystem readFile(String path, Handler<AsyncResult<Buffer>> handler);
 
   /**
-   * Like {@link #readFile(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #readFile(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Buffer> readFile(String path);
+  CompletionStage<Buffer> readFile(String path);
 
   /**
    * Blocking version of {@link #readFile(String, Handler)}
@@ -607,10 +607,10 @@ public interface FileSystem {
   FileSystem writeFile(String path, Buffer data, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #writeFile(String, Buffer, Handler)} but returns a {@code Future} that will be
+   * Like {@link #writeFile(String, Buffer, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> writeFile(String path, Buffer data);
+  CompletionStage<Void> writeFile(String path, Buffer data);
 
   /**
    * Blocking version of {@link #writeFile(String, Buffer, Handler)}
@@ -632,10 +632,10 @@ public interface FileSystem {
   FileSystem open(String path, OpenOptions options, Handler<AsyncResult<AsyncFile>> handler);
 
   /**
-   * Like {@link #open(String, OpenOptions, Handler)} but returns a {@code Future} that will be
+   * Like {@link #open(String, OpenOptions, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<AsyncFile> open(String path, OpenOptions options);
+  CompletionStage<AsyncFile> open(String path, OpenOptions options);
 
   /**
    * Blocking version of {@link #open(String, io.vertx.core.file.OpenOptions, Handler)}
@@ -653,10 +653,10 @@ public interface FileSystem {
   FileSystem createFile(String path, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #createFile(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #createFile(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> createFile(String path);
+  CompletionStage<Void> createFile(String path);
 
   /**
    * Blocking version of {@link #createFile(String, Handler)}
@@ -676,10 +676,10 @@ public interface FileSystem {
   FileSystem createFile(String path, String perms, Handler<AsyncResult<Void>> handler);
 
   /**
-   * Like {@link #createFile(String, String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #createFile(String, String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Void> createFile(String path, String perms);
+  CompletionStage<Void> createFile(String path, String perms);
 
   /**
    * Blocking version of {@link #createFile(String, String, Handler)}
@@ -698,10 +698,10 @@ public interface FileSystem {
   FileSystem exists(String path, Handler<AsyncResult<Boolean>> handler);
 
   /**
-   * Like {@link #exists(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #exists(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<Boolean> exists(String path);
+  CompletionStage<Boolean> exists(String path);
 
   /**
    * Blocking version of {@link #exists(String, Handler)}
@@ -719,10 +719,10 @@ public interface FileSystem {
   FileSystem fsProps(String path, Handler<AsyncResult<FileSystemProps>> handler);
 
   /**
-   * Like {@link #fsProps(String, Handler)} but returns a {@code Future} that will be
+   * Like {@link #fsProps(String, Handler)} but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<FileSystemProps> fsProps(String path);
+  CompletionStage<FileSystemProps> fsProps(String path);
 
   /**
    * Blocking version of {@link #fsProps(String, Handler)}

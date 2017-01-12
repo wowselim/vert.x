@@ -29,6 +29,7 @@ import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.spi.concurrent.CompletableStage;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -41,6 +42,7 @@ import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -108,9 +110,9 @@ public class AsyncFileImpl implements AsyncFile {
   }
 
   @Override
-  public Future<Void> close() {
-    Future<Void> fut = Future.future();
-    close(fut.completer());
+  public CompletionStage<Void> close() {
+    CompletableStage<Void> fut = CompletableStage.create();
+    close(fut);
     return fut;
   }
 
@@ -143,9 +145,9 @@ public class AsyncFileImpl implements AsyncFile {
     return doWrite(buffer, position, handler);
   }
 
-  public Future<Void> write(Buffer buffer, long position) {
-    Future<Void> fut = Future.future();
-    write(buffer, position, fut.completer());
+  public CompletionStage<Void> write(Buffer buffer, long position) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    write(buffer, position, fut);
     return fut;
   }
 
@@ -263,9 +265,9 @@ public class AsyncFileImpl implements AsyncFile {
 
 
   @Override
-  public Future<Void> flush() {
-    Future<Void> fut = Future.future();
-    flush(fut.completer());
+  public CompletionStage<Void> flush() {
+    CompletableStage<Void> fut = CompletableStage.create();
+    flush(fut);
     return fut;
   }
 
@@ -492,9 +494,9 @@ public class AsyncFileImpl implements AsyncFile {
   }
 
   @Override
-  public Future<Buffer> read(Buffer buffer, int offset, long position, int length) {
-    Future<Buffer> fut = Future.future();
-    read(buffer, offset, position, length, fut.completer());
+  public CompletionStage<Buffer> read(Buffer buffer, int offset, long position, int length) {
+    CompletableStage<Buffer> fut = CompletableStage.create();
+    read(buffer, offset, position, length, fut);
     return fut;
   }
 }

@@ -18,12 +18,12 @@ package io.vertx.core.dns;
 
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.VertxGen;
 
 import java.util.List;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Provides a way to asynchronously lookup information from DNS servers.
@@ -48,10 +48,10 @@ public interface DnsClient {
   DnsClient lookup(String name, Handler<AsyncResult<@Nullable String>> handler);
 
   /**
-   * Like {@link #lookup(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #lookup(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<@Nullable String> lookup(String name);
+  CompletionStage<@Nullable String> lookup(String name);
 
   /**
    * Try to lookup the A (ipv4) record for the given name. The first found will be used.
@@ -66,10 +66,10 @@ public interface DnsClient {
   DnsClient lookup4(String name, Handler<AsyncResult<@Nullable String>> handler);
 
   /**
-   * Like {@link #lookup4(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #lookup4(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<@Nullable String> lookup4(String name);
+  CompletionStage<@Nullable String> lookup4(String name);
 
   /**
    * Try to lookup the AAAA (ipv6) record for the given name. The first found will be used.
@@ -84,10 +84,10 @@ public interface DnsClient {
   DnsClient lookup6(String name, Handler<AsyncResult<@Nullable String>> handler);
 
   /**
-   * Like {@link #lookup6(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #lookup6(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<@Nullable String> lookup6(String name);
+  CompletionStage<@Nullable String> lookup6(String name);
 
   /**
    * Try to resolve all A (ipv4) records for the given name.
@@ -103,10 +103,10 @@ public interface DnsClient {
   DnsClient resolveA(String name, Handler<AsyncResult<List<String>>> handler);
 
   /**
-   * Like {@link #resolveA(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #resolveA(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<List<String>> resolveA(String name);
+  CompletionStage<List<String>> resolveA(String name);
 
   /**
    * Try to resolve all AAAA (ipv6) records for the given name.
@@ -122,10 +122,10 @@ public interface DnsClient {
   DnsClient resolveAAAA(String name, Handler<AsyncResult<List<String>>> handler);
 
   /**
-   * Like {@link #resolveAAAA(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #resolveAAAA(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<List<String>> resolveAAAA(String name);
+  CompletionStage<List<String>> resolveAAAA(String name);
 
   /**
    * Try to resolve the CNAME record for the given name.
@@ -140,10 +140,10 @@ public interface DnsClient {
   DnsClient resolveCNAME(String name, Handler<AsyncResult<List<String>>> handler);
 
   /**
-   * Like {@link #resolveCNAME(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #resolveCNAME(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<List<String>> resolveCNAME(String name);
+  CompletionStage<List<String>> resolveCNAME(String name);
 
   /**
    * Try to resolve the MX records for the given name.
@@ -159,10 +159,10 @@ public interface DnsClient {
   DnsClient resolveMX(String name, Handler<AsyncResult<List<MxRecord>>> handler);
 
   /**
-   * Like {@link #resolveMX(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #resolveMX(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<List<MxRecord>> resolveMX(String name);
+  CompletionStage<List<MxRecord>> resolveMX(String name);
 
   /**
    * Try to resolve the TXT records for the given name.
@@ -177,10 +177,10 @@ public interface DnsClient {
   DnsClient resolveTXT(String name, Handler<AsyncResult<List<String>>> handler);
 
   /**
-   * Like {@link #resolveTXT(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #resolveTXT(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<List<String>> resolveTXT(String name);
+  CompletionStage<List<String>> resolveTXT(String name);
 
   /**
    * Try to resolve the PTR record for the given name.
@@ -195,10 +195,10 @@ public interface DnsClient {
   DnsClient resolvePTR(String name, Handler<AsyncResult<@Nullable String>> handler);
 
   /**
-   * Like {@link #resolvePTR(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #resolvePTR(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<@Nullable String> resolvePTR(String name);
+  CompletionStage<@Nullable String> resolvePTR(String name);
 
   /**
    * Try to resolve the NS records for the given name.
@@ -213,10 +213,10 @@ public interface DnsClient {
   DnsClient resolveNS(String name, Handler<AsyncResult<List<String>>> handler);
 
   /**
-   * Like {@link #resolveNS(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #resolveNS(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<List<String>> resolveNS(String name);
+  CompletionStage<List<String>> resolveNS(String name);
 
   /**
    * Try to resolve the SRV records for the given name.
@@ -231,10 +231,10 @@ public interface DnsClient {
   DnsClient resolveSRV(String name, Handler<AsyncResult<List<SrvRecord>>> handler);
 
   /**
-   * Like {@link #resolveSRV(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #resolveSRV(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<List<SrvRecord>> resolveSRV(String name);
+  CompletionStage<List<SrvRecord>> resolveSRV(String name);
 
   /**
    * Try to do a reverse lookup of an IP address. This is basically the same as doing trying to resolve a PTR record
@@ -250,8 +250,8 @@ public interface DnsClient {
   DnsClient reverseLookup(String ipaddress, Handler<AsyncResult<@Nullable String>> handler);
 
   /**
-   * Like {@link #reverseLookup(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #reverseLookup(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  Future<@Nullable String> reverseLookup(String ipaddress);
+  CompletionStage<@Nullable String> reverseLookup(String ipaddress);
 }

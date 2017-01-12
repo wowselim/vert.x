@@ -31,6 +31,7 @@ import io.vertx.core.spi.cluster.AsyncMultiMap;
 import io.vertx.core.spi.cluster.ChoosableIterable;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.core.spi.cluster.NodeListener;
+import io.vertx.core.spi.concurrent.CompletableStage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +40,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -243,124 +245,144 @@ public class FakeClusterManager implements ClusterManager {
 
     @Override
     public void get(final K k, Handler<AsyncResult<V>> resultHandler) {
-      get(k).setHandler(resultHandler);
-    }
-
-    @Override
-    public Future<V> get(K k) {
-      return vertx.executeBlocking(fut -> fut.complete(map.get(k)));
+      vertx.executeBlocking(fut -> fut.complete(map.get(k)), resultHandler);
     }
 
     @Override
     public void put(final K k, final V v, Handler<AsyncResult<Void>> resultHandler) {
-      put(k, v).setHandler(resultHandler);
-    }
-
-    @Override
-    public Future<Void> put(K k, V v) {
-      return vertx.executeBlocking(fut -> {
+      vertx.executeBlocking(fut -> {
         map.put(k, v);
         fut.complete();
-      });
+      }, resultHandler);
     }
 
     @Override
     public void putIfAbsent(K k, V v, Handler<AsyncResult<V>> resultHandler) {
-      putIfAbsent(k, v).setHandler(resultHandler);
-    }
-
-    @Override
-    public Future<V> putIfAbsent(K k, V v) {
-      return vertx.executeBlocking(fut -> fut.complete(map.putIfAbsent(k, v)));
+      vertx.executeBlocking(fut -> fut.complete(map.putIfAbsent(k, v)), resultHandler);
     }
 
     @Override
     public void put(K k, V v, long timeout, Handler<AsyncResult<Void>> completionHandler) {
-      put(k, v, timeout).setHandler(completionHandler);
-    }
-
-    @Override
-    public Future<Void> put(K k, V v, long timeout) {
-      Future<Void> fut = put(k, v);
+      put(k, v, completionHandler);
       vertx.setTimer(timeout, tid -> map.remove(k));
-      return fut;
     }
 
     @Override
     public void putIfAbsent(K k, V v, long timeout, Handler<AsyncResult<V>> completionHandler) {
-      putIfAbsent(k, v, timeout).setHandler(completionHandler);
-    }
-
-    @Override
-    public Future<V> putIfAbsent(K k, V v, long timeout) {
-      Future<V> future = putIfAbsent(k, v);
-      return future.map(vv -> {
+      Future<V> future = Future.future();
+      putIfAbsent(k, v, future.completer());
+      future.map(vv -> {
         if (vv == null) vertx.setTimer(timeout, tid -> map.remove(k));
         return vv;
-      });
+      }).setHandler(completionHandler);
     }
 
     @Override
     public void removeIfPresent(K k, V v, Handler<AsyncResult<Boolean>> resultHandler) {
-      removeIfPresent(k, v).setHandler(resultHandler);
-    }
-
-    @Override
-    public Future<Boolean> removeIfPresent(K k, V v) {
-      return vertx.executeBlocking(fut -> fut.complete(map.remove(k, v)));
+      vertx.executeBlocking(fut -> fut.complete(map.remove(k, v)), resultHandler);
     }
 
     @Override
     public void replace(K k, V v, Handler<AsyncResult<V>> resultHandler) {
-      replace(k, v).setHandler(resultHandler);
-    }
-
-    @Override
-    public Future<V> replace(K k, V v) {
-      return vertx.executeBlocking(fut -> fut.complete(map.replace(k, v)));
+      vertx.executeBlocking(fut -> fut.complete(map.replace(k, v)), resultHandler);
     }
 
     @Override
     public void replaceIfPresent(K k, V oldValue, V newValue, Handler<AsyncResult<Boolean>> resultHandler) {
-      replaceIfPresent(k, oldValue, newValue).setHandler(resultHandler);
-    }
-
-    @Override
-    public Future<Boolean> replaceIfPresent(K k, V oldValue, V newValue) {
-      return vertx.executeBlocking(fut -> fut.complete(map.replace(k, oldValue, newValue)));
+      vertx.executeBlocking(fut -> fut.complete(map.replace(k, oldValue, newValue)), resultHandler);
     }
 
     @Override
     public void clear(Handler<AsyncResult<Void>> resultHandler) {
-      clear().setHandler(resultHandler);
-    }
-
-    @Override
-    public Future<Void> clear() {
-      return vertx.executeBlocking(fut -> {
+      vertx.executeBlocking(fut -> {
         map.clear();
         fut.complete();
-      });
+      }, resultHandler);
     }
 
     @Override
     public void size(Handler<AsyncResult<Integer>> resultHandler) {
-      size().setHandler(resultHandler);
-    }
-
-    @Override
-    public Future<Integer> size() {
-      return vertx.executeBlocking(fut -> fut.complete(map.size()));
+      vertx.executeBlocking(fut -> fut.complete(map.size()), resultHandler);
     }
 
     @Override
     public void remove(final K k, Handler<AsyncResult<V>> resultHandler) {
-      remove(k).setHandler(resultHandler);
+      vertx.executeBlocking(fut -> fut.complete(map.remove(k)), resultHandler);
     }
 
     @Override
-    public Future<V> remove(K k) {
-      return vertx.executeBlocking(fut -> fut.complete(map.remove(k)));
+    public CompletionStage<V> get(K k) {
+      CompletableStage<V> fut = CompletableStage.create();
+      get(k, fut);
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<Void> put(K k, V v) {
+      CompletableStage<Void> fut = CompletableStage.create();
+      put(k, v, fut);
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<Void> put(K k, V v, long ttl) {
+      CompletableStage<Void> fut = CompletableStage.create();
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<V> putIfAbsent(K k, V v) {
+      CompletableStage<V> fut = CompletableStage.create();
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<V> putIfAbsent(K k, V v, long ttl) {
+      CompletableStage<V> fut = CompletableStage.create();
+      putIfAbsent(k, v, ttl, fut);
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<V> remove(K k) {
+      CompletableStage<V> fut = CompletableStage.create();
+      remove(k, fut);
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<Boolean> removeIfPresent(K k, V v) {
+      CompletableStage<Boolean> fut = CompletableStage.create();
+      removeIfPresent(k, v, fut);
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<V> replace(K k, V v) {
+      CompletableStage<V> fut = CompletableStage.create();
+      replace(k, v, fut);
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<Boolean> replaceIfPresent(K k, V oldValue, V newValue) {
+      CompletableStage<Boolean> fut = CompletableStage.create();
+      replaceIfPresent(k, oldValue, newValue, fut);
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<Void> clear() {
+      CompletableStage<Void> fut = CompletableStage.create();
+      clear(fut);
+      return fut;
+    }
+
+    @Override
+    public CompletionStage<Integer> size() {
+      CompletableStage<Integer> fut = CompletableStage.create();
+      size(fut);
+      return fut;
     }
   }
 
@@ -403,19 +425,19 @@ public class FakeClusterManager implements ClusterManager {
     @Override
     public void remove(final K k, final V v, Handler<AsyncResult<Boolean>> completionHandler) {
       vertx.executeBlocking(fut -> {
-          ChoosableSet<V> vals = map.get(k);
-          boolean found = false;
-          if (vals != null) {
-            boolean removed = vals.remove(v);
-            if (removed) {
-              if (vals.isEmpty()) {
-                map.remove(k);
-              }
-              found = true;
+        ChoosableSet<V> vals = map.get(k);
+        boolean found = false;
+        if (vals != null) {
+          boolean removed = vals.remove(v);
+          if (removed) {
+            if (vals.isEmpty()) {
+              map.remove(k);
             }
+            found = true;
           }
-          fut.complete(found);
-        }, completionHandler);
+        }
+        fut.complete(found);
+      }, completionHandler);
     }
 
     @Override

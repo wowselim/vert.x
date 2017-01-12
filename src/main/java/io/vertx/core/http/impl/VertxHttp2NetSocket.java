@@ -30,6 +30,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.net.NetSocket;
 import io.vertx.core.net.SocketAddress;
+import io.vertx.core.spi.concurrent.CompletableStage;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.security.cert.X509Certificate;
@@ -38,6 +39,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
@@ -187,9 +189,9 @@ class VertxHttp2NetSocket<C extends Http2ConnectionBase> extends VertxHttp2Strea
   }
 
   @Override
-  public Future<Void> sendFile(String filename, long offset, long length) {
-    Future<Void> fut = Future.future();
-    sendFile(filename, offset, length, fut.completer());
+  public CompletionStage<Void> sendFile(String filename, long offset, long length) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    sendFile(filename, offset, length, fut);
     return fut;
   }
 

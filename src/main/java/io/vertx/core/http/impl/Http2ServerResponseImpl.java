@@ -34,12 +34,14 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.http.StreamResetException;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.spi.concurrent.CompletableStage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.ClosedChannelException;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
@@ -480,9 +482,9 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
   }
 
   @Override
-  public Future<Void> sendFile(String filename, long offset, long length) {
-    Future<Void> fut = Future.future();
-    sendFile(filename, offset, length, fut.completer());
+  public CompletionStage<Void> sendFile(String filename, long offset, long length) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    sendFile(filename, offset, length, fut);
     return fut;
   }
 
@@ -609,9 +611,9 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
   }
 
   @Override
-  public Future<HttpServerResponse> push(HttpMethod method, String host, String path) {
-    Future<HttpServerResponse> fut = Future.future();
-    push(method, host, path, fut.completer());
+  public CompletionStage<HttpServerResponse> push(HttpMethod method, String host, String path) {
+    CompletableStage<HttpServerResponse> fut = CompletableStage.create();
+    push(method, host, path, fut);
     return fut;
   }
 
@@ -621,9 +623,9 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
   }
 
   @Override
-  public Future<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers) {
-    Future<HttpServerResponse> fut = Future.future();
-    push(method, path, headers, fut.completer());
+  public CompletionStage<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers) {
+    CompletableStage<HttpServerResponse> fut = CompletableStage.create();
+    push(method, path, headers, fut);
     return fut;
   }
 
@@ -633,9 +635,9 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
   }
 
   @Override
-  public Future<HttpServerResponse> push(HttpMethod method, String path) {
-    Future<HttpServerResponse> fut = Future.future();
-    push(method, path, fut.completer());
+  public CompletionStage<HttpServerResponse> push(HttpMethod method, String path) {
+    CompletableStage<HttpServerResponse> fut = CompletableStage.create();
+    push(method, path, fut);
     return fut;
   }
 
@@ -656,9 +658,9 @@ public class Http2ServerResponseImpl implements HttpServerResponse {
   }
 
   @Override
-  public Future<HttpServerResponse> push(HttpMethod method, String host, String path, MultiMap headers) {
-    Future<HttpServerResponse> fut = Future.future();
-    push(method, host, path, headers, fut.completer());
+  public CompletionStage<HttpServerResponse> push(HttpMethod method, String host, String path, MultiMap headers) {
+    CompletableStage<HttpServerResponse> fut = CompletableStage.create();
+    push(method, host, path, headers, fut);
     return fut;
   }
 }

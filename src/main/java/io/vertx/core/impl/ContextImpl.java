@@ -23,9 +23,11 @@ import io.vertx.core.impl.launcher.VertxCommandLauncher;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.spi.metrics.PoolMetrics;
 
 import java.util.*;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
@@ -243,16 +245,16 @@ public abstract class ContextImpl implements ContextInternal {
   }
 
   @Override
-  public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered) {
-    Future<T> fut = Future.future();
-    executeBlocking(blockingCodeHandler, ordered, fut.completer());
+  public <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered) {
+    CompletableStage<T> fut = CompletableStage.create();
+    executeBlocking(blockingCodeHandler, ordered, fut);
     return fut;
   }
 
   @Override
-  public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler) {
-    Future<T> fut = Future.future();
-    executeBlocking(blockingCodeHandler, fut.completer());
+  public <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler) {
+    CompletableStage<T> fut = CompletableStage.create();
+    executeBlocking(blockingCodeHandler, fut);
     return fut;
   }
 

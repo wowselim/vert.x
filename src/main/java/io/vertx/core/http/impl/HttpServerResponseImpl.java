@@ -32,11 +32,13 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.core.spi.concurrent.CompletableStage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.concurrent.CompletionStage;
 
 /**
  *
@@ -331,9 +333,9 @@ public class HttpServerResponseImpl implements HttpServerResponse {
   }
 
   @Override
-  public Future<Void> sendFile(String filename, long offset, long length) {
-    Future<Void> fut = Future.future();
-    sendFile(filename, offset, length, fut.completer());
+  public CompletionStage<Void> sendFile(String filename, long offset, long length) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    sendFile(filename, offset, length, fut);
     return fut;
   }
 
@@ -618,28 +620,30 @@ public class HttpServerResponseImpl implements HttpServerResponse {
 
   @Override
   public HttpServerResponse push(HttpMethod method, String host, String path, MultiMap headers, Handler<AsyncResult<HttpServerResponse>> handler) {
-    push(method, host, path, headers).setHandler(handler);
+    handler.handle(Future.failedFuture("Push promise is only supported with HTTP2"));
     return this;
   }
 
   @Override
-  public Future<HttpServerResponse> push(HttpMethod method, String host, String path) {
+  public CompletionStage<HttpServerResponse> push(HttpMethod method, String host, String path) {
     return push(method, host, path, (MultiMap) null);
   }
 
   @Override
-  public Future<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers) {
+  public CompletionStage<HttpServerResponse> push(HttpMethod method, String path, MultiMap headers) {
     return push(method, null, path, headers);
   }
 
   @Override
-  public Future<HttpServerResponse> push(HttpMethod method, String path) {
+  public CompletionStage<HttpServerResponse> push(HttpMethod method, String path) {
     return push(method, null, path);
   }
 
   @Override
-  public Future<HttpServerResponse> push(HttpMethod method, String host, String path, MultiMap headers) {
-    return Future.failedFuture("Push promise is only supported with HTTP2");
+  public CompletionStage<HttpServerResponse> push(HttpMethod method, String host, String path, MultiMap headers) {
+    CompletableStage<HttpServerResponse> fut = CompletableStage.create();
+    push(method, host, path, headers, fut);
+    return fut;
   }
 
   @Override

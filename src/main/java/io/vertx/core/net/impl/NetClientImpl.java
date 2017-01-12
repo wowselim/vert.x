@@ -18,6 +18,7 @@ package io.vertx.core.net.impl;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.netty.bootstrap.Bootstrap;
@@ -41,6 +42,7 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.net.NetClient;
 import io.vertx.core.net.NetClientOptions;
 import io.vertx.core.net.NetSocket;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.spi.metrics.Metrics;
 import io.vertx.core.spi.metrics.MetricsProvider;
 import io.vertx.core.spi.metrics.TCPMetrics;
@@ -93,9 +95,9 @@ public class NetClientImpl implements NetClient, MetricsProvider {
   }
 
   @Override
-  public Future<NetSocket> connect(int port, String host) {
-    Future<NetSocket> fut = Future.future();
-    connect(port, host, fut.completer());
+  public CompletionStage<NetSocket> connect(int port, String host) {
+    CompletableStage<NetSocket> fut = CompletableStage.create();
+    connect(port, host, fut);
     return fut;
   }
 

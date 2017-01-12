@@ -19,11 +19,12 @@ package io.vertx.core.net;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.metrics.Measured;
 import io.vertx.core.streams.ReadStream;
+
+import java.util.concurrent.CompletionStage;
 
 /**
  * Represents a TCP server
@@ -60,9 +61,9 @@ public interface NetServer extends Measured {
    * <p>
    * The server may not be listening until some time after the call to listen has returned.
    *
-   * @return a {@code Future} that will be completed once the operation completes.
+   * @return a {@code CompletionStage} that will be completed once the operation completes.
    */
-  Future<NetServer> listen();
+  CompletionStage<NetServer> listen();
 
   /**
    * Like {@link #listen} but providing a handler that will be notified when the server is listening, or fails.
@@ -81,9 +82,9 @@ public interface NetServer extends Measured {
    * <p>
    * The server may not be listening until some time after the call to listen has returned.
    *
-   * @return a {@code Future} that will be completed once the operation completes.
+   * @return a {@code CompletionStage} that will be completed once the operation completes.
    */
-  Future<NetServer> listen(int port, String host);
+  CompletionStage<NetServer> listen(int port, String host);
 
   /**
    * Like {@link #listen(int, String)} but providing a handler that will be notified when the server is listening, or fails.
@@ -104,7 +105,7 @@ public interface NetServer extends Measured {
    *
    * @return a reference to this, so the API can be used fluently
    */
-  Future<NetServer> listen(int port);
+  CompletionStage<NetServer> listen(int port);
 
   /**
    * Like {@link #listen(int)} but providing a handler that will be notified when the server is listening, or fails.
@@ -118,9 +119,9 @@ public interface NetServer extends Measured {
    * Close the server. This will close any currently open connections. The close may not complete until after this
    * method has returned.
    *
-   * @return a {@code Future} that will be completed once the operation completes.
+   * @return a {@code CompletionStage} that will be completed once the operation completes.
    */
-  Future<Void> close();
+  CompletionStage<Void> close();
 
   /**
    * Like {@link #close} but supplying a handler that will be notified when close is complete.

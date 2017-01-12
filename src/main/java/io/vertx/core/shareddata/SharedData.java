@@ -18,8 +18,10 @@ package io.vertx.core.shareddata;
 
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.spi.concurrent.CompletableStage;
+
+import java.util.concurrent.CompletionStage;
 
 /**
  * Shared data allows you to share data safely between different parts of your application in a safe way.
@@ -49,10 +51,10 @@ public interface SharedData {
   <K, V> void getClusterWideMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> resultHandler);
 
   /**
-   * Like {@link #getClusterWideMap(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #getClusterWideMap(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  <K, V> Future<AsyncMap<K, V>> getClusterWideMap(String name);
+  <K, V> CompletionStage<AsyncMap<K, V>> getClusterWideMap(String name);
 
   /**
    * Get a cluster wide lock with the specified name. The lock will be passed to the handler when it is available.
@@ -63,12 +65,12 @@ public interface SharedData {
   void getLock(String name, Handler<AsyncResult<Lock>> resultHandler);
 
   /**
-   * Like {@link #getLock(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #getLock(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Lock> getLock(String name) {
-    Future<Lock> fut = Future.future();
-    getLock(name, fut.completer());
+  default CompletionStage<Lock> getLock(String name) {
+    CompletableStage<Lock> fut = CompletableStage.create();
+    getLock(name, fut);
     return fut;
   }
 
@@ -82,12 +84,12 @@ public interface SharedData {
   void getLockWithTimeout(String name, long timeout, Handler<AsyncResult<Lock>> resultHandler);
 
   /**
-   * Like {@link #getLockWithTimeout(String, long, Handler)}but returns a {@code Future} that will be
+   * Like {@link #getLockWithTimeout(String, long, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Lock> getLockWithTimeout(String name, long timeout) {
-    Future<Lock> fut = Future.future();
-    getLockWithTimeout(name, timeout, fut.completer());
+  default CompletionStage<Lock> getLockWithTimeout(String name, long timeout) {
+    CompletableStage<Lock> fut = CompletableStage.create();
+    getLockWithTimeout(name, timeout, fut);
     return fut;
   }
 
@@ -100,12 +102,12 @@ public interface SharedData {
   void getCounter(String name, Handler<AsyncResult<Counter>> resultHandler);
 
   /**
-   * Like {@link #getCounter(String, Handler)}but returns a {@code Future} that will be
+   * Like {@link #getCounter(String, Handler)}but returns a {@code CompletionStage} that will be
    * completed once the operation completes.
    */
-  default Future<Counter> getCounter(String name) {
-    Future<Counter> fut = Future.future();
-    getCounter(name, fut.completer());
+  default CompletionStage<Counter> getCounter(String name) {
+    CompletableStage<Counter> fut = CompletableStage.create();
+    getCounter(name, fut);
     return fut;
   }
 

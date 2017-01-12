@@ -57,6 +57,7 @@ import io.vertx.core.shareddata.impl.SharedDataImpl;
 import io.vertx.core.spi.VerticleFactory;
 import io.vertx.core.spi.VertxMetricsFactory;
 import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.spi.metrics.Metrics;
 import io.vertx.core.spi.metrics.MetricsProvider;
 import io.vertx.core.spi.metrics.PoolMetrics;
@@ -443,9 +444,9 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public Future<Void> close() {
-    Future<Void> fut = Future.future();
-    close(fut.completer());
+  public CompletionStage<Void> close() {
+    CompletableStage<Void> fut = CompletableStage.create();
+    close(fut);
     return fut;
   }
 
@@ -524,9 +525,9 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public Future<String> deployVerticle(Verticle verticle) {
-    Future<String> fut = Future.future();
-    deployVerticle(verticle, new DeploymentOptions(), fut.completer());
+  public CompletionStage<String> deployVerticle(Verticle verticle) {
+    CompletableStage<String> fut = CompletableStage.create();
+    deployVerticle(verticle, new DeploymentOptions(), fut);
     return fut;
   }
 
@@ -541,9 +542,9 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public Future<String> deployVerticle(Verticle verticle, DeploymentOptions options) {
-    Future<String> fut = Future.future();
-    deployVerticle(verticle, options, fut.completer());
+  public CompletionStage<String> deployVerticle(Verticle verticle, DeploymentOptions options) {
+    CompletableStage<String> fut = CompletableStage.create();
+    deployVerticle(verticle, options, fut);
     return fut;
   }
 
@@ -563,16 +564,16 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public Future<String> deployVerticle(String name) {
-    Future<String> fut = Future.future();
-    deployVerticle(name, new DeploymentOptions(), fut.completer());
+  public CompletionStage<String> deployVerticle(String name) {
+    CompletableStage<String> fut = CompletableStage.create();
+    deployVerticle(name, new DeploymentOptions(), fut);
     return fut;
   }
 
   @Override
-  public Future<String> deployVerticle(String name, DeploymentOptions options) {
-    Future<String> fut = Future.future();
-    deployVerticle(name, options, fut.completer());
+  public CompletionStage<String> deployVerticle(String name, DeploymentOptions options) {
+    CompletableStage<String> fut = CompletableStage.create();
+    deployVerticle(name, options, fut);
     return fut;
   }
 
@@ -591,9 +592,9 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public Future<Void> undeploy(String deploymentID) {
-    Future<Void> fut = Future.future();
-    undeploy(deploymentID, fut.completer());
+  public CompletionStage<Void> undeploy(String deploymentID) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    undeploy(deploymentID, fut);
     return fut;
   }
 
@@ -640,9 +641,9 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered) {
-    Future<T> fut = Future.future();
-    executeBlocking(blockingCodeHandler, ordered, fut.completer());
+  public <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler, boolean ordered) {
+    CompletableStage<T> fut = CompletableStage.create();
+    executeBlocking(blockingCodeHandler, ordered, fut);
     return fut;
   }
 
@@ -653,9 +654,9 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public <T> Future<T> executeBlocking(Handler<Future<T>> blockingCodeHandler) {
-    Future<T> fut = Future.future();
-    executeBlocking(blockingCodeHandler, fut.completer());
+  public <T> CompletionStage<T> executeBlocking(Handler<Future<T>> blockingCodeHandler) {
+    CompletableStage<T> fut = CompletableStage.create();
+    executeBlocking(blockingCodeHandler, fut);
     return fut;
   }
 

@@ -45,11 +45,13 @@ import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.net.NetSocket;
 import io.vertx.core.net.impl.ConnectionBase;
+import io.vertx.core.spi.concurrent.CompletableStage;
 import io.vertx.core.spi.metrics.TCPMetrics;
 
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
@@ -390,9 +392,9 @@ abstract class Http2ConnectionBase extends ConnectionBase implements Http2FrameL
   }
 
   @Override
-  public Future<Void> updateSettings(io.vertx.core.http.Http2Settings settings) {
-    Future<Void> fut = Future.future();
-    updateSettings(settings, fut.completer());
+  public CompletionStage<Void> updateSettings(io.vertx.core.http.Http2Settings settings) {
+    CompletableStage<Void> fut = CompletableStage.create();
+    updateSettings(settings, fut);
     return fut;
   }
 
@@ -450,9 +452,9 @@ abstract class Http2ConnectionBase extends ConnectionBase implements Http2FrameL
   }
 
   @Override
-  public Future<Buffer> ping(Buffer data) {
-    Future<Buffer> fut = Future.future();
-    ping(data, fut.completer());
+  public CompletionStage<Buffer> ping(Buffer data) {
+    CompletableStage<Buffer> fut = CompletableStage.create();
+    ping(data, fut);
     return fut;
   }
 

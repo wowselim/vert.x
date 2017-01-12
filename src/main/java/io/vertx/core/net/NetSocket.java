@@ -19,7 +19,6 @@ package io.vertx.core.net;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.codegen.annotations.CacheReturn;
 import io.vertx.codegen.annotations.Fluent;
@@ -30,6 +29,7 @@ import io.vertx.core.streams.WriteStream;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.security.cert.X509Certificate;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Represents a socket-like interface to a TCP connection on either the
@@ -109,7 +109,7 @@ public interface NetSocket extends ReadStream<Buffer>, WriteStream<Buffer> {
    * @param filename  file name of the file to send
    * @return a future that will be resolved when the send has completed or a failure has occurred
    */
-  default Future<Void> sendFile(String filename) {
+  default CompletionStage<Void> sendFile(String filename) {
     return sendFile(filename, 0, Long.MAX_VALUE);
   }
 
@@ -121,7 +121,7 @@ public interface NetSocket extends ReadStream<Buffer>, WriteStream<Buffer> {
    * @param offset offset
    * @return a future that will be resolved when the send has completed or a failure has occurred
    */
-  default Future<Void> sendFile(String filename, long offset) {
+  default CompletionStage<Void> sendFile(String filename, long offset) {
     return sendFile(filename, offset, Long.MAX_VALUE);
   }
 
@@ -134,7 +134,7 @@ public interface NetSocket extends ReadStream<Buffer>, WriteStream<Buffer> {
    * @param length length
    * @return a future that will be resolved when the send has completed or a failure has occurred
    */
-  Future<Void> sendFile(String filename, long offset, long length);
+  CompletionStage<Void> sendFile(String filename, long offset, long length);
 
   /**
    * Same as {@link #sendFile(String)} but also takes a handler that will be called when the send has completed or

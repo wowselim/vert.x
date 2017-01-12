@@ -20,7 +20,6 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.Future;
 import io.vertx.core.impl.Arguments;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.shareddata.AsyncMap;
@@ -29,9 +28,11 @@ import io.vertx.core.shareddata.LocalMap;
 import io.vertx.core.shareddata.Lock;
 import io.vertx.core.shareddata.SharedData;
 import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.core.spi.concurrent.CompletableStage;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -71,9 +72,9 @@ public class SharedDataImpl implements SharedData {
   }
 
   @Override
-  public <K, V> Future<AsyncMap<K, V>> getClusterWideMap(String name) {
-    Future<AsyncMap<K, V>> ret = Future.future();
-    getClusterWideMap(name, ret.completer());
+  public <K, V> CompletionStage<AsyncMap<K, V>> getClusterWideMap(String name) {
+    CompletableStage<AsyncMap<K, V>> ret = CompletableStage.create();
+    getClusterWideMap(name, ret);
     return ret;
   }
 
@@ -185,7 +186,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<V> get(K k) {
+    public CompletionStage<V> get(K k) {
       return delegate.get(k);
     }
 
@@ -197,7 +198,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<Void> put(K k, V v) {
+    public CompletionStage<Void> put(K k, V v) {
       checkType(k);
       checkType(v);
       return delegate.put(k, v);
@@ -211,7 +212,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<Void> put(K k, V v, long ttl) {
+    public CompletionStage<Void> put(K k, V v, long ttl) {
       checkType(k);
       checkType(v);
       return delegate.put(k, v, ttl);
@@ -225,7 +226,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<V> putIfAbsent(K k, V v) {
+    public CompletionStage<V> putIfAbsent(K k, V v) {
       checkType(k);
       checkType(v);
       return delegate.putIfAbsent(k, v);
@@ -239,7 +240,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<V> putIfAbsent(K k, V v, long ttl) {
+    public CompletionStage<V> putIfAbsent(K k, V v, long ttl) {
       checkType(k);
       checkType(v);
       return delegate.putIfAbsent(k, v, ttl);
@@ -251,7 +252,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<V> remove(K k) {
+    public CompletionStage<V> remove(K k) {
       return delegate.remove(k);
     }
 
@@ -261,7 +262,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<Boolean> removeIfPresent(K k, V v) {
+    public CompletionStage<Boolean> removeIfPresent(K k, V v) {
       return delegate.removeIfPresent(k, v);
     }
 
@@ -271,7 +272,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<V> replace(K k, V v) {
+    public CompletionStage<V> replace(K k, V v) {
       return delegate.replace(k, v);
     }
 
@@ -281,7 +282,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<Boolean> replaceIfPresent(K k, V oldValue, V newValue) {
+    public CompletionStage<Boolean> replaceIfPresent(K k, V oldValue, V newValue) {
       return delegate.replaceIfPresent(k, oldValue, newValue);
     }
 
@@ -291,7 +292,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<Void> clear() {
+    public CompletionStage<Void> clear() {
       return delegate.clear();
     }
 
@@ -301,7 +302,7 @@ public class SharedDataImpl implements SharedData {
     }
 
     @Override
-    public Future<Integer> size() {
+    public CompletionStage<Integer> size() {
       return delegate.size();
     }
   }
