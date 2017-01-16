@@ -15,14 +15,18 @@
  */
 package io.vertx.core.spi.concurrent;
 
+import io.vertx.core.ServiceHelper;
+
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
  */
-public interface CompletableStageFactory {
+public interface ConcurrentFactory {
 
   /**
-   * @return an uncompleted instance
+   * @return an uncompleted stage
    */
-  <T> CompletableStage<T> create();
+  <T> CompletableStage<T> completableStage();
+
+  ConcurrentFactory instance = ServiceHelper.loadFactory(ConcurrentFactory.class);
 
 }

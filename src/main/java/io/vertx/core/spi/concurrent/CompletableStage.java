@@ -17,7 +17,6 @@ package io.vertx.core.spi.concurrent;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import io.vertx.core.ServiceHelper;
 
 import java.util.concurrent.CompletionStage;
 
@@ -32,9 +31,7 @@ public interface CompletableStage<T> extends CompletionStage<T>, Handler<AsyncRe
    * @return an uncompleted instance
    */
   static <T> CompletableStage<T> create() {
-    return factory.create();
+    return ConcurrentFactory.instance.completableStage();
   }
-
-  CompletableStageFactory factory = ServiceHelper.loadFactory(CompletableStageFactory.class);
 
 }

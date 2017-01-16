@@ -15,16 +15,16 @@
  */
 package io.vertx.core.impl;
 
-import io.vertx.core.spi.concurrent.CompletableStageFactory;
+import io.vertx.core.spi.concurrent.ConcurrentFactory;
 import io.vertx.core.spi.concurrent.CompletableStage;
 
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
  */
-public class CompletableStageFactoryImpl implements CompletableStageFactory {
+public class ConcurrentFactoryImpl implements ConcurrentFactory {
 
   @Override
-  public <T> CompletableStage<T> create() {
+  public <T> CompletableStage<T> completableStage() {
     return new CompletableStageImpl<>();
   }
 }
