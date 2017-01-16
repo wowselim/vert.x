@@ -126,6 +126,7 @@ public interface HttpServer extends Measured {
    * @param port  the port to listen on
    * @param host  the host to listen on
    * @param listenHandler  the listen handler
+   * @return a reference to this, so the API can be used fluently
    */
   @Fluent
   HttpServer listen(int port, String host, Handler<AsyncResult<HttpServer>> listenHandler);
@@ -145,6 +146,7 @@ public interface HttpServer extends Measured {
    *
    * @param port  the port to listen on
    * @param listenHandler  the listen handler
+   * @return a reference to this, so the API can be used fluently
    */
   @Fluent
   HttpServer listen(int port, Handler<AsyncResult<HttpServer>> listenHandler);
@@ -153,6 +155,7 @@ public interface HttpServer extends Measured {
    * Like {@link #listen} but supplying a handler that will be called when the server is actually listening (or has failed).
    *
    * @param listenHandler  the listen handler
+   * @return a reference to this, so the API can be used fluently
    */
   @Fluent
   HttpServer listen(Handler<AsyncResult<HttpServer>> listenHandler);

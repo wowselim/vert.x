@@ -70,6 +70,7 @@ public interface NetServer extends Measured {
    * Like {@link #listen} but providing a handler that will be notified when the server is listening, or fails.
    *
    * @param listenHandler  handler that will be notified when listening or failed
+   * @return a reference to this, so the API can be used fluently
    */
   @Fluent
   NetServer listen(Handler<AsyncResult<NetServer>> listenHandler);
@@ -94,6 +95,7 @@ public interface NetServer extends Measured {
    * @param port  the port to listen on
    * @param host  the host to listen on
    * @param listenHandler handler that will be notified when listening or failed
+   * @return a reference to this, so the API can be used fluently
    */
   @Fluent
   NetServer listen(int port, String host, Handler<AsyncResult<NetServer>> listenHandler);
@@ -115,6 +117,7 @@ public interface NetServer extends Measured {
    *
    * @param port  the port to listen on
    * @param listenHandler handler that will be notified when listening or failed
+   * @return a reference to this, so the API can be used fluently
    */
   @Fluent
   NetServer listen(int port, Handler<AsyncResult<NetServer>> listenHandler);
