@@ -127,7 +127,8 @@ public interface HttpServer extends Measured {
    * @param host  the host to listen on
    * @param listenHandler  the listen handler
    */
-  void listen(int port, String host, Handler<AsyncResult<HttpServer>> listenHandler);
+  @Fluent
+  HttpServer listen(int port, String host, Handler<AsyncResult<HttpServer>> listenHandler);
 
   /**
    * Like {@link #listen(int, String)} but the server will listen on host "0.0.0.0" and port specified here ignoring
@@ -145,14 +146,16 @@ public interface HttpServer extends Measured {
    * @param port  the port to listen on
    * @param listenHandler  the listen handler
    */
-  void listen(int port, Handler<AsyncResult<HttpServer>> listenHandler);
+  @Fluent
+  HttpServer listen(int port, Handler<AsyncResult<HttpServer>> listenHandler);
 
   /**
    * Like {@link #listen} but supplying a handler that will be called when the server is actually listening (or has failed).
    *
    * @param listenHandler  the listen handler
    */
-  void listen(Handler<AsyncResult<HttpServer>> listenHandler);
+  @Fluent
+  HttpServer listen(Handler<AsyncResult<HttpServer>> listenHandler);
 
   /**
    * Close the server. Any open HTTP connections will be closed.

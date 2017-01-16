@@ -16,6 +16,7 @@
 
 package io.vertx.core.net;
 
+import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
@@ -70,7 +71,8 @@ public interface NetServer extends Measured {
    *
    * @param listenHandler  handler that will be notified when listening or failed
    */
-  void listen(Handler<AsyncResult<NetServer>> listenHandler);
+  @Fluent
+  NetServer listen(Handler<AsyncResult<NetServer>> listenHandler);
 
   /**
    * Start listening on the specified port and host, ignoring post and host configured in the {@link io.vertx.core.net.NetServerOptions} used when
@@ -93,7 +95,8 @@ public interface NetServer extends Measured {
    * @param host  the host to listen on
    * @param listenHandler handler that will be notified when listening or failed
    */
-  void listen(int port, String host, Handler<AsyncResult<NetServer>> listenHandler);
+  @Fluent
+  NetServer listen(int port, String host, Handler<AsyncResult<NetServer>> listenHandler);
 
   /**
    * Start listening on the specified port and host "0.0.0.0", ignoring post and host configured in the
@@ -113,7 +116,8 @@ public interface NetServer extends Measured {
    * @param port  the port to listen on
    * @param listenHandler handler that will be notified when listening or failed
    */
-  void listen(int port, Handler<AsyncResult<NetServer>> listenHandler);
+  @Fluent
+  NetServer listen(int port, Handler<AsyncResult<NetServer>> listenHandler);
 
   /**
    * Close the server. This will close any currently open connections. The close may not complete until after this

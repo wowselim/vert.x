@@ -122,8 +122,8 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public void listen(int port, Handler<AsyncResult<NetServer>> listenHandler) {
-    listen(port, "0.0.0.0", listenHandler);
+  public NetServer listen(int port, Handler<AsyncResult<NetServer>> listenHandler) {
+    return listen(port, "0.0.0.0", listenHandler);
   }
 
   @Override
@@ -134,12 +134,12 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public synchronized void listen(Handler<AsyncResult<NetServer>> listenHandler) {
-    listen(options.getPort(), options.getHost(), listenHandler);
+  public synchronized NetServer listen(Handler<AsyncResult<NetServer>> listenHandler) {
+    return listen(options.getPort(), options.getHost(), listenHandler);
   }
 
   @Override
-  public synchronized void listen(int port, String host, Handler<AsyncResult<NetServer>> listenHandler) {
+  public synchronized NetServer listen(int port, String host, Handler<AsyncResult<NetServer>> listenHandler) {
     if (connectStream.handler() == null) {
       throw new IllegalStateException("Set connect handler first");
     }
@@ -220,7 +220,7 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
             log.error(t);
           }
           listening = false;
-          return;
+          return this;
         }
         if (port != 0) {
           vertx.sharedNetServers().put(id, this);
@@ -257,6 +257,8 @@ public class NetServerImpl implements NetServer, Closeable, MetricsProvider {
         }
       });
     }
+
+    return this;
   }
 
   public CompletionStage<Void> close() {

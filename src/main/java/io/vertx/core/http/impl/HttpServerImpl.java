@@ -215,8 +215,8 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public void listen(Handler<AsyncResult<HttpServer>> listenHandler) {
-    listen(options.getPort(), options.getHost(), listenHandler);
+  public HttpServer listen(Handler<AsyncResult<HttpServer>> listenHandler) {
+    return listen(options.getPort(), options.getHost(), listenHandler);
   }
 
   @Override
@@ -234,11 +234,11 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
   }
 
   @Override
-  public void listen(int port, Handler<AsyncResult<HttpServer>> listenHandler) {
-    listen(port, "0.0.0.0", listenHandler);
+  public HttpServer listen(int port, Handler<AsyncResult<HttpServer>> listenHandler) {
+    return listen(port, "0.0.0.0", listenHandler);
   }
 
-  public synchronized void listen(int port, String host, Handler<AsyncResult<HttpServer>> listenHandler) {
+  public synchronized HttpServer listen(int port, String host, Handler<AsyncResult<HttpServer>> listenHandler) {
     if (requestStream.handler() == null && wsStream.handler() == null) {
       throw new IllegalStateException("Set request or websocket handler first");
     }
@@ -320,7 +320,7 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
             log.error(t);
           }
           listening = false;
-          return;
+          return this;
         }
         vertx.sharedHttpServers().put(id, this);
         actualServer = this;
@@ -348,6 +348,7 @@ public class HttpServerImpl implements HttpServer, Closeable, MetricsProvider {
         }
       });
     }
+    return this;
   }
 
   // Visible for testing
