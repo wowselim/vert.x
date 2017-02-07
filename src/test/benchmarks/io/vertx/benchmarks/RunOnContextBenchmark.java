@@ -54,8 +54,26 @@ public class RunOnContextBenchmark extends BenchmarkBase {
   }
 
   @Benchmark
+  @Fork(jvmArgsAppend = { "-Dvertx.threadChecks=false" })
+  public void disableThreadChecks(BaselineState state) {
+    state.context.runDirect(state.task);
+  }
+
+  @Benchmark
+  @Fork(jvmArgsAppend = { "-Dvertx.disableContextTimings=true" })
+  public void disableContextTimings(BaselineState state) {
+    state.context.runDirect(state.task);
+  }
+
+  @Benchmark
+  @Fork(jvmArgsAppend = { "-Dvertx.disableTCCL=true" })
+  public void disableTCCL(BaselineState state) {
+    state.context.runDirect(state.task);
+  }
+
+  @Benchmark
   @Fork(jvmArgsAppend = { "-Dvertx.threadChecks=false", "-Dvertx.disableContextTimings=true", "-Dvertx.disableTCCL=true" })
-  public void noChecks(BaselineState state) {
+  public void disableAll(BaselineState state) {
     state.context.runDirect(state.task);
   }
 }
