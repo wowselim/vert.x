@@ -115,7 +115,7 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   private final int defaultWorkerPoolSize;
   private final long defaultWorkerMaxExecTime;
   private final CloseHooks closeHooks;
-  private final BiFunction<Context, Runnable, Runnable> contextInterceptor;
+  private volatile BiFunction<Context, Runnable, Runnable> taskInterceptor;
 
   VertxImpl() {
     this(new VertxOptions());
@@ -130,7 +130,6 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
     if (Vertx.currentContext() != null) {
       log.warn("You're already on a Vert.x context, are you sure you want to create a new Vertx instance?");
     }
-    contextInterceptor = options.getTaskInterceptor();
     closeHooks = new CloseHooks(log);
     checker = new BlockedThreadChecker(options.getBlockedThreadCheckInterval(), options.getWarningExceptionTime());
     eventLoopThreadFactory = new VertxThreadFactory("vert.x-eventloop-thread-", checker, false, options.getMaxEventLoopExecuteTime());
@@ -980,7 +979,13 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
+  public VertxImpl taskInterceptor(BiFunction<Context, Runnable, Runnable> taskInterceptor) {
+    this.taskInterceptor = taskInterceptor;
+    return this;
+  }
+
+  @Override
   public BiFunction<Context, Runnable, Runnable> taskInterceptor() {
-    return contextInterceptor;
+    return taskInterceptor;
   }
 }

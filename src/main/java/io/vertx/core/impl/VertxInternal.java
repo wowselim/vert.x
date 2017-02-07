@@ -124,11 +124,28 @@ public interface VertxInternal extends Vertx {
    */
   AddressResolverGroup<InetSocketAddress> nettyAddressResolverGroup();
 
-  @GenIgnore
   void addCloseHook(Closeable hook);
 
-  @GenIgnore
   void removeCloseHook(Closeable hook);
 
+  /**
+   * Set the task interceptor for the context instance. This is useful for integrating distributed tracing
+   * tools with Vert.x.
+   * <p>
+   * You should set the task interceptor before the context creation, as the created context will cache the
+   * interceptor.
+   * <p>
+   * If you need some dynamicity or multiple interceptors, you should handle this in the implementation
+   * of the your interceptor.
+   * <p>
+   *
+   * @param taskInterceptor the task interceptor to use.
+   * @return a reference to this, so the API can be used fluently
+   */
+  VertxInternal taskInterceptor(BiFunction<Context, Runnable, Runnable> taskInterceptor);
+
+  /**
+   * @return the task interceptor
+   */
   BiFunction<Context, Runnable, Runnable> taskInterceptor();
 }

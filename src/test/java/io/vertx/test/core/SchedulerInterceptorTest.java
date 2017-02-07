@@ -16,10 +16,11 @@
 package io.vertx.test.core;
 
 import io.vertx.core.Context;
-import io.vertx.core.VertxOptions;
+import io.vertx.core.impl.VertxInternal;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 
 /**
@@ -27,25 +28,17 @@ import java.util.function.BiFunction;
  */
 public class SchedulerInterceptorTest extends VertxTestBase {
 
-  private volatile BiFunction<Context, Runnable, Runnable> interceptor;
-
-  @Override
-  protected VertxOptions getOptions() {
-    return super.getOptions().setTaskInterceptor((ctx, task) -> {
-      if (interceptor != null) {
-        task = interceptor.apply(ctx, task);
-      }
-      return task;
-    });
+  private void setInterceptor(BiFunction<Context, Runnable, Runnable> interceptor) {
+    ((VertxInternal) vertx).taskInterceptor(interceptor);
   }
 
   @Test
   public void testRunOnContext() {
     AtomicInteger cnt = new AtomicInteger();
-    interceptor = (c, r) -> {
+    setInterceptor((c, r) -> {
       cnt.incrementAndGet();
       return r;
-    };
+    });
 
     vertx.runOnContext(v -> {
       assertEquals(1, cnt.get());
@@ -59,16 +52,18 @@ public class SchedulerInterceptorTest extends VertxTestBase {
 
   @Test
   public void testExecuteBlocking() {
-    Context ctx = vertx.getOrCreateContext();
     AtomicInteger cnt = new AtomicInteger();
+    AtomicReference<Context> ref = new AtomicReference<>();
 
-    interceptor = (c, r) -> {
-      if (c == ctx) {
+    setInterceptor((c, r) -> {
+      if (c == ref.get()) {
         cnt.incrementAndGet();
       }
       return r;
-    };
+    });
 
+    Context ctx = vertx.getOrCreateContext();
+    ref.set(ctx);
     ctx.executeBlocking(f -> {
       assertEquals(1, cnt.get());
     }, true, null);
@@ -83,16 +78,18 @@ public class SchedulerInterceptorTest extends VertxTestBase {
 
   @Test
   public void testTimer() {
-    Context ctx = vertx.getOrCreateContext();
     AtomicInteger cnt = new AtomicInteger();
+    AtomicReference<Context> ref = new AtomicReference<>();
 
-    interceptor = (c, r) -> {
-      if (c == ctx) {
+    setInterceptor((c, r) -> {
+      if (c == ref.get()) {
         cnt.incrementAndGet();
       }
       return r;
-    };
+    });
 
+    Context ctx = vertx.getOrCreateContext();
+    ref.set(ctx);
     ctx.runOnContext(v -> {
       assertEquals(1, cnt.get());
       vertx.setTimer(1000, h -> {
@@ -109,16 +106,19 @@ public class SchedulerInterceptorTest extends VertxTestBase {
 
   @Test
   public void testRunPeriodic() {
-    Context ctx = vertx.getOrCreateContext();
-    AtomicInteger cnt = new AtomicInteger();
 
-    interceptor = (c, r) -> {
-      if (c == ctx) {
+    AtomicReference<Context> ref = new AtomicReference<>();
+
+    AtomicInteger cnt = new AtomicInteger();
+    setInterceptor((c, r) -> {
+      if (c == ref.get()) {
         cnt.incrementAndGet();
       }
       return r;
-    };
+    });
 
+    Context ctx = vertx.getOrCreateContext();
+    ref.set(ctx);
     ctx.runOnContext(v -> {
       assertEquals(1, cnt.get());
       vertx.setPeriodic(1000, h -> {
