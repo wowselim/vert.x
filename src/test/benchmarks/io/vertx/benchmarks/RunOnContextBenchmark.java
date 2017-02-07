@@ -15,8 +15,13 @@
  */
 package io.vertx.benchmarks;
 
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.impl.BenchmarkContext;
 import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.infra.Blackhole;
 
@@ -24,10 +29,33 @@ import org.openjdk.jmh.infra.Blackhole;
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
  */
 @State(Scope.Thread)
-public class EmptyBenchmark {
+public class RunOnContextBenchmark extends BenchmarkBase {
+
+  @State(Scope.Thread)
+  public static class BaselineState {
+
+    Vertx vertx;
+    BenchmarkContext context;
+    Handler<Void> task;
+
+    @Setup
+    public void setup(Blackhole hole) {
+      vertx = Vertx.vertx();
+      context = BenchmarkContext.create(vertx);
+      task = v -> {
+        hole.consume("the-string");
+      };
+    }
+  }
 
   @Benchmark
-  public void baseline(Blackhole blackhole) {
-    blackhole.consume("whatever");
+  public void baseline(BaselineState state) {
+    state.context.runDirect(state.task);
+  }
+
+  @Benchmark
+  @Fork(jvmArgsAppend = { "-Dvertx.threadChecks=false", "-Dvertx.disableContextTimings=true", "-Dvertx.disableTCCL=true" })
+  public void noChecks(BaselineState state) {
+    state.context.runDirect(state.task);
   }
 }

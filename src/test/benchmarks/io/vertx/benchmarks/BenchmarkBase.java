@@ -32,7 +32,13 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 5, time = 2, timeUnit = TimeUnit.SECONDS)
 @Threads(1)
 @BenchmarkMode(Mode.Throughput)
-@Fork(value = 3, jvmArgs = { "-XX:+UseBiasedLocking", "-XX:BiasedLockingStartupDelay=0", "-XX:+AggressiveOpts"})
+@Fork(value = 3, jvmArgs = {
+    "-XX:+UseBiasedLocking",
+    "-XX:BiasedLockingStartupDelay=0",
+    "-XX:+AggressiveOpts",
+    "-Djmh.executor=CUSTOM",
+    "-Djmh.executor.class=io.vertx.core.impl.VertxExecutorService"
+})
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public abstract class BenchmarkBase {
 }
