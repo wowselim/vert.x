@@ -66,6 +66,7 @@
     <stack.version>3.4.0-SNAPSHOT</stack.version>
     <jetty.alpnAgent.version>2.0.6</jetty.alpnAgent.version>
     <jetty.alpnAgent.path>${settings.localRepository}/org/mortbay/jetty/alpn/jetty-alpn-agent/${jetty.alpnAgent.version}/jetty-alpn-agent-${jetty.alpnAgent.version}.jar</jetty.alpnAgent.path>
+    <jmh.version>1.17.3</jmh.version>
 
   </properties>
 
@@ -172,6 +173,7 @@
       <artifactId>vertx-docgen</artifactId>
       <optional>true</optional>
     </dependency>
+
     <!-- Testing -->
     <dependency>
       <groupId>junit</groupId>
@@ -207,6 +209,14 @@
       <groupId>io.netty</groupId>
       <artifactId>netty-tcnative-boringssl-static</artifactId>
       <version>${tcnative.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- JMH -->
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>${jmh.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -315,7 +325,6 @@
             <configuration>
               <processors>
                 <processor>io.vertx.codegen.CodeGenProcessor</processor>
-                <processor>io.vertx.docgen.JavaDocGenProcessor</processor>
               </processors>
               <optionMap>
                 <codegen.output>${project.basedir}/src/main</codegen.output>
@@ -368,6 +377,7 @@
             </goals>
             <configuration>
               <sources>
+                <source>${project.basedir}/src/test/benchmarks</source>
                 <source>${project.basedir}/src/test/generated</source>
               </sources>
             </configuration>
@@ -648,6 +658,44 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+
+    <profile>
+      <id>benchmarks</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>assemble-docs</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <archive>
+                    <manifest>
+                      <mainClass>org.openjdk.jmh.Main</mainClass>
+                    </manifest>
+                  </archive>
+                  <descriptors>
+                    <descriptor>src/test/assembly/benchmarks.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.openjdk.jmh</groupId>
+          <artifactId>jmh-generator-annprocess</artifactId>
+          <version>${jmh.version}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
     </profile>
   </profiles>
 
