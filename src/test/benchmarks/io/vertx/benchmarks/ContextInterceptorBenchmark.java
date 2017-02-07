@@ -18,7 +18,6 @@ package io.vertx.benchmarks;
 import io.vertx.core.Context;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
 import io.vertx.core.impl.BenchmarkContext;
 import io.vertx.core.impl.VertxInternal;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -67,7 +66,7 @@ public class ContextInterceptorBenchmark extends BenchmarkBase {
         hole.consume(task);
         return task;
       };
-      vertx = ((VertxInternal)Vertx.vertx()).taskInterceptor(interceptor);
+      vertx = ((VertxInternal)Vertx.vertx()).addContextInterceptor(interceptor);
       context = BenchmarkContext.create(vertx);
       task = v -> {
         hole.consume("the-string");

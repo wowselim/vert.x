@@ -26,16 +26,20 @@ import java.util.function.BiFunction;
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
  */
-public class SchedulerInterceptorTest extends VertxTestBase {
+public class ContextInterceptorTest extends VertxTestBase {
 
-  private void setInterceptor(BiFunction<Context, Runnable, Runnable> interceptor) {
-    ((VertxInternal) vertx).taskInterceptor(interceptor);
+  private void addInterceptor(BiFunction<Context, Runnable, Runnable> interceptor) {
+    ((VertxInternal) vertx).addContextInterceptor(interceptor);
+  }
+
+  private void removeInterceptor(BiFunction<Context, Runnable, Runnable> interceptor) {
+    ((VertxInternal) vertx).removeContextInterceptor(interceptor);
   }
 
   @Test
   public void testRunOnContext() {
     AtomicInteger cnt = new AtomicInteger();
-    setInterceptor((c, r) -> {
+    addInterceptor((c, r) -> {
       cnt.incrementAndGet();
       return r;
     });
@@ -55,7 +59,7 @@ public class SchedulerInterceptorTest extends VertxTestBase {
     AtomicInteger cnt = new AtomicInteger();
     AtomicReference<Context> ref = new AtomicReference<>();
 
-    setInterceptor((c, r) -> {
+    addInterceptor((c, r) -> {
       if (c == ref.get()) {
         cnt.incrementAndGet();
       }
@@ -81,7 +85,7 @@ public class SchedulerInterceptorTest extends VertxTestBase {
     AtomicInteger cnt = new AtomicInteger();
     AtomicReference<Context> ref = new AtomicReference<>();
 
-    setInterceptor((c, r) -> {
+    addInterceptor((c, r) -> {
       if (c == ref.get()) {
         cnt.incrementAndGet();
       }
@@ -110,7 +114,7 @@ public class SchedulerInterceptorTest extends VertxTestBase {
     AtomicReference<Context> ref = new AtomicReference<>();
 
     AtomicInteger cnt = new AtomicInteger();
-    setInterceptor((c, r) -> {
+    addInterceptor((c, r) -> {
       if (c == ref.get()) {
         cnt.incrementAndGet();
       }
@@ -129,6 +133,38 @@ public class SchedulerInterceptorTest extends VertxTestBase {
           testComplete();
         });
       });
+    });
+
+    await();
+  }
+
+  @Test
+  public void testRemoveInterceptor() {
+    AtomicInteger cnt1 = new AtomicInteger();
+    AtomicInteger cnt2 = new AtomicInteger();
+
+    BiFunction<Context, Runnable, Runnable> si1 = (c, r) -> {
+      cnt1.incrementAndGet();
+      return r;
+    };
+
+    BiFunction<Context, Runnable, Runnable> si2 = (c, r) -> {
+      cnt2.incrementAndGet();
+      return r;
+    };
+
+    addInterceptor(si1);
+    addInterceptor(si2);
+
+    vertx.runOnContext(v -> {
+      assertEquals(1, cnt1.get());
+      assertEquals(1, cnt2.get());
+      removeInterceptor(si2);
+    });
+    vertx.runOnContext(v -> {
+      assertEquals(2, cnt1.get());
+      assertEquals(1, cnt2.get());
+      testComplete();
     });
 
     await();

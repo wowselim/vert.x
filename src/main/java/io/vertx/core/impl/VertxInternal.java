@@ -19,7 +19,6 @@ package io.vertx.core.impl;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.resolver.AddressResolverGroup;
-import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Closeable;
 import io.vertx.core.Context;
@@ -129,23 +128,31 @@ public interface VertxInternal extends Vertx {
   void removeCloseHook(Closeable hook);
 
   /**
-   * Set the task interceptor for the context instance. This is useful for integrating distributed tracing
+   * Add an interceptor for the context, this is useful for integrating distributed tracing
    * tools with Vert.x.
    * <p>
-   * You should set the task interceptor before the context creation, as the created context will cache the
-   * interceptor.
+   * You should add interceptors before the context are created, as the created context will cache the
+   * interceptors for their lifetime.
    * <p>
    * If you need some dynamicity or multiple interceptors, you should handle this in the implementation
    * of the your interceptor.
    * <p>
    *
-   * @param taskInterceptor the task interceptor to use.
+   * @param interceptor the task interceptor to use.
    * @return a reference to this, so the API can be used fluently
    */
-  VertxInternal taskInterceptor(BiFunction<Context, Runnable, Runnable> taskInterceptor);
+  VertxInternal addContextInterceptor(BiFunction<Context, Runnable, Runnable> interceptor);
 
   /**
-   * @return the task interceptor
+   * Remove an interceptor added via {@link #addContextInterceptor(BiFunction)}.
+   *
+   * @param interceptor the interceptor to remove
+   * @return a reference to this, so the API can be used fluently
    */
-  BiFunction<Context, Runnable, Runnable> taskInterceptor();
+  VertxInternal removeContextInterceptor(BiFunction<Context, Runnable, Runnable> interceptor);
+
+  /**
+   * @return the context interceptor to apply to a context
+   */
+  BiFunction<Context, Runnable, Runnable> contextInterceptor();
 }

@@ -81,7 +81,7 @@ public abstract class ContextImpl implements ContextInternal {
     this.orderedInternalPoolExec = internalBlockingPool.createOrderedExecutor();
     this.workerExec = workerPool.createOrderedExecutor();
     this.closeHooks = new CloseHooks(log);
-    this.interceptor = owner.taskInterceptor();
+    this.interceptor = owner.contextInterceptor();
   }
 
   public static void setContext(ContextImpl context) {

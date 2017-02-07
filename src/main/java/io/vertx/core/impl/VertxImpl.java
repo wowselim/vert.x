@@ -115,7 +115,8 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   private final int defaultWorkerPoolSize;
   private final long defaultWorkerMaxExecTime;
   private final CloseHooks closeHooks;
-  private volatile BiFunction<Context, Runnable, Runnable> taskInterceptor;
+  private final List<BiFunction<Context, Runnable, Runnable>> contextInterceptors = new ArrayList<>();
+  private volatile BiFunction<Context, Runnable, Runnable> contextInterceptor;
 
   VertxImpl() {
     this(new VertxOptions());
@@ -979,13 +980,41 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   }
 
   @Override
-  public VertxImpl taskInterceptor(BiFunction<Context, Runnable, Runnable> taskInterceptor) {
-    this.taskInterceptor = taskInterceptor;
+  public synchronized VertxInternal addContextInterceptor(BiFunction<Context, Runnable, Runnable> interceptor) {
+    if (interceptor == null) {
+      throw new NullPointerException();
+    }
+    contextInterceptors.add(interceptor);
+    updateContextInterceptors();
     return this;
   }
 
   @Override
-  public BiFunction<Context, Runnable, Runnable> taskInterceptor() {
-    return taskInterceptor;
+  public synchronized VertxInternal removeContextInterceptor(BiFunction<Context, Runnable, Runnable> interceptor) {
+    contextInterceptors.remove(interceptor);
+    updateContextInterceptors();
+    return this;
+  }
+
+  private void updateContextInterceptors() {
+    int size = contextInterceptors.size();
+    if (size == 0) {
+      contextInterceptor = null;
+    } else if (size == 1) {
+      contextInterceptor = contextInterceptors.get(0);
+    } else {
+      List<BiFunction<Context, Runnable, Runnable>> copy = new ArrayList<>(contextInterceptors);
+      contextInterceptor = (ctx, task) -> {
+        for (int i = 0;i < size;i++) {
+          task = copy.get(i).apply(ctx, task);
+        }
+        return task;
+      };
+    }
+  }
+
+  @Override
+  public BiFunction<Context, Runnable, Runnable> contextInterceptor() {
+    return contextInterceptor;
   }
 }
