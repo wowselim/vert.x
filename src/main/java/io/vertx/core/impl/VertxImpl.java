@@ -70,6 +70,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.BiFunction;
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
@@ -114,6 +115,7 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   private final int defaultWorkerPoolSize;
   private final long defaultWorkerMaxExecTime;
   private final CloseHooks closeHooks;
+  private final BiFunction<Context, Runnable, Runnable> contextInterceptor;
 
   VertxImpl() {
     this(new VertxOptions());
@@ -128,6 +130,7 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
     if (Vertx.currentContext() != null) {
       log.warn("You're already on a Vert.x context, are you sure you want to create a new Vertx instance?");
     }
+    contextInterceptor = options.getTaskInterceptor();
     closeHooks = new CloseHooks(log);
     checker = new BlockedThreadChecker(options.getBlockedThreadCheckInterval(), options.getWarningExceptionTime());
     eventLoopThreadFactory = new VertxThreadFactory("vert.x-eventloop-thread-", checker, false, options.getMaxEventLoopExecuteTime());
@@ -974,5 +977,10 @@ public class VertxImpl implements VertxInternal, MetricsProvider {
   @Override
   public void removeCloseHook(Closeable hook) {
     closeHooks.remove(hook);
+  }
+
+  @Override
+  public BiFunction<Context, Runnable, Runnable> taskInterceptor() {
+    return contextInterceptor;
   }
 }

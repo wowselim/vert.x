@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.function.BiFunction;
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
@@ -58,6 +59,7 @@ public abstract class ContextImpl implements ContextInternal {
   protected final WorkerPool internalBlockingPool;
   protected final Executor orderedInternalPoolExec;
   protected final Executor workerExec;
+  protected final BiFunction<Context, Runnable, Runnable> interceptor;
 
   protected ContextImpl(VertxInternal vertx, WorkerPool internalBlockingPool, WorkerPool workerPool, String deploymentID, JsonObject config,
                         ClassLoader tccl) {
@@ -79,6 +81,7 @@ public abstract class ContextImpl implements ContextInternal {
     this.orderedInternalPoolExec = internalBlockingPool.createOrderedExecutor();
     this.workerExec = workerPool.createOrderedExecutor();
     this.closeHooks = new CloseHooks(log);
+    this.interceptor = owner.taskInterceptor();
   }
 
   public static void setContext(ContextImpl context) {
@@ -247,7 +250,7 @@ public abstract class ContextImpl implements ContextInternal {
       Executor exec, PoolMetrics metrics) {
     Object queueMetric = metrics != null ? metrics.submitted() : null;
     try {
-      exec.execute(() -> {
+      Runnable task = () -> {
         VertxThread current = (VertxThread) Thread.currentThread();
         Object execMetric = null;
         if (metrics != null) {
@@ -278,7 +281,13 @@ public abstract class ContextImpl implements ContextInternal {
         if (resultHandler != null) {
           runOnContext(v -> res.setHandler(resultHandler));
         }
-      });
+      };
+
+      // Don't provide application scheduler hooks on the framework internal tasks
+      if (interceptor != null && exec != orderedInternalPoolExec) {
+        task = interceptor.apply(this, task);
+      }
+      exec.execute(task);
     } catch (RejectedExecutionException e) {
       // Pool is already shut down
       if (metrics != null) {

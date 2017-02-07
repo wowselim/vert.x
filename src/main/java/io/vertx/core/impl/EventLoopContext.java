@@ -18,15 +18,11 @@ package io.vertx.core.impl;
 
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 public class EventLoopContext extends ContextImpl {
-
-  private static final Logger log = LoggerFactory.getLogger(EventLoopContext.class);
 
   public EventLoopContext(VertxInternal vertx, WorkerPool internalBlockingPool, WorkerPool workerPool, String deploymentID, JsonObject config,
                           ClassLoader tccl) {
@@ -35,7 +31,11 @@ public class EventLoopContext extends ContextImpl {
 
   public void executeAsync(Handler<Void> task) {
     // No metrics, we are on the event loop.
-    nettyEventLoop().execute(wrapTask(null, task, true, null));
+    Runnable runnable = wrapTask(null, task, true, null);
+    if (interceptor != null) {
+      runnable = interceptor.apply(this, runnable);
+    }
+    nettyEventLoop().execute(runnable);
   }
 
   @Override

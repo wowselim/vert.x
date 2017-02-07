@@ -35,7 +35,11 @@ public class BenchmarkContext extends ContextImpl {
 
   @Override
   protected void executeAsync(Handler<Void> task) {
-    wrapTask(null, task, true, null).run();
+    Runnable runnable = wrapTask(null, task, true, null);
+    if (interceptor != null) {
+      runnable = interceptor.apply(this, runnable);
+    }
+    runnable.run();
   }
 
   public void runDirect(Handler<Void> task) {

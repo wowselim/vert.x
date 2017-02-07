@@ -17,6 +17,7 @@
 package io.vertx.core;
 
 import io.vertx.codegen.annotations.DataObject;
+import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.dns.AddressResolverOptions;
 import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.json.JsonObject;
@@ -24,6 +25,7 @@ import io.vertx.core.metrics.MetricsOptions;
 import io.vertx.core.spi.cluster.ClusterManager;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * Instances of this class are used to configure {@link io.vertx.core.Vertx} instances.
@@ -136,6 +138,7 @@ public class VertxOptions {
   private long warningExceptionTime = DEFAULT_WARNING_EXCEPTION_TIME;
   private EventBusOptions eventBusOptions = new EventBusOptions();
   private AddressResolverOptions addressResolverOptions = new AddressResolverOptions();
+  private BiFunction<Context, Runnable, Runnable> taskInterceptor;
 
   /**
    * Default constructor
@@ -648,6 +651,27 @@ public class VertxOptions {
     return this;
   }
 
+  /**
+   * @return the task interceptor
+   */
+  @GenIgnore
+  public BiFunction<Context, Runnable, Runnable> getTaskInterceptor() {
+    return taskInterceptor;
+  }
+
+  /**
+   * Set the task interceptor for the context instance. This is useful for integrating distributed tracing
+   * tools with Vert.x.
+   *
+   * @param taskInterceptor the task interceptor to use.
+   * @return a reference to this, so the API can be used fluently
+   */
+  @GenIgnore
+  public VertxOptions setTaskInterceptor(BiFunction<Context, Runnable, Runnable> taskInterceptor) {
+    this.taskInterceptor = taskInterceptor;
+    return this;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -711,6 +735,7 @@ public class VertxOptions {
         ", addressResolver=" + addressResolverOptions.toJson() +
         ", eventbus=" + eventBusOptions.toJson() +
         ", warningExceptionTime=" + warningExceptionTime +
+        ", taskInterceptor=" + taskInterceptor +
         '}';
   }
 }

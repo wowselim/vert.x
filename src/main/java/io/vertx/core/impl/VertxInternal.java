@@ -22,6 +22,7 @@ import io.netty.resolver.AddressResolverGroup;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Closeable;
+import io.vertx.core.Context;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.impl.HttpServerImpl;
@@ -36,6 +37,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.function.BiFunction;
 
 /**
  * This interface provides services for vert.x core internal use only
@@ -127,4 +129,6 @@ public interface VertxInternal extends Vertx {
 
   @GenIgnore
   void removeCloseHook(Closeable hook);
+
+  BiFunction<Context, Runnable, Runnable> taskInterceptor();
 }
