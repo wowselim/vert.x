@@ -1396,6 +1396,25 @@ public interface HttpClient extends Measured {
   ReadStream<WebSocket> websocketStream(String requestURI, MultiMap headers, WebsocketVersion version,
                                   String subProtocols);
 
+
+  HttpClient websocket(WebSocketRequestOptions options, Handler<WebSocket> wsConnect);
+
+  HttpClient websocket(WebSocketRequestOptions options, Handler<WebSocket> wsConnect, Handler<Throwable> failureHandler);
+
+  HttpClient websocketAbs(String url, Handler<WebSocket> wsConnect);
+
+  HttpClient websocketAbs(String url, Handler<WebSocket> wsConnect, Handler<Throwable> failureHandler);
+
+  HttpClient websocketAbs(String url, WebSocketRequestOptions options, Handler<WebSocket> wsConnect);
+
+  HttpClient websocketAbs(String url, WebSocketRequestOptions options, Handler<WebSocket> wsConnect, Handler<Throwable> failureHandler);
+
+  ReadStream<WebSocket> websocketStream(WebSocketRequestOptions options);
+
+  ReadStream<WebSocket> websocketStreamAbs(String url);
+
+  ReadStream<WebSocket> websocketStreamAbs(String url, WebSocketRequestOptions options);
+
   /**
    * Set a redirect handler for the http client.
    * <p>

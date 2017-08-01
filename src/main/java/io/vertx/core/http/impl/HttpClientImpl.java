@@ -31,6 +31,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpVersion;
 import io.vertx.core.http.RequestOptions;
 import io.vertx.core.http.WebSocket;
+import io.vertx.core.http.WebSocketRequestOptions;
 import io.vertx.core.http.WebsocketVersion;
 import io.vertx.core.impl.ContextImpl;
 import io.vertx.core.impl.VertxInternal;
@@ -380,31 +381,7 @@ public class HttpClientImpl implements HttpClient, MetricsProvider {
 
   @Override
   public WebSocketStream websocketStreamAbs(String url, MultiMap headers, WebsocketVersion version, String subProtocols) {
-    URI uri;
-    try {
-      uri = new URI(url);
-    } catch (URISyntaxException e) {
-      throw new IllegalArgumentException(e);
-    }
-    String scheme = uri.getScheme();
-    if (!"ws".equals(scheme) && !"wss".equals(scheme)) {
-      throw new IllegalArgumentException("Scheme: " + scheme);
-    }
-    boolean ssl = scheme.length() == 3;
-    int port = uri.getPort();
-    if (port == -1) port = ssl ? 443 : 80;
-    StringBuilder relativeUri = new StringBuilder();
-    if (uri.getRawPath() != null) {
-      relativeUri.append(uri.getRawPath());
-    }
-    if (uri.getRawQuery() != null) {
-      relativeUri.append('?').append(uri.getRawQuery());
-    }
-    if (uri.getRawFragment() != null) {
-      relativeUri.append('#').append(uri.getRawFragment());
-    }
-    RequestOptions options = new RequestOptions().setHost(uri.getHost()).setPort(port).setSsl(ssl).setURI(relativeUri.toString());
-    return websocketStream(options, headers, version, subProtocols);
+    return websocketStreamAbs(url, new WebSocketRequestOptions().setHeaders(headers).setVersion(version).setSubProtocol(subProtocols));
   }
 
   @Override
@@ -441,6 +418,80 @@ public class HttpClientImpl implements HttpClient, MetricsProvider {
   @Override
   public WebSocketStream websocketStream(String requestURI, MultiMap headers, WebsocketVersion version, String subProtocols) {
     return websocketStream(options.getDefaultPort(), options.getDefaultHost(), requestURI, headers, version, subProtocols);
+  }
+
+  @Override
+  public HttpClient websocket(WebSocketRequestOptions options, Handler<WebSocket> wsConnect) {
+    websocketStream(options).handler(wsConnect);
+    return this;
+  }
+
+  @Override
+  public HttpClient websocket(WebSocketRequestOptions options, Handler<WebSocket> wsConnect, Handler<Throwable> failureHandler) {
+    websocketStream(options).exceptionHandler(failureHandler).handler(wsConnect);
+    return this;
+  }
+
+  @Override
+  public HttpClient websocketAbs(String url, Handler<WebSocket> wsConnect) {
+    websocketStreamAbs(url, new WebSocketRequestOptions()).handler(wsConnect);
+    return this;
+  }
+
+  @Override
+  public HttpClient websocketAbs(String url, Handler<WebSocket> wsConnect, Handler<Throwable> failureHandler) {
+    websocketStreamAbs(url, new WebSocketRequestOptions()).exceptionHandler(failureHandler).handler(wsConnect);
+    return this;
+  }
+
+  @Override
+  public HttpClient websocketAbs(String url, WebSocketRequestOptions options, Handler<WebSocket> wsConnect) {
+    websocketStreamAbs(url, options).handler(wsConnect);
+    return this;
+  }
+
+  @Override
+  public HttpClient websocketAbs(String url, WebSocketRequestOptions options, Handler<WebSocket> wsConnect, Handler<Throwable> failureHandler) {
+    websocketStreamAbs(url, options).exceptionHandler(failureHandler).handler(wsConnect);
+    return this;
+  }
+
+  @Override
+  public WebSocketStream websocketStream(WebSocketRequestOptions options) {
+    return new WebSocketStream(options.getPort(), options.getHost(), options.getURI(), options.getHeaders(), options.getVersion(), options.getSubProtocol(), options.isSsl());
+  }
+
+  @Override
+  public WebSocketStream websocketStreamAbs(String url) {
+    return websocketStreamAbs(url, new WebSocketRequestOptions());
+  }
+
+  @Override
+  public WebSocketStream websocketStreamAbs(String url, WebSocketRequestOptions options) {
+    URI uri;
+    try {
+      uri = new URI(url);
+    } catch (URISyntaxException e) {
+      throw new IllegalArgumentException(e);
+    }
+    String scheme = uri.getScheme();
+    if (!"ws".equals(scheme) && !"wss".equals(scheme)) {
+      throw new IllegalArgumentException("Scheme: " + scheme);
+    }
+    boolean ssl = scheme.length() == 3;
+    int port = uri.getPort();
+    if (port == -1) port = ssl ? 443 : 80;
+    StringBuilder relativeUri = new StringBuilder();
+    if (uri.getRawPath() != null) {
+      relativeUri.append(uri.getRawPath());
+    }
+    if (uri.getRawQuery() != null) {
+      relativeUri.append('?').append(uri.getRawQuery());
+    }
+    if (uri.getRawFragment() != null) {
+      relativeUri.append('#').append(uri.getRawFragment());
+    }
+    return websocketStream(new WebSocketRequestOptions(options).setHost(uri.getHost()).setPort(port).setSsl(ssl).setURI(relativeUri.toString()));
   }
 
   @Override

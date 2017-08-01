@@ -133,4 +133,48 @@ public class WebSocketRequestOptions extends RequestOptions {
     this.subProtocol = subProtocol;
     return this;
   }
+
+  @Override
+  public String getHost() {
+    return super.getHost();
+  }
+
+  @Override
+  public WebSocketRequestOptions setHost(String host) {
+    super.setHost(host);
+    return this;
+  }
+
+  @Override
+  public int getPort() {
+    return super.getPort();
+  }
+
+  @Override
+  public WebSocketRequestOptions setPort(int port) {
+    super.setPort(port);
+    return this;
+  }
+
+  @Override
+  public boolean isSsl() {
+    return super.isSsl();
+  }
+
+  @Override
+  public WebSocketRequestOptions setSsl(boolean ssl) {
+    super.setSsl(ssl);
+    return this;
+  }
+
+  @Override
+  public String getURI() {
+    return super.getURI();
+  }
+
+  @Override
+  public WebSocketRequestOptions setURI(String uri) {
+    super.setURI(uri);
+    return this;
+  }
 }
