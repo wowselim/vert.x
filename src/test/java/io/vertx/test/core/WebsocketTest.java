@@ -1758,20 +1758,47 @@ public class WebsocketTest extends VertxTestBase {
   @Test
   public void testClearClientSslOptions() {
     SelfSignedCertificate certificate = SelfSignedCertificate.create();
-    HttpServerOptions serverOptions = new HttpServerOptions().setPort(HttpTestBase.DEFAULT_HTTP_PORT)
+    HttpServerOptions serverOptions = new HttpServerOptions().setPort(HttpTestBase.DEFAULT_HTTPS_PORT)
       .setSsl(true)
       .setKeyCertOptions(certificate.keyCertOptions());
-    HttpClientOptions options = new HttpClientOptions()
+    HttpClientOptions clientOptions = new HttpClientOptions()
       .setTrustAll(true)
       .setVerifyHost(false);
-    client = vertx.createHttpClient(options);
+    client = vertx.createHttpClient(clientOptions);
     server = vertx.createHttpServer(serverOptions).websocketHandler(WebSocketBase::close).listen(onSuccess(server -> {
-      RequestOptions requestOptions = new RequestOptions().setPort(HttpTestBase.DEFAULT_HTTP_PORT).setSsl(true);
+      RequestOptions requestOptions = new RequestOptions().setPort(HttpTestBase.DEFAULT_HTTPS_PORT).setSsl(true);
       client.websocket(requestOptions, ws -> {
         ws.closeHandler(v -> {
           testComplete();
         });
       });
+    }));
+    await();
+  }
+
+  @Test
+  public void testWebsocketAbs() {
+    SelfSignedCertificate certificate = SelfSignedCertificate.create();
+    HttpServerOptions serverOptions = new HttpServerOptions().setPort(HttpTestBase.DEFAULT_HTTPS_PORT)
+      .setSsl(true)
+      .setKeyCertOptions(certificate.keyCertOptions());
+    HttpClientOptions clientOptions = new HttpClientOptions()
+      .setTrustAll(true)
+      .setVerifyHost(false);
+    client = vertx.createHttpClient(clientOptions);
+    server = vertx.createHttpServer(serverOptions).requestHandler(request -> {
+      if ("/test".equals(request.path())) {
+        request.upgrade().close();
+      } else {
+        request.response().end();
+      }
+    }).listen(onSuccess(server -> {
+      String url = "wss://" + clientOptions.getDefaultHost() + ":" + HttpTestBase.DEFAULT_HTTPS_PORT + "/test";
+      client.websocketAbs(url, null, null, null, ws -> {
+        ws.closeHandler(v -> {
+          testComplete();
+        });
+      }, null);
     }));
     await();
   }
