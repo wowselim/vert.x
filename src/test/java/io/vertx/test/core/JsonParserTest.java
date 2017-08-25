@@ -175,15 +175,24 @@ public class JsonParserTest {
     parser.startObjectHandler(v -> {
       assertEquals(0, status.getAndIncrement());
       parser.objectHandler(json -> {
-        assertEquals("foo", parser.currentField());
-        assertEquals(1, status.getAndIncrement());
+        switch (status.getAndIncrement()) {
+          case 1:
+            assertEquals("foo", parser.currentField());
+            break;
+          case 2:
+            assertEquals("bar", parser.currentField());
+            break;
+          default:
+            fail();
+            break;
+        }
       });
     });
     parser.endObjectHandler(v -> {
-      assertEquals(2, status.getAndIncrement());
+      assertEquals(3, status.getAndIncrement());
     });
-    parser.handle(Buffer.buffer("{\"foo\":{}}"));
-    assertEquals(3, status.get());
+    parser.handle(Buffer.buffer("{\"foo\":{},\"bar\":{}}"));
+    assertEquals(4, status.get());
   }
 
   @Test

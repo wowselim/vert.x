@@ -43,18 +43,66 @@
  *
  * [source, $lang]
  * ----
- * {@link examples.RecordParserExamples#example1()}
+ * {@link examples.ParseToolsExamples#recordParserExample1()}
  * ----
  *
  * You can also produce fixed sized chunks as follows:
  *
  * [source, $lang]
  * ----
- * {@link examples.RecordParserExamples#example2()}
+ * {@link examples.ParseToolsExamples#recordParserExample2()}
  * ----
  *
  * For more details, check out the {@link io.vertx.core.parsetools.RecordParser} class.
  *
+ * == Json Parser
+ *
+ * The json parser provides a good alternative when you need to deal with large json structures. It transforms a sequence
+ * of input buffer to a sequence of json parse events.
+ *
+ * [source, $lang]
+ * ----
+ * {@link examples.ParseToolsExamples#jsonParserExample1()}
+ * ----
+ *
+ * The json parser is non-blocking and emitted events are driven by the input buffers
+ *
+ * [source, $lang]
+ * ----
+ * {@link examples.ParseToolsExamples#jsonParserExample2}
+ * ----
+ *
+ * Event driven parsing provides more control but comes at the price of flexibility. The json parser allows you
+ * to handle json structures when it is desired:
+ *
+ * [source, $lang]
+ * ----
+ * {@link examples.ParseToolsExamples#jsonParserExample3}
+ * ----
+ *
+ * The object and array handlers can be set and unset during the parsing allowing you to switch between fine grained
+ * events or json object/array events.
+ *
+ * [source, $lang]
+ * ----
+ * {@link examples.ParseToolsExamples#jsonParserExample4}
+ * ----
+ *
+ * You can also decode POJOs
+ *
+ * [source, $lang]
+ * ----
+ * {@link examples.ParseToolsExamples#jsonParserExample5}
+ * ----
+ *
+ * Whenever the parser fails to process a buffer, an exception will be thrown unless you set an exception handler:
+ *
+ * [source, $lang]
+ * ----
+ * {@link examples.ParseToolsExamples#jsonParserExample5}
+ * ----
+ *
+ * For more details, check out the {@link io.vertx.core.parsetools.JsonParser} class.
  */
 @Document(fileName = "parsetools.adoc")
 package io.vertx.core.parsetools;

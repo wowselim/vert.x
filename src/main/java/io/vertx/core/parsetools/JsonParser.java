@@ -17,6 +17,7 @@ package io.vertx.core.parsetools;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.vertx.codegen.annotations.Fluent;
+import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
@@ -63,6 +64,8 @@ public interface JsonParser extends Handler<Buffer> {
 
   /**
    * Set an handler to be called whenever the parser cannot parse or process the input.
+   * <p/>
+   * The handler won't handle errors thrown by handlers set on this parser such as {@link #startObjectHandler(Handler)}, etc...
    *
    * @return  a reference to this, so the API can be used fluently
    */
@@ -115,7 +118,7 @@ public interface JsonParser extends Handler<Buffer> {
    * @param handler that will receive object events
    * @return  a reference to this, so the API can be used fluently
    */
-  @Fluent
+  @GenIgnore
   <T> JsonParser objectHandler(TypeReference<T> type, Handler<T> handler);
 
   /**
@@ -164,7 +167,7 @@ public interface JsonParser extends Handler<Buffer> {
    * @param handler that will receive object events
    * @return  a reference to this, so the API can be used fluently
    */
-  @Fluent
+  @GenIgnore
   <T> JsonParser arrayHandler(TypeReference<T> type, Handler<T> handler);
 
   /**
