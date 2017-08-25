@@ -16,18 +16,23 @@
 package io.vertx.core.parsetools.impl;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.json.async.NonBlockingJsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.util.TokenBuffer;
 import io.vertx.core.Handler;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.DecodeException;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.parsetools.JsonParser;
 
 import java.io.IOException;
-import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author <a href="mailto:julien@julienviet.com">Julien Viet</a>
@@ -44,6 +49,7 @@ public class JsonParserImpl implements JsonParser {
   private Handler<String> fieldHandler;
   private Handler<Object> valueHandler;
   private Handler<JsonToken> tokenHandler = this::handleToken;
+  private Handler<Throwable> exceptionHandler;
   private String currentField;
 
   public JsonParserImpl() {
@@ -97,6 +103,21 @@ public class JsonParserImpl implements JsonParser {
           if (handler != null) {
             handler.handle(parser.getText());
           }
+          currentField = null;
+          break;
+        }
+        case VALUE_TRUE: {
+          Handler<Object> handler = valueHandler;
+          if (handler != null) {
+            handler.handle(Boolean.TRUE);
+          }
+          break;
+        }
+        case VALUE_FALSE: {
+          Handler<Object> handler = valueHandler;
+          if (handler != null) {
+            handler.handle(Boolean.FALSE);
+          }
           break;
         }
         case VALUE_NULL: {
@@ -138,29 +159,51 @@ public class JsonParserImpl implements JsonParser {
           throw new UnsupportedOperationException("Token " + token + " not implemented");
       }
     } catch (IOException e) {
-      throw new VertxException(e);
+      throw new DecodeException(e.getMessage());
     }
   }
 
   @Override
   public void handle(Buffer event) {
+    handle(event.getBytes());
+  }
+
+  @Override
+  public void end() {
+    handle((byte[]) null);
+  }
+
+  private void handle(byte[] bytes) {
     try {
-      byte[] bytes = event.getBytes();
-      parser.feedInput(bytes, 0, bytes.length);
+      if (bytes != null) {
+        parser.feedInput(bytes, 0, bytes.length);
+      } else {
+        parser.endOfInput();
+      }
       while (true) {
         JsonToken token = parser.nextToken();
-        if (token == JsonToken.NOT_AVAILABLE) {
+        if (token == null || token == JsonToken.NOT_AVAILABLE) {
           break;
         }
         tokenHandler.handle(token);
       }
     } catch (IOException e) {
-      throw new VertxException(e);
+      if (exceptionHandler != null) {
+        exceptionHandler.handle(e);
+      } else {
+        throw new DecodeException(e.getMessage());
+      }
+    } catch (Exception e) {
+      if (exceptionHandler != null) {
+        exceptionHandler.handle(e);
+      } else {
+        throw e;
+      }
     }
   }
 
   @Override
-  public JsonParserImpl enterObjectHandler(Handler<Void> handler) {
+  public JsonParserImpl startObjectHandler(Handler<Void> handler) {
     enterObjectHandler = handler;
     return this;
   }
@@ -178,19 +221,19 @@ public class JsonParserImpl implements JsonParser {
   }
 
   @Override
-  public JsonParserImpl leaveObjectHandler(Handler<Void> handler) {
+  public JsonParserImpl endObjectHandler(Handler<Void> handler) {
     leaveObjectHandler = handler;
     return this;
   }
 
   @Override
-  public JsonParser enterArrayHandler(Handler<Void> handler) {
+  public JsonParser startArrayHandler(Handler<Void> handler) {
     enterArrayHandler = handler;
     return this;
   }
 
   @Override
-  public JsonParser leaveArrayHandler(Handler<Void> handler) {
+  public JsonParser endArrayHandler(Handler<Void> handler) {
     leaveArrayHandler = handler;
     return this;
   }
@@ -202,87 +245,113 @@ public class JsonParserImpl implements JsonParser {
 
   private class BufferingHandler implements Handler<JsonToken> {
 
-    final Handler<String> handler;
-    StringWriter buffer = new StringWriter();
-    JsonGenerator gen;
+    Handler<TokenBuffer> handler;
     int depth;
-
-    public BufferingHandler(Handler<String> handler) {
-      this.handler = handler;
-    }
+    TokenBuffer buffer;
 
     @Override
     public void handle(JsonToken event) {
-      switch (event) {
-        case START_OBJECT:
-        case START_ARRAY: {
-          if (depth++ == 0) {
-            // Setup other handlers
-            JsonFactory factory = new JsonFactory();
-            try {
-              gen = factory.createGenerator(buffer);
-            } catch (IOException e) {
-              throw new VertxException(e);
+      try {
+        switch (event) {
+          case START_OBJECT:
+          case START_ARRAY:
+            if (depth++ == 0) {
+              buffer = new TokenBuffer(Json.mapper, false);
             }
-          }
-          try {
             if (event == JsonToken.START_OBJECT) {
-              gen.writeStartObject();
+              buffer.writeStartObject();
             } else {
-              gen.writeStartArray();
+              buffer.writeStartArray();
             }
-          } catch (IOException e) {
-            throw new VertxException(e);
-          }
-          break;
-        }
-        case FIELD_NAME: {
-          try {
-            gen.writeFieldName(parser.getCurrentName());
-          } catch (IOException e) {
-            throw new VertxException(e);
-          }
-          break;
-        }
-        case VALUE_NUMBER_INT: {
-          try {
-            gen.writeNumber(parser.getLongValue());
-          } catch (IOException e) {
-            throw new VertxException(e);
-          }
-          break;
-        }
-        case END_OBJECT:
-        case END_ARRAY: {
-          try {
+            break;
+          case FIELD_NAME:
+            buffer.writeFieldName(parser.getCurrentName());
+            break;
+          case VALUE_NUMBER_INT:
+            buffer.writeNumber(parser.getLongValue());
+            break;
+          case VALUE_STRING:
+            buffer.writeString(parser.getText());
+            break;
+          case VALUE_TRUE:
+            buffer.writeBoolean(true);
+            break;
+          case VALUE_FALSE:
+            buffer.writeBoolean(false);
+            break;
+          case VALUE_NULL:
+            buffer.writeNull();
+            break;
+          case END_OBJECT:
+          case END_ARRAY:
             if (event == JsonToken.END_OBJECT) {
-              gen.writeEndObject();
+              buffer.writeEndObject();
             } else {
-              gen.writeEndArray();
+              buffer.writeEndArray();
             }
             if (--depth == 0) {
               tokenHandler = JsonParserImpl.this::handleToken;
-              gen.flush();
-              String s = buffer.toString();
-              buffer.getBuffer().setLength(0);
-              handler.handle(s);
+              buffer.flush();
+              handler.handle(buffer);
             }
-          } catch (IOException e) {
-            throw new VertxException(e);
-          }
-          break;
+            break;
+          default:
+            throw new UnsupportedOperationException("Not implemented " + event);
         }
+      } catch (IOException e) {
+        // Should not happen as we are buffering
+        throw new VertxException(e);
       }
     }
   }
 
   @Override
-  public JsonParserImpl objectHandler(Handler<JsonObject> handler) {
-    if (handler != null) {
-      if (objectHandler != null) {
-        throw new UnsupportedOperationException("what should we do ?");
+  public JsonParser objectHandler(Handler<JsonObject> handler) {
+    return objectHandler(handler, buffer -> {
+      try {
+        return new JsonObject(Json.mapper.readValue(buffer.asParser(), Map.class));
+      } catch (Exception e) {
+        throw new DecodeException("Failed to decode: " + e.getMessage());
       }
-      objectHandler = new BufferingHandler(json -> handler.handle(new JsonObject(json)));
+    });
+  }
+
+  @Override
+  public <T> JsonParser objectHandler(Class<T> type, Handler<T> handler) {
+    return objectHandler(handler, buffer -> {
+      try {
+        return Json.mapper.readValue(buffer.asParser(), type);
+      } catch (Exception e) {
+        throw new DecodeException("Failed to decode: " + e.getMessage());
+      }
+    });
+  }
+
+  @Override
+  public <T> JsonParser objectHandler(TypeReference<T> type, Handler<T> handler) {
+    return objectHandler(handler, buffer -> {
+      try {
+        return Json.mapper.readValue(buffer.asParser(), type);
+      } catch (Exception e) {
+        throw new DecodeException("Failed to decode: " + e.getMessage());
+      }
+    });
+  }
+
+  private <T> JsonParser objectHandler(Handler<T> handler, Function<TokenBuffer, T> mapper) {
+    if (handler != null) {
+      if (objectHandler == null) {
+        objectHandler = new BufferingHandler();
+      }
+      objectHandler.handler = buffer -> {
+        T obj;
+        try {
+          obj = mapper.apply(buffer);
+        } catch (Exception e) {
+          throw new DecodeException(e.getMessage());
+        }
+        handler.handle(obj);
+      };
     } else {
       if (objectHandler != null) {
         objectHandler = null;
@@ -293,18 +362,70 @@ public class JsonParserImpl implements JsonParser {
   }
 
   @Override
-  public JsonParserImpl arrayHandler(Handler<JsonArray> handler) {
-    if (handler != null) {
-      if (arrayHandler != null) {
-        throw new UnsupportedOperationException("what should we do ?");
+  public JsonParser arrayHandler(Handler<JsonArray> handler) {
+    return arrayHandler(handler, buffer -> {
+      try {
+        return new JsonArray(Json.mapper.readValue(buffer.asParser(), List.class));
+      } catch (Exception e) {
+        throw new DecodeException("Failed to decode: " + e.getMessage());
       }
-      arrayHandler = new BufferingHandler(json -> handler.handle(new JsonArray(json)));
+    });
+  }
+
+  @Override
+  public <T> JsonParser arrayHandler(Class<T> type, Handler<T> handler) {
+    return arrayHandler(handler, buffer -> {
+      try {
+        return Json.mapper.readValue(buffer.asParser(), type);
+      } catch (Exception e) {
+        throw new DecodeException("Failed to decode: " + e.getMessage());
+      }
+    });
+  }
+
+  @Override
+  public <T> JsonParser arrayHandler(TypeReference<T> type, Handler<T> handler) {
+    return arrayHandler(handler, buffer -> {
+      try {
+        return Json.mapper.readValue(buffer.asParser(), type);
+      } catch (Exception e) {
+        throw new DecodeException("Failed to decode: " + e.getMessage());
+      }
+    });
+  }
+
+  private <T> JsonParser arrayHandler(Handler<T> handler, Function<TokenBuffer, T> mapper) {
+    if (handler != null) {
+      if (arrayHandler == null) {
+        arrayHandler = new BufferingHandler();
+      }
+      arrayHandler.handler = buffer -> {
+        T array;
+        try {
+          array = mapper.apply(buffer);
+        } catch (Exception e) {
+          throw new DecodeException(e.getMessage());
+        }
+        handler.handle(array);
+      };
     } else {
       if (arrayHandler != null) {
         arrayHandler = null;
         tokenHandler = this::handleToken;
       }
     }
+    return this;
+  }
+
+  @Override
+  public JsonParser write(Buffer buffer) {
+    handle(buffer);
+    return this;
+  }
+
+  @Override
+  public JsonParser exceptionHandler(Handler<Throwable> handler) {
+    exceptionHandler = handler;
     return this;
   }
 }
