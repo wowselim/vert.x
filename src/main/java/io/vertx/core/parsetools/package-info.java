@@ -57,23 +57,26 @@
  *
  * == Json Parser
  *
- * The json parser provides a good alternative when you need to deal with large json structures. It transforms a sequence
- * of input buffer to a sequence of json parse events.
+ * You can easily parse JSON structures but that requires to provide the JSON string at once, but it
+ * may not be convenient when you need to parse very large structures.
+ *
+ * The non-blocking JSON parser is an event driven parser able to deal with very large structures.
+ * It transforms a sequence of input buffer to a sequence of JSON parse events.
  *
  * [source, $lang]
  * ----
  * {@link examples.ParseToolsExamples#jsonParserExample1()}
  * ----
  *
- * The json parser is non-blocking and emitted events are driven by the input buffers
+ * The parser is non-blocking and emitted events are driven by the input buffers
  *
  * [source, $lang]
  * ----
  * {@link examples.ParseToolsExamples#jsonParserExample2}
  * ----
  *
- * Event driven parsing provides more control but comes at the price of flexibility. The json parser allows you
- * to handle json structures when it is desired:
+ * Event driven parsing provides more control but comes at the price of flexibility. The parser allows you
+ * to handle JSON structures when it is desired:
  *
  * [source, $lang]
  * ----
@@ -81,7 +84,7 @@
  * ----
  *
  * The object and array handlers can be set and unset during the parsing allowing you to switch between fine grained
- * events or json object/array events.
+ * events or JSON object/array events.
  *
  * [source, $lang]
  * ----
