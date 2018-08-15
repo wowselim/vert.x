@@ -9,7 +9,6 @@
  * SPDX-License-Identifier: EPL-2.0 OR Apache-2.0
  */package io.vertx.test.core.instrumentation;
 
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.http.*;
@@ -24,12 +23,9 @@ import io.vertx.test.core.VertxTestBase;
 import io.vertx.test.core.instrumentation.tracer.Scope;
 import io.vertx.test.core.instrumentation.tracer.Span;
 import io.vertx.test.core.instrumentation.tracer.Tracer;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.junit.Test;
@@ -178,16 +174,15 @@ public class MetricsTest extends VertxTestBase {
     awaitLatch(latch);
     Span rootSpan = tracer.newTrace();
     tracer.activate(rootSpan);
-    HttpClientRequest req = client.get(8080, "localhost", "/1", resp -> {
+    client.getNow(8080, "localhost", "/1", resp -> {
       assertEquals(rootSpan, tracer.activeSpan());
       assertEquals(200, resp.statusCode());
       List<Span> finishedSpans = tracer.getFinishedSpans();
       // client request to /1, server request /1, client request /2, server request /2
       assertEquals(4, finishedSpans.size());
-      assertOneTrace(finishedSpans);
+      assertSingleTrace(finishedSpans);
       testComplete();
     });
-    req.end();
     await();
     assertEquals(rootSpan, tracer.activeSpan());
   }
@@ -215,42 +210,24 @@ public class MetricsTest extends VertxTestBase {
           req.response().setStatusCode(500).end();
         }
       }
-    }).listen(8080, "localhost", onSuccess(v -> {
-      latch.countDown();
-    }));
+    }).listen(8080, "localhost", onSuccess(v -> latch.countDown()));
     awaitLatch(latch);
     Span rootSpan = tracer.newTrace();
     tracer.activate(rootSpan);
 
     int numberOfRequests = 4;
-    ExecutorService executorService = Executors.newFixedThreadPool(numberOfRequests);
-    List<java.util.concurrent.Future<?>> futures = new ArrayList<>();
     for (int i = 0; i < numberOfRequests; i++) {
-      final int id = i;
-      java.util.concurrent.Future<?> future = executorService.submit(() -> {
-        tracer.activate(rootSpan);
-        HttpClientRequest req = client.get(8080, "localhost", "/1?id=" + id, resp -> {
-          assertEquals(rootSpan, tracer.activeSpan());
-          assertEquals(200, resp.statusCode());
-        });
-        req.end();
+      client.getNow(8080, "localhost", "/1?id=" + i, resp -> {
+        assertEquals(rootSpan, tracer.activeSpan());
+        assertEquals(200, resp.statusCode());
       });
-      futures.add(future);
     }
 
-    for (java.util.concurrent.Future<?> future: futures) {
-      future.get();
-    }
-
-    executorService.shutdown();
-    executorService.awaitTermination(1, TimeUnit.MINUTES);
-    testComplete();
-    await();
-    waitUntil(() -> tracer.getFinishedSpans().size() == 4*numberOfRequests);
+    waitUntil(() -> tracer.getFinishedSpans().size() == 4 * numberOfRequests);
     assertEquals(rootSpan, tracer.activeSpan());
     List<Span> finishedSpans = tracer.getFinishedSpans();
     assertEquals(4*numberOfRequests, finishedSpans.size());
-    assertOneTrace(finishedSpans);
+    assertSingleTrace(finishedSpans);
 
     Map<Integer, Span> spanMap = finishedSpans.stream()
       .collect(Collectors.toMap(o -> o.id, Function.identity()));
@@ -278,10 +255,9 @@ public class MetricsTest extends VertxTestBase {
     }
   }
 
-  void assertOneTrace(List<Span> spans) {
+  private void assertSingleTrace(List<Span> spans) {
     for (int i = 1; i < spans.size(); i++) {
       assertEquals(spans.get(i - 1).traceId, spans.get(i).traceId);
     }
   }
-
 }
