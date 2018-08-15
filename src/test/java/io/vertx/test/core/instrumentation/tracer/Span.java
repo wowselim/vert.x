@@ -40,7 +40,9 @@ public class Span {
   }
 
   public void addTag(String key, String value) {
-    tags.put(key, value);
+    if (value != null) {
+      tags.put(key, value);
+    }
   }
 
   public void finish() {
