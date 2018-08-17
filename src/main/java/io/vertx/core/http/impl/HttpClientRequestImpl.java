@@ -616,7 +616,9 @@ public class HttpClientRequestImpl extends HttpClientRequestBase implements Http
       // This gives the user an opportunity to set an exception handler before connecting so
       // they can capture any exceptions on connection
       connecting = true;
-      client.getConnectionForRequest(connectCtx, peerHost, ssl, port, host, ar1 -> {
+
+      //
+      Handler<AsyncResult<HttpClientStream>> lambda = ar1 -> {
         if (ar1.succeeded()) {
           HttpClientStream stream = ar1.result();
           ContextInternal ctx = (ContextInternal) stream.getContext();
@@ -639,7 +641,10 @@ public class HttpClientRequestImpl extends HttpClientRequestBase implements Http
             handleException(ar1.cause());
           });
         }
-      });
+      };
+
+      // We do a capture here
+      client.getConnectionForRequest(connectCtx, peerHost, ssl, port, host, vertx.captureContinuation(lambda));
     }
   }
 

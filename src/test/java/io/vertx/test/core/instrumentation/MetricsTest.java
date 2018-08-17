@@ -126,10 +126,14 @@ public class MetricsTest extends VertxTestBase {
             @Override
             public Span requestBegin(Void endpointMetric, Void socketMetric, SocketAddress localAddress, SocketAddress remoteAddress, HttpClientRequest request) {
               // A bit hackish ?
-              Handler handler = request.handler();
-              Span span = handler instanceof Capture ?
-                tracer.createChild(((Capture)handler).span) :
-                tracer.newTrace();
+
+              Span span = tracer.activeSpan();
+              if (span == null) {
+                span = tracer.newTrace();
+              } else {
+                span = tracer.createChild(span);
+              }
+
               span.addTag("span_kind", "client");
               span.addTag("path", request.path());
               span.addTag("query", request.query());
