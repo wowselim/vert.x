@@ -11,10 +11,12 @@
 package io.vertx.core.json;
 
 import io.vertx.codegen.annotations.Fluent;
+import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.shareddata.Shareable;
 import io.vertx.core.shareddata.impl.ClusterSerializable;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.*;
@@ -89,7 +91,8 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>>, ClusterS
     if (obj == null) {
       return null;
     } else {
-      return new JsonObject((Map<String, Object>) Json.mapper.convertValue(obj, Map.class));
+      String encode = Json.encode(obj);
+      return new JsonObject(encode);
     }
   }
 
@@ -103,7 +106,7 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>>, ClusterS
    *          if the type cannot be instantiated.
    */
   public <T> T mapTo(Class<T> type) {
-    return Json.mapper.convertValue(map, type);
+    return Json.decodeValue(Json.encode(this), type);
   }
 
   /**

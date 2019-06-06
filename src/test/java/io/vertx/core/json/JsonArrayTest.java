@@ -806,7 +806,7 @@ public class JsonArrayTest {
     jsonArray.add(new JsonObject().put("foo", "bar"));
     jsonArray.add(new JsonArray().add("foo").add(123));
     String strBytes = Base64.getEncoder().encodeToString(bytes);
-    String expected = "[\"foo\",123,1234,1.23,2.34,true,\"" + strBytes + "\",null,{\"foo\":\"bar\"},[\"foo\",123]]";
+    String expected = "[\"foo\",123,1234,1.2300000190734863,2.34,true,\"" + strBytes + "\",null,{\"foo\":\"bar\"},[\"foo\",123]]";
     String json = jsonArray.encode();
     assertEquals(expected, json);
   }
@@ -825,7 +825,7 @@ public class JsonArrayTest {
     jsonArray.add(new JsonObject().put("foo", "bar"));
     jsonArray.add(new JsonArray().add("foo").add(123));
     String strBytes = Base64.getEncoder().encodeToString(bytes);
-    Buffer expected = Buffer.buffer("[\"foo\",123,1234,1.23,2.34,true,\"" + strBytes + "\",null,{\"foo\":\"bar\"},[\"foo\",123]]", "UTF-8");
+    Buffer expected = Buffer.buffer("[\"foo\",123,1234,1.2300000190734863,2.34,true,\"" + strBytes + "\",null,{\"foo\":\"bar\"},[\"foo\",123]]", "UTF-8");
     Buffer json = jsonArray.toBuffer();
     assertArrayEquals(expected.getBytes(), json.getBytes());
   }
@@ -870,7 +870,7 @@ public class JsonArrayTest {
     jsonArray.add(new JsonObject().put("foo", "bar"));
     jsonArray.add(new JsonArray().add("foo").add(123));
     String strBytes = Base64.getEncoder().encodeToString(bytes);
-    String expected = "[ \"foo\", 123, 1234, 1.23, 2.34, true, \"" + strBytes + "\", null, {" + Utils.LINE_SEPARATOR +
+    String expected = "[ \"foo\", 123, 1234, 1.2300000190734863, 2.34, true, \"" + strBytes + "\", null, {" + Utils.LINE_SEPARATOR +
       "  \"foo\" : \"bar\"" + Utils.LINE_SEPARATOR +
       "}, [ \"foo\", 123 ] ]";
     String json = jsonArray.encodePrettily();

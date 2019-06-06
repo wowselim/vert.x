@@ -11,9 +11,7 @@
 
 package io.vertx.core.json;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.test.core.TestUtils;
 import io.vertx.test.core.VertxTestBase;
@@ -32,6 +30,7 @@ import static java.time.format.DateTimeFormatter.ISO_INSTANT;
  */
 public class JsonMapperTest extends VertxTestBase {
 
+/*
   @Test
   public void testGetSetMapper() {
     ObjectMapper mapper = Json.mapper;
@@ -51,6 +50,7 @@ public class JsonMapperTest extends VertxTestBase {
     assertSame(newMapper, Json.prettyMapper);
     Json.prettyMapper = mapper;
   }
+*/
 
   @Test
   public void encodeCustomTypeInstant() {
@@ -150,11 +150,11 @@ public class JsonMapperTest extends VertxTestBase {
   }
 
   private static class Pojo {
-    @JsonProperty
+//    @JsonProperty
     String value;
-    @JsonProperty
+//    @JsonProperty
     Instant instant;
-    @JsonProperty
+//    @JsonProperty
     byte[] bytes;
   }
 
@@ -217,7 +217,7 @@ public class JsonMapperTest extends VertxTestBase {
     String nullText = "null";
     assertNull(asBuffer ? Json.decodeValue(Buffer.buffer(nullText)) : Json.decodeValue(nullText));
 
-    JsonObject obj = new JsonObject().put("foo", "bar");
+    JsonObject obj = new JsonObject().put("foo", "bar").put("daa", new JsonArray().add(0).add(true));
     assertEquals(obj, asBuffer ? Json.decodeValue(obj.toBuffer()) : Json.decodeValue(obj.toString()));
 
     JsonArray arr = new JsonArray().add(1).add(false).add("whatever").add(obj);

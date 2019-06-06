@@ -1238,10 +1238,17 @@ public class JsonObjectTest {
     jsonObject.put("myobj", new JsonObject().put("foo", "bar"));
     jsonObject.put("myarr", new JsonArray().add("foo").add(123));
     String strBytes = Base64.getEncoder().encodeToString(bytes);
-    String expected = "{\"mystr\":\"foo\",\"mycharsequence\":\"oob\",\"myint\":123,\"mylong\":1234,\"myfloat\":1.23,\"mydouble\":2.34,\"" +
+    String expected = "{\"mystr\":\"foo\",\"mycharsequence\":\"oob\",\"myint\":123,\"mylong\":1234,\"myfloat\":1.2300000190734863,\"mydouble\":2.34,\"" +
       "myboolean\":true,\"mybinary\":\"" + strBytes + "\",\"myinstant\":\"" + ISO_INSTANT.format(now) + "\",\"mynull\":null,\"myobj\":{\"foo\":\"bar\"},\"myarr\":[\"foo\",123]}";
     String json = jsonObject.encode();
     assertEquals(expected, json);
+  }
+
+  @Test
+  public void testFoo() throws Exception {
+
+
+
   }
 
   @Test
@@ -1262,7 +1269,7 @@ public class JsonObjectTest {
     jsonObject.put("myarr", new JsonArray().add("foo").add(123));
     String strBytes = Base64.getEncoder().encodeToString(bytes);
 
-    Buffer expected = Buffer.buffer("{\"mystr\":\"foo\",\"mycharsequence\":\"oob\",\"myint\":123,\"mylong\":1234,\"myfloat\":1.23,\"mydouble\":2.34,\"" +
+    Buffer expected = Buffer.buffer("{\"mystr\":\"foo\",\"mycharsequence\":\"oob\",\"myint\":123,\"mylong\":1234,\"myfloat\":1.2300000190734863,\"mydouble\":2.34,\"" +
       "myboolean\":true,\"mybinary\":\"" + strBytes + "\",\"myinstant\":\"" + ISO_INSTANT.format(now) + "\",\"mynull\":null,\"myobj\":{\"foo\":\"bar\"},\"myarr\":[\"foo\",123]}", "UTF-8");
 
     Buffer json = jsonObject.toBuffer();
@@ -1323,7 +1330,7 @@ public class JsonObjectTest {
       "  \"mystr\" : \"foo\"," + Utils.LINE_SEPARATOR +
       "  \"myint\" : 123," + Utils.LINE_SEPARATOR +
       "  \"mylong\" : 1234," + Utils.LINE_SEPARATOR +
-      "  \"myfloat\" : 1.23," + Utils.LINE_SEPARATOR +
+      "  \"myfloat\" : 1.2300000190734863," + Utils.LINE_SEPARATOR +
       "  \"mydouble\" : 2.34," + Utils.LINE_SEPARATOR +
       "  \"myboolean\" : true," + Utils.LINE_SEPARATOR +
       "  \"mybinary\" : \"" + strBytes + "\"," + Utils.LINE_SEPARATOR +

@@ -23,7 +23,6 @@ import org.openjdk.jmh.annotations.State;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
 
 /**
  * @author Thomas Segismont
@@ -47,7 +46,7 @@ public class JsonEncodeBenchmark extends BenchmarkBase {
 
   private JsonObject loadJson(URL url) {
     try {
-      return new JsonObject(Json.mapper.readValue(url, Map.class));
+      return new JsonObject(Json.mapper.mapFrom(url));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

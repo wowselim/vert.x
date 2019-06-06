@@ -47,7 +47,7 @@ public class JsonDecodeBenchmark extends BenchmarkBase {
 
   private Buffer loadJsonAsBuffer(URL url) {
     try {
-      Buffer encoded = new JsonObject(Json.mapper.readValue(url, Map.class)).toBuffer();
+      Buffer encoded = new JsonObject(Json.mapper.mapFrom(url)).toBuffer();
       return Buffer.buffer().appendInt(encoded.length()).appendBuffer(encoded);
     } catch (IOException e) {
       throw new RuntimeException(e);

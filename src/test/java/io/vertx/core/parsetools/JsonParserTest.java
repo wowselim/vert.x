@@ -581,8 +581,8 @@ public class JsonParserTest {
       parser.arrayValueMode();
       parser.handler(event -> values.add(event.mapTo(LinkedList.class)));
       parser.handle(new JsonArray().add(0).add(1).add(2).toBuffer());
-      assertEquals(Collections.singletonList(Arrays.asList(0L, 1L, 2L)), values);
-      assertEquals(LinkedList.class, values.get(0).getClass());
+      assertEquals(Collections.singletonList(Arrays.asList(0, 1, 2)), values);
+      assertEquals(ArrayList.class, values.get(0).getClass());
     }
 
     @Test

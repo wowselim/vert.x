@@ -11,18 +11,22 @@
 
 package io.vertx.core.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.TreeCodec;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.jr.ob.JSON;
+import com.fasterxml.jackson.jr.ob.JSONObjectException;
+import com.fasterxml.jackson.jr.ob.impl.CollectionBuilder;
+import com.fasterxml.jackson.jr.ob.impl.JSONReader;
+import com.fasterxml.jackson.jr.ob.impl.JSONWriter;
+import com.fasterxml.jackson.jr.ob.impl.MapBuilder;
+import com.fasterxml.jackson.jr.ob.impl.TypeDetector;
 import io.netty.buffer.ByteBufInputStream;
+import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.DateTimeException;
 import java.time.Instant;
@@ -40,15 +44,46 @@ import static java.time.format.DateTimeFormatter.ISO_INSTANT;
  */
 public class Json {
 
-  public static ObjectMapper mapper = new ObjectMapper();
-  public static ObjectMapper prettyMapper = new ObjectMapper();
+  // Non-standard JSON but we allow C style comments in our JSON
+  private static final JsonFactory f = new JsonFactory().enable(JsonParser.Feature.ALLOW_COMMENTS);
+
+  private static final int DEFAULT_FEATURES = JSON.Feature.defaults()
+    & ~JSON.Feature.USE_DEFERRED_MAPS.mask()
+    | JSON.Feature.WRITE_NULL_PROPERTIES.mask()
+    | JSON.Feature.FAIL_ON_UNKNOWN_BEAN_PROPERTY.mask();
+
+
+  private static class VertxJSON extends JSON {
+
+    private VertxJSON(int features) {
+      super(features, f, null);
+    }
+
+    @Override
+    protected TypeDetector _defaultTypeDetector(int features) {
+      return new VertxTypeDetector(features);
+    }
+    @Override
+    protected JSONWriter _defaultWriter(int features, TreeCodec tc, TypeDetector td) {
+      return new VertxJSONWriter(features, td, tc);
+    }
+    @Override
+    protected JSONReader _defaultReader(int features, TreeCodec tc, TypeDetector td) {
+      return new VertxJSONReader(features, td, tc, CollectionBuilder.defaultImpl(), MapBuilder.defaultImpl());
+    }
+    @Override
+    public JsonParser _parser(Object source) throws IOException, JSONObjectException {
+      return super._parser(source);
+    }
+  }
+
+  // Should be private
+  public static final VertxJSON mapper = new VertxJSON(DEFAULT_FEATURES);
+  static final VertxJSON prettyMapper = new VertxJSON(DEFAULT_FEATURES | JSON.Feature.PRETTY_PRINT_OUTPUT.mask());
 
   static {
-    // Non-standard JSON but we allow C style comments in our JSON
-    mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 
-    prettyMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-    prettyMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+/*
 
     SimpleModule module = new SimpleModule();
     // custom types
@@ -59,9 +94,10 @@ public class Json {
     module.addDeserializer(Instant.class, new InstantDeserializer());
     module.addSerializer(byte[].class, new ByteArraySerializer());
     module.addDeserializer(byte[].class, new ByteArrayDeserializer());
+*/
 
-    mapper.registerModule(module);
-    prettyMapper.registerModule(module);
+    // mapper.registerModule(module);
+    // prettyMapper.registerModule(module);
   }
 
   /**
@@ -73,7 +109,7 @@ public class Json {
    */
   public static String encode(Object obj) throws EncodeException {
     try {
-      return mapper.writeValueAsString(obj);
+      return mapper.asString(obj);
     } catch (Exception e) {
       throw new EncodeException("Failed to encode as JSON: " + e.getMessage());
     }
@@ -88,7 +124,7 @@ public class Json {
    */
   public static Buffer encodeToBuffer(Object obj) throws EncodeException {
     try {
-      return Buffer.buffer(mapper.writeValueAsBytes(obj));
+      return Buffer.buffer(mapper.asBytes(obj));
     } catch (Exception e) {
       throw new EncodeException("Failed to encode as JSON: " + e.getMessage());
     }
@@ -103,7 +139,7 @@ public class Json {
    */
   public static String encodePrettily(Object obj) throws EncodeException {
     try {
-      return prettyMapper.writeValueAsString(obj);
+      return prettyMapper.asString(obj);
     } catch (Exception e) {
       throw new EncodeException("Failed to encode as JSON: " + e.getMessage());
     }
@@ -119,7 +155,10 @@ public class Json {
    */
   public static <T> T decodeValue(String str, Class<T> clazz) throws DecodeException {
     try {
-      return mapper.readValue(str, clazz);
+      if (clazz == Map.class) {
+        return (T) mapper.mapFrom(str);
+      }
+      return mapper.beanFrom(clazz, str);
     } catch (Exception e) {
       throw new DecodeException("Failed to decode: " + e.getMessage());
     }
@@ -135,7 +174,7 @@ public class Json {
    */
   public static Object decodeValue(String str) throws DecodeException {
     try {
-      Object value = mapper.readValue(str, Object.class);
+      Object value = mapper.anyFrom(str);
       if (value instanceof List) {
         List list = (List) value;
         return new JsonArray(list);
@@ -160,7 +199,8 @@ public class Json {
    */
   public static <T> T decodeValue(String str, TypeReference<T> type) throws DecodeException {
     try {
-      return mapper.readValue(str, type);
+      JsonParser parser = mapper._parser(str);
+      return mapper.asCodec().readValue(parser, type);
     } catch (Exception e) {
       throw new DecodeException("Failed to decode: " + e.getMessage(), e);
     }
@@ -176,7 +216,7 @@ public class Json {
    */
   public static Object decodeValue(Buffer buf) throws DecodeException {
     try {
-      Object value = mapper.readValue((InputStream) new ByteBufInputStream(buf.getByteBuf()), Object.class);
+      Object value = mapper.anyFrom(new ByteBufInputStream(buf.getByteBuf()));
       if (value instanceof List) {
         List list = (List) value;
         return new JsonArray(list);
@@ -201,7 +241,8 @@ public class Json {
    */
   public static <T> T decodeValue(Buffer buf, TypeReference<T> type) throws DecodeException {
     try {
-      return mapper.readValue(new ByteBufInputStream(buf.getByteBuf()), type);
+      JsonParser jsonParser = mapper._parser(new ByteBufInputStream(buf.getByteBuf()));
+      return mapper.asCodec().readValue(jsonParser, type);
     } catch (Exception e) {
       throw new DecodeException("Failed to decode:" + e.getMessage(), e);
     }
@@ -217,7 +258,11 @@ public class Json {
    */
   public static <T> T decodeValue(Buffer buf, Class<T> clazz) throws DecodeException {
     try {
-      return mapper.readValue((InputStream) new ByteBufInputStream(buf.getByteBuf()), clazz);
+      ByteBufInputStream src = new ByteBufInputStream(buf.getByteBuf());
+      if (clazz == Map.class) {
+        return (T) mapper.mapFrom(src);
+      }
+      return mapper.beanFrom(clazz, src);
     } catch (Exception e) {
       throw new DecodeException("Failed to decode:" + e.getMessage(), e);
     }
@@ -272,7 +317,14 @@ public class Json {
     return StreamSupport.stream(iterable.spliterator(), false);
   }
 
-  private static class JsonObjectSerializer extends JsonSerializer<JsonObject> {
+  static Instant readInstant(String text) {
+    try {
+      return Instant.from(ISO_INSTANT.parse(text));
+    } catch (DateTimeException e) {
+      throw new VertxException("Expected an ISO 8601 formatted date time" + text);
+    }
+  }
+/*  private static class JsonObjectSerializer extends JsonSerializer<JsonObject> {
     @Override
     public void serialize(JsonObject value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
       jgen.writeObject(value.getMap());
@@ -324,5 +376,5 @@ public class Json {
         throw new InvalidFormatException(p, "Expected a base64 encoded byte array", text, Instant.class);
       }
     }
-  }
+  }*/
 }
